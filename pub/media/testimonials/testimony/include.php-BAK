@@ -1,0 +1,35 @@
+<?php
+
+$infoFile = '/web/magicmurals/prod/images/customer_gallery/info.txt';
+$lines = file($infoFile);   
+$meta_data = array();
+for($i=1;$i<count($lines);$i++){
+    list($filename,$name,$headline,$description) = split("\t",$lines[$i]);
+    
+    $meta_data[$filename."-name"]= $name;
+    $meta_data[$filename."-headline"]= $headline;
+    $meta_data[$filename."-description"]= $description;
+}
+
+
+$dir    = '/web/magicmurals/prod/images/customer_gallery/';
+$dh  = opendir($dir);
+while (false !== ($filename = readdir($dh))) {
+    if (substr($filename,strlen($filename)-4) == '.jpg') {
+    	$files[] = $filename;
+    }
+}
+sort($files);
+for ($i=0;$i<count($files);$i=$i+2) {
+ $j=$i+1;
+ $headline = $meta_data[$files[$i]."-headline"];
+ $name = $meta_data[$files[$i]."-name"];
+ $description = $meta_data[$files[$i]."-description"];
+print <<<END
+    <li class="business"><a href="#"><img class="gallery-thumb" src="/images/customer_gallery/$files[$j]" alt="$files[$i]" data-large="/images/customer_gallery/$files[$i]" data-headline="$headline" data-author="$name" data-description="$description" /></a></li>
+END;
+
+}
+
+?>
+
