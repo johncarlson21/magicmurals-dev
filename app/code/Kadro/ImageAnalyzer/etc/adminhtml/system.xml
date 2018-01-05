@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="kadro" sortOrder="10" translate="label">
+			<label>Kadro</label>
+		</tab>
+		<section id="kadro_imageanalyzer" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+			<label>Image Analyzer</label>
+			<tab>kadro</tab>
+			<resource>Kadro_ImageAnalyzer::config_kadro_imageanalyzer</resource>
+			<group id="settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+				<label>Settings</label>
+				<field id="limit_low" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
+					<label>Low Pixel Ratio Limit</label>
+					<comment>MP to sqft ratio low limit.  Any ratio below this number will be deemed poor quality.  Default: &lt;code&gt;0.05&lt;/code&gt;</comment>
+				</field>
+				<field id="limit_high" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
+					<label>High Pixel Ratio Limit</label>
+					<comment>MP to sqft ratio high limit.  Any ratio above this number will be deemed good quality.  Default: &lt;code&gt;0.50&lt;/code&gt;</comment>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>

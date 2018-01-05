@@ -1,0 +1,25 @@
+{
+    "name": "kadro/module-imageanalyzer",
+    "description": "",
+    "license": "proprietary",
+    "authors": [
+        {
+            "email": "info@mage2gen.com",
+            "name": "Mage2Gen"
+        },
+        {
+            "email": "johncarlson21@gmail.com",
+            "name": "John Carlson"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Kadro\\ImageAnalyzer\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
