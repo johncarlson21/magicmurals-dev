@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
+    <type name="muralprod" label="Mural Product" modelInstance="Surething\Muralprod\Model\Product\Type">
+    	<priceModel instance="Surething\Muralprod\Model\Product\Price" />
+    </type>
+    <type name="patternprod" label="Mural Pattern Product" modelInstance="Surething\Muralprod\Model\Product\Type\Patternprod">
+    	<priceModel instance="Surething\Muralprod\Model\Product\Price" />
+    </type>
+</config>

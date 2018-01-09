@@ -1,0 +1,131 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Product\View\Options */
+?>
+
+<?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php $_productId = $block->getProduct()->getId() ?>
+<?php $_product = $block->getProduct(); ?>
+	<?php
+	$custom_upload_sku = "Custom Mural";
+	$opArray = array("Pattern Size", "Pattern Color", "Size", "height_ft", "height_in", "width_in", "width_ft", "Materials", "Finish", "Image");
+    $ops = array();
+	$avOps = array();
+    foreach($_options as $_option): 
+        $title = $_option->getTitle();
+        $class_code = strtolower($title);
+        if ( in_array($title, $opArray) ) {
+            $ops[$class_code] = $_option;
+			$avOps[] = $class_code;
+		}
+	endforeach;
+	
+	// for custom upload product
+	if ( $_product->getSku() == $custom_upload_sku ) {
+        $imOpId = $ops['image']->getId();
+        $custom_file = $_GET['upload_file'];
+    ?>
+    <div class="image-option" style="display: none;">
+        <input type="text" value="<?php echo $custom_file;?>" name="options[<?php echo $imOpId;?>]" class="input-text required-entry  product-custom-option" id="options_<?php echo $imOpId;?>_text">
+    </div>
+    <?php
+    }
+    ?>
+    
+    <?php
+	// just for pattern products
+	if ($_product->getTypeId() == "patternprod") {
+	?>	
+	
+	<div class="grid-container top-options-box">
+		<div class="grid12-6 option-pattern-size">
+			<span style="display: inline-block; position: absolute; left: 90px;">
+                <span class="tooltip" style="font-weight: bold;"><img src="/images/QuestionBtn.jpg" alt="?" width="16" /></span>
+                <div class="tooltiptitle">Pattern Size!</div>
+                <div class="tooltiptext"><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('tooltip-pat-size')->toHtml(); ?></div>
+            </span>
+			<?php echo $this->getOptionHtml($ops['pattern size']) ?>
+		</div>
+		<div class="grid12-6 option-pattern-color">
+			<?php echo $this->getOptionHtml($ops['pattern color']) ?>
+		</div>
+	</div>
+	
+	<?php	
+	}
+	?>
+
+	<!-- main output grid for top options -->
+    <div class="grid-container top-options-box">
+        <div class="grid12-7 option-size">
+            <span class="convert-option" id="conv-calculator"><input data-remodal-target="convert-modal" type="checkbox" id="convert-option" /> <em>Metric Calculator</em></span>
+            <?php echo $this->getOptionHtml($ops['size']) ?>
+            
+            <?php if ($_product->getSku() == $custom_upload_sku) { ?>
+			<p><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('custom-mural-notification')->toHtml(); ?></p>
+			<?php } else { ?>
+       		<p style="display: none;" class="custom-notification"><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mural-notification')->toHtml(); ?></p>
+       		
+       		<?php } ?>
+        </div>
+        <!-- end size grid -->
+<?php
+$pos = strpos($_product->getSku(), "MMC-");
+?>        
+        <div class="grid12-5 option-custom-sizes" style="display: none;">
+<?php if( $pos === FALSE ) { ?>
+            <p class="custom-sizes-text"><label>Custom Size:</label>
+            <span class="convert-option"><input data-remodal-target="convert-modal-custom" type="checkbox" id="convert-option-custom" /> <em>Metric Converter</em></span>
+            <?php if ($_product->getTypeId() == "patternprod") { ?>
+            <br />Enter your dimensions below.</p>
+            <?php } else { ?>
+            <br />Enter your dimensions below and then use the crop box on the image to select the final proportions.</p>
+            <?php } ?>
+            <div class="decimal-error"></div>
+            <div class="grid12-6 height-ft"><?php echo $this->getOptionHtml($ops['height_ft']) ?></div>
+            <div class="grid12-6 height-in"><?php echo $this->getOptionHtml($ops['height_in']) ?></div>
+            <div class="grid12-6 width-ft"><?php echo $this->getOptionHtml($ops['width_ft']) ?></div>
+            <div class="grid12-6 width-in"><?php echo $this->getOptionHtml($ops['width_in']) ?></div>
+            <?php if ($_product->getTypeId() != "patternprod") { ?>
+            <div class="grid12-12" style="text-align:right; padding-top: 8px;">
+                <label>HOW TO CROP MY IMAGE</label>
+            </div>
+            <?php } ?>
+<?php } ?>
+        </div>
+        <!-- end custom sizes grid -->
+    </div>
+    <div class="grid-container top-options-box">
+        <div class="grid12-7 option-material"><div class="grid12-12">
+            <?php echo $this->getOptionHtml($ops['materials']) ?>
+            <?php if(in_array('finish',$avOps)) { echo $this->getOptionHtml($ops['finish']); } ?>
+        </div></div>
+        <!-- end material grid -->
+        <div class="grid12-5 product-mural-price-box">
+            <?php echo $this->getChildHtml('product_type_data'); ?>
+        </div>
+        <div class="grid12-12">
+    		<?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_material_description')->toHtml(); ?>
+    	</div>
+    </div>
+
+<?php if (count($_options)):?>
+<p>We have options</p>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "priceOptions": {
+                "optionConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig()?>,
+                "controlContainer": ".field",
+                "priceHolderSelector": "[data-product-id='<?php echo $block->escapeHtml($_productId)?>'][data-role=priceBox]"
+            }
+        }
+    }
+</script>
+<?php endif; ?>

@@ -1,0 +1,558 @@
+<script>
+	var minSqFt = 0;
+	require(['jquery', 'jquery/ui'], function($){ 
+		
+<?php
+/*
+ *	Muralprod and Pattern Prod Javascript Functions
+ *
+ */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+
+$productType = $product->getTypeId();
+$custom_upload_sku = "Custom Mural";
+$options = $product->getCustomOptions();
+
+// setup some variables
+$mini_sqft = $product->getData('mini_sq_ft');
+$small_sqft = $product->getData('small_sq_ft');
+$med_sqft = $product->getData('medium_sq_ft');
+$large_sqft = $product->getData('large_sq_ft');
+$xlarge_sqft = $product->getData('x_large_sq_ft');
+$clear_sqft = $product->getData('clearance_sq_ft');
+
+if (!empty($mini_sqft) && $mini_sqft < 12) { $mini_sqft = 12; }
+if (!empty($small_sqft) && $small_sqft < 12) { $small_sqft	= 12; }
+if (!empty($med_sqft) && $med_sqft < 12) { $med_sqft    = 12; }
+
+$optionId = '';
+$sqft_optionId = '';
+$sizeOption = null;
+$optionValues = null;
+$patSizeOption = null;
+$patSizeOptionValues = null;
+$patSizeOption_id = '';
+$patColorOption = null;
+$patColorOptionValues = null;
+$patColorOption_id = '';
+$wfId = '';
+$wiId = '';
+$hfId = '';
+$hiId = '';
+$cropSizeId = '';
+$materialOption = null;
+$material_option_id = '';
+$finishOption = null;
+$finish_option_id = '';
+
+if ( $product->getSku() == $custom_upload_sku ) {
+    $custom_upload_dir = "/cust_file_upload/files/upload/";
+    $custom_file = $_GET['upload_file'];   
+}
+
+foreach ($product->getOptions() as $o) {
+	// looking for just the size option
+	if ($o->getTitle() == 'Size') {
+		$sizeOption = $o;
+		$optionId = $o->getOptionId();
+		$optionValues = $o->getValues();
+	} elseif ($o->getTitle() == 'Square Ft') {
+		$sqft_optionId = $o->getOptionId();
+	} elseif ($o->getTitle() == 'width_ft') {
+		$wfId = $o->getOptionId();
+	} elseif ($o->getTitle() == 'width_in') {
+		$wiId = $o->getOptionId();
+	} elseif ($o->getTitle() == 'height_ft') {
+		$hfId = $o->getOptionId();
+	} elseif ($o->getTitle() == 'height_in') {
+		$hiId = $o->getOptionId();
+	} elseif ($o->getTitle() == 'crop_size') {
+        $cropSizeId = $o->getOptionId();
+    } elseif ($o->getTitle() == 'Color') {
+        $colorValues = $o->getValues();
+    } elseif ($o->getTitle() == 'Image Orientation') {
+        $orientationValues = $o->getValues();
+    } elseif ($o->getTitle() == "Finish") {
+		$finish_option_id = $o->getOptionId();
+		$finishOption = $o;
+	} elseif ($o->getTitle() == "Materials") {
+		$material_option_id = $o->getOptionId();
+		$materialOption = $o;
+	} elseif ($o->getTitle() == "Pattern Size") {
+		$patSizeOption = $o;
+		$patSizeOptionValues = $o->getValues();
+		$patSizeOption_id = $o->getOptionId();
+	} elseif ($o->getTitle() == "Pattern Color") {
+		$patColorOption = $o;
+		$patColorOptionValues = $o->getValues();
+		$patColorOption_id = $o->getOptionId();
+	}
+	
+}
+
+$minSqFt = false;
+
+foreach ($optionValues as $op) {
+	$opData = $op->getData();
+    $title = '';
+    if ( stripos($opData['title'], "Small") !== false ) {
+        $title = "Small";
+    } elseif ( stripos($opData['title'], "Medium") !== false ) {
+        $title = "Medium";
+    } elseif ( stripos($opData['title'], "XL") !== false ) {
+        $title = "XLarge";
+    } elseif ( stripos($opData['title'], "Large") !== false ) {
+        $title = "Large";
+    } elseif ( stripos($opData['title'], "Custom") !== false ) {
+        $title = "Custom";
+    } elseif ( stripos($opData['title'], "CLEARANCE") !== false ) {
+		$title = "Clearance";
+    }
+	
+	switch ($title) {
+        /* size options */
+		case 'Mini':
+			if (!empty($mini_sqft)) {
+				$minSqFt = (!$minSqFt) ? $mini_sqft: $minSqFt;
+			?>
+				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
+					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $mini_sqft; ?>);
+					destroyCrop();
+					updatePrice();
+				});
+			<?php
+			}
+		break;
+		case 'Small':
+			if (!empty($small_sqft)) {
+				$minSqFt = (!$minSqFt) ? $small_sqft: $minSqFt;
+			?>
+				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
+					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $small_sqft; ?>); 
+					destroyCrop();
+					minSqFt = <?php echo $small_sqft;?>;
+                    updatePrice();
+				});
+			<?php
+			}
+		break;
+		case 'Medium':
+			if (!empty($med_sqft)) {
+				$minSqFt = (!$minSqFt) ? $med_sqft: $minSqFt;
+			?>
+				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
+					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $med_sqft; ?>);
+					destroyCrop();
+					minSqFt = <?php echo $med_sqft;?>;
+					updatePrice();
+				});
+			<?php
+			}
+		break;
+		case 'Large':
+			if (!empty($large_sqft)) {
+				$minSqFt = (!$minSqFt) ? $large_sqft: $minSqFt;
+			?>
+				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
+					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $large_sqft; ?>);
+					destroyCrop();
+					minSqFt = <?php echo $large_sqft;?>;
+					updatePrice();
+				});
+			<?php
+			}
+		break;
+        case 'XLarge':
+			if (!empty($xlarge_sqft)) {
+				$minSqFt = (!$minSqFt) ? $xlarge_sqft: $minSqFt;
+			?>
+				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
+					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $xlarge_sqft; ?>);
+					destroyCrop();
+					updatePrice();
+				});
+			<?php
+			}
+		break;
+		case 'Clearance':
+			if (!empty($clear_sqft)) {
+				$minSqFt = (!$minSqFt) ? $clear_sqft: $minSqFt;
+			?>
+				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() {
+                                        $("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $clear_sqft; ?>);
+                                        destroyCrop();
+                                        updatePrice();
+                                });
+			<?php
+			}
+		break;
+		case 'Custom':
+			$custId = $opData['option_type_id'];
+			?>
+			if (typeof ID_SUFFIX == 'undefined') { ID_SUFFIX = ''; }
+			$('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+				// reset price to 0;
+				$("#options_<?php echo $sqft_optionId; ?>_text").val('0');
+				minSqFt = 0;
+				updatePrice();
+				
+				/*
+				// function to change buttons
+				<?php if ($productType != "patternprod") { ?>
+                // hide origial add to cart button
+                $("#addtocart-btn").hide();
+                <?php if ( $product->getSku() == $custom_upload_sku ) { ?>
+                $("#verify-crop-btn.analyze-btn").show();
+                <?php } else { ?>
+                $("#verify-crop-btn").show();
+                <?php } ?>
+				<?php } ?>
+				*/
+				
+				// enable size boxes
+                $(".option-custom-sizes").show();
+                $("#conv-calculator").hide();
+				$(".custom-notification").show();
+				/*customImageCrop();
+                $("#image-main").removeClass("visible");
+				calculateCustomSqFt();*/
+				
+				$("#options_<?php echo $wfId; ?>_text").keyup(function() {
+					calculateCustomSqFt();
+				});
+				$("#options_<?php echo $wiId; ?>_text").keyup(function() {
+					calculateCustomSqFt();
+				});
+				$("#options_<?php echo $hfId; ?>_text").keyup(function() {
+					calculateCustomSqFt();
+				});
+				$("#options_<?php echo $hiId; ?>_text").keyup(function() {
+					calculateCustomSqFt();
+				});
+				
+				var baddecimal = false;
+	
+				function checkDecimal() {
+					var height_ft = $("#options_<?php echo $hfId; ?>_text").val();
+					var height_in = $("#options_<?php echo $hiId; ?>_text").val();
+					var width_ft = $("#options_<?php echo $wfId; ?>_text").val();
+					var width_in = $("#options_<?php echo $wiId; ?>_text").val();
+
+					var decimal = false;
+
+					if (height_ft.indexOf(".") != -1) {
+						decimal = true;
+					}else if (height_in.indexOf(".") != -1) {
+						decimal = true;
+					}else if (width_ft.indexOf(".") != -1) {
+						decimal = true;
+					}else if (width_in.indexOf(".") != -1) {
+						decimal = true;
+					}
+
+					if (decimal == true) {
+						$(".decimal-error").text("Custom size dimensions cannot contain a decimal point (.) Please round to the nearest inch.").css({padding:"5px",border:"#FF0000 solid 1px",color:"#FF0000"});
+						baddecimal = true;
+						return true;
+					} else {
+						$(".decimal-error").text("").css({padding:"0px",border:"none",color:"#FF0000"});
+						baddecimal = false;
+						return false;
+					}
+				}
+
+				function checkModal() {
+					if (baddecimal === true) {
+						return false;
+					} else {
+						inst.open();
+						return false;
+					}
+				}
+
+
+				function calculateCustomSqFt() {
+					if ($('input[value="<?php echo $opData['option_type_id'];?>"]').is(':checked')) {
+						// check for a decimal
+						var decimal = checkDecimal();
+						if (decimal == true) { return; }
+
+						// calculate sqft based on custom height and width
+						var height_ft = parseFloat($("#options_<?php echo $hfId; ?>_text").val());
+						var height_in = parseFloat($("#options_<?php echo $hiId; ?>_text").val());
+						var width_ft = parseFloat($("#options_<?php echo $wfId; ?>_text").val());
+						var width_in = parseFloat($("#options_<?php echo $wiId; ?>_text").val());
+						var height = 0;
+						var width = 0;
+
+						if (height_ft > 0) { height = height_ft * 12; }
+						if (height_in > 0) { height = height + height_in; }
+						height = (height / 12);
+						height = height.toFixed(2);
+
+						if (width_ft > 0) { width = width_ft * 12; }
+						if (width_in > 0) { width = width + width_in; }
+						width = (width / 12);
+						width = width.toFixed(2);
+
+						if (height > 0 && width > 0) {
+							var sqft = height * width;
+							sqft = Math.round(sqft);
+							if (sqft < 12) { sqft = 12; }
+							$("#options_<?php echo $sqft_optionId; ?>_text").val(sqft);
+							calculateDimension();
+
+							updatePrice();
+						}
+						return;
+					} else {
+						return;
+					}
+				}
+			}); // end click function
+			<?php
+		break;
+	} // end switch
+	
+} // end foreach
+		
+if (!empty($colorValues)) {
+	foreach ( $colorValues as $op ) {
+		$opData = $op->getData();
+		switch ($opData['title']) {
+			/* color options */
+			case "Original":
+				?>
+				$('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+				   setColor("original"); 
+				});
+				$('input[value="<?php echo $opData['option_type_id'];?>"]').prop('checked', true);
+				<?php
+			break;
+			case "Grayscale":
+				?>
+				$('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+				   setColor("grayscale"); 
+				});
+				<?php
+			break;
+			case "Sepia":
+				?>
+				$('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+				   setColor("sepia"); 
+				});
+				<?php
+			break;
+		}// end switch 
+	} // end foreach for color values
+}
+		
+foreach ( $orientationValues as $op ) {
+    $opData = $op->getData();
+	switch ($opData['title']) {
+        /* color options */
+        case "Original":
+            ?>
+            $('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+               setOrientation("original"); 
+            });
+	    	$('input[value="<?php echo $opData['option_type_id'];?>"]').prop('checked', true);
+            <?php
+        break;
+        case "Mirror":
+            ?>
+            $('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+               setOrientation("mirror"); 
+            });
+            <?php
+        break;
+    }// end switch 
+} // end foreach for orientation values
+
+?>
+		
+		/* options for jcrop */
+
+		var mainImg = ".fotorama__img";
+		var api = null;
+		var verify_api = null;
+		var sepia = false;
+		var mirror = false;
+		var productType = "<?php echo $productType; ?>";
+		
+		// functions
+		
+		function destroyCrop() {
+			if (api !== null) {
+				api.destroy();
+				api = null;
+			}
+			$("#image-main").addClass("visible");
+			// show add to cart button and hide verify
+			<?php if ( $product->getSku() == $custom_upload_sku ) { ?>
+			$("#verify-crop-btn.analyze-btn").hide();
+			<?php } else { ?>
+			$("#verify-crop-btn").hide();
+			<?php } ?>
+			$("#addtocart-btn").show();
+			$(".option-custom-sizes").hide();
+			$("#conv-calculator").show();
+			$(".custom-notification").hide();
+		}
+
+		function showCoords(c) {
+			if (productType == "patternprod") { return; }
+
+			//update jcrop coordinates
+			$("#options_<?php echo $cropSizeId; ?>_text").val(c.x + ',' + c.y + ',' + c.w + ',' + c.h);
+		}
+				
+		function calculateDimension() {
+			if (productType == "patternprod") { return; }
+
+			if ( parseInt($("#options_<?php echo $hfId; ?>_text").val()) > 0 ) {
+				heightFoot = parseInt($("#options_<?php echo $hfId; ?>_text").val()) * 1;
+			} else { heightFoot = 0; }
+			if ( parseInt($("#options_<?php echo $hiId; ?>_text").val()) > 0 ) {
+				heightInch = parseInt($("#options_<?php echo $hiId; ?>_text").val()) / 12;
+			} else { heightInch = 0; }
+			if ( parseInt($("#options_<?php echo $wfId; ?>_text").val()) > 0 ) {
+				widthFoot = parseInt($("#options_<?php echo $wfId; ?>_text").val()) * 1;
+			} else { widthFoot = 0; }
+			if ( parseInt($("#options_<?php echo $wiId; ?>_text").val()) > 0 ) {
+				widthInch = parseInt($("#options_<?php echo $wiId; ?>_text").val()) / 12;
+			} else { widthInch = 0; }
+
+			h = heightFoot + heightInch
+			w = widthFoot + widthInch
+			if (h > 0 && w > 0 && h != '' && w != '') {
+				//reset select
+				var bnd = api.getBounds();
+				api.enable();
+				api.animateTo([0, 0, bnd[0], bnd[1]]);
+				// adjust crop
+				var newAspect = w / h;
+				api.setOptions({aspectRatio: newAspect});
+			}
+
+		}
+				
+		/* metric calculations */
+
+		function roundit(which){
+			return Math.round(which*100)/100
+		}
+
+		function cmconvert(){
+			with (document.cminch){
+				feet.value = roundit(cm.value/30.84);
+				inch.value = roundit(cm.value/2.54);
+			}
+		}
+
+		function inchconvert(){
+			with (document.cminch){
+				cm.value = roundit(inch.value*2.54);
+				feet.value=roundit(inch.value/12);
+			}
+		}
+
+		function feetconvert(){
+			with (document.cminch){
+				cm.value=roundit(feet.value*30.48);
+				inch.value=roundit(feet.value*12);
+			}
+		}
+
+		function calcReset() {
+			$j("#calc-feet").val("");
+			$j("#calc-inch").val("");
+			$j("#calc-feet-w").val("");
+			$j("#calc-inch-w").val("");
+			$j("#calc-cm").val("");
+			$j("#calc-cm-w").val("");
+		}
+
+		function calcCM() {
+			if ( $j("#calc-feet").val() == "" ) {
+				calcFtIn();
+				return;
+			}
+			feet = roundit($j("#calc-feet").val()*30.48);
+			inches = roundit($j("#calc-inch").val()*2.54);
+			total = (feet+inches).toFixed(2);
+			$j("#calc-cm").val(total);
+			feetW = roundit($j("#calc-feet-w").val()*30.48);
+			inchesW = roundit($j("#calc-inch-w").val()*2.54);
+			totalW = (feetW+inchesW).toFixed(2);
+			$j("#calc-cm-w").val(totalW);
+		}
+
+		function calcFtIn() {
+			height = $j("#calc-cm").val()/2.54; // we have inches now
+			width = $j("#calc-cm-w").val()/2.54; // we have inches now
+
+			feet_height = Math.floor(height/12);
+			inch_height = Math.floor(height %= 12);
+			feet_width = Math.floor(width/12);
+			inch_width = Math.floor(width %= 12);
+
+			$j("#calc-feet").val(feet_height); // height feet
+			$j("#calc-inch").val(inch_height); // height inch
+			$j("#calc-feet-w").val(feet_width); // width feet
+			$j("#calc-inch-w").val(inch_width); // width inch
+
+			calculateCustomSqFt();
+		}
+
+		function convertCM() {
+			height = $j("#calc-cm-height").val()/2.54; // we have inches now
+			width = $j("#calc-cm-width").val()/2.54; // we have inches now
+
+			feet_height = Math.floor(height/12);
+			inch_height = Math.floor(height %= 12);
+			feet_width = Math.floor(width/12);
+			inch_width = Math.floor(width %= 12);
+
+			$j("#options_<?php echo $hfId;?>_text").val(feet_height); // height feet
+			$j("#options_<?php echo $hiId;?>_text").val(inch_height); // height inch
+			$j("#options_<?php echo $wfId;?>_text").val(feet_width); // width feet
+			$j("#options_<?php echo $wiId;?>_text").val(inch_width); // width inch
+
+			calculateCustomSqFt();
+		}
+		
+		function setColor(color) {
+			if (color == "original") {
+				$(mainImg).css({filter:"none",WebkitFilter:"none"});
+			} else if (color == "grayscale") {
+				$(mainImg).css({filter:"grayscale(100%)",WebkitFilter:"grayscale(100%)"});
+			} else if (color == "sepia") {
+				$(mainImg).css({filter:"sepia(100%)",WebkitFilter:"sepia(100%)"});
+			}
+		}
+		
+		function setOrientation(orient) {
+			if (orient == "mirror") {
+				$(mainImg).css({transform:"none",WebkitTransform:"scaleX(-1)",top:"0",left:"0"});
+			} else if (orient == "original") {
+				$(mainImg).css({transform:"",WebkitTransform:"",top:"",left:""});
+			}
+		}
+		
+		//used to update price
+		function updatePrice() {
+			$("div.price-box .price-final_price").trigger("updatePrice");
+		}
+		
+		minSqFt = <?php echo $minSqFt;?>;
+		updatePrice();
+	});
+</script>
+	
+<p>Product: <?php echo $minSqFt;?></p>
+
+
+	
+		

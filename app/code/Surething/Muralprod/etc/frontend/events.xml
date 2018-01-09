@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="sales_quote_add_item">
+		<observer instance="Surething\Muralprod\Observer\Sales\SalesQuoteAddItem" name="surething_muralprod_observer_sales_quote_add_item"/>
+	</event>
+	<!-- used -->
+	<event name="checkout_cart_product_add_after">
+		<observer name="muralprod_customprice" instance="Surething\Muralprod\Observer\CustomPrice" />
+	</event>
+</config>

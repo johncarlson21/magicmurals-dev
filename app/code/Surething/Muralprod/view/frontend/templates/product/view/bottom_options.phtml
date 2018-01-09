@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/* @var $block \Magento\Catalog\Block\Product\View\Options */
+/* This file is for the bottom options */
+?>
+
+<?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php $_productId = $block->getProduct()->getId() ?>
+<?php if (count($_options)):?>
+    <?php foreach ($_options as $_option): ?>
+        <?php echo $block->getOptionHtml($_option) ?>
+    <?php endforeach; ?>
+<?php endif; ?>
