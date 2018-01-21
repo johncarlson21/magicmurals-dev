@@ -1,0 +1,21 @@
+{
+    "name": "surething/module-salesperson",
+    "description": "Adds Salesperson to orders and quotes. Automatically adds the logged in user.",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "John Carlson",
+            "email": "john@surethingweb.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Surething\\Salesperson\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
