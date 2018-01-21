@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Surething. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+		
+		<add id="Surething_Testimonials::testimonials" 
+			 title="Testimonials" 
+			 module="Surething_Testimonials" 
+			 sortOrder="20" 
+			 resource="Magento_Backend::content"/> 
+		
+        <add id="Surething_Testimonials::surething_testimonialsgrid_index" 
+			 title="Testimonial Manager" 
+			 module="Surething_Testimonials"  
+			 sortOrder="10" 
+			 action="testimonials/testimonialsgrid/index" 
+			 resource="Magento_Backend::content" parent="Surething_Testimonials::testimonials"/>
+		
+		<add id="Surething_Testimonials::surething_testimonialsimport_index" 
+			 title="Testimonials Import" 
+			 module="Surething_Testimonials"  
+			 sortOrder="20" 
+			 action="testimonials/testimonialsimport/index" 
+			 resource="Magento_Backend::content" 
+			 parent="Surething_Testimonials::testimonials"/>
+<!--AddMenu-->
+    </menu>
+</config>

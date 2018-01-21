@@ -1,0 +1,75 @@
+<?php
+/* TESTIMONIALS	GALLERY	*/
+
+//$testimonials =	Mage::getModel('testimonials/testimony')->getTestimonials();
+
+//$media_folder = Mage::getBaseDir('media') . "/";
+
+?>
+
+<div id="gallery">
+    <div id="gallery-header">
+        <div id="gallery-header-center">
+            <div id="gallery-header-center-right">
+                <a href="javascript:void(0);" id="filter-all">View All</a>
+                <span class="gal-separator">|</span>
+                <a href="javascript:void(0);" id="filter-residential">Residential</a>
+                <span class="gal-separator">|</span>
+                <a href="javascript:void(0);" id="filter-business">Business</a>
+                
+                <div id="filter-dropdowns" style="text-align: center; margin: 5px 0;">
+                	<select id="residential-dropdown" style="display: none;">
+               	    	<option value="">Choose a Room</option>
+                	    <option value="Ba">Bathroom</option>
+                	    <option value="Be">Bedroom</option>
+                	    <option value="Bor">Bonus Room</option>
+                	    <option value="Bo">Boy's Room</option>
+                	    <option value="D">Dining Room</option>
+                	    <!-- <option value="Do">Dorm Room</option> -->
+                	    <option value="Eh">Entry/Hallway</option>
+                	    <option value="Rf">Residential 'Framed'</option>
+                	    <option value="G">Garage</option>
+                	    <option value="Gi">Girl's Room</option>
+                	    <option value="Ho">Home Office</option>
+                	    <option value="Kid">Kid's Room</option>
+                	    <option value="Ki">Kitchen</option>
+                	    <option value="L">Living Room</option>
+                	    <option value="M">Man Cave</option>
+                	    <!-- <option value="N">Nursery</option> -->
+                	    <!-- <option value="P">Playroom</option>
+                	    <option value="T">Teen's Room</option> -->
+                	    <option value="Ro">Other</option>
+                    </select>
+                	<select id="business-dropdown" style="display: none;">
+               	    	<option value="">Select an Industry</option>
+                	    <!-- <option value="Br">Breweries &amp; Wineries</option> -->
+                	    <option value="Ch">Churches &amp; Religion</option>
+                	    <option value="Co">Corporate &amp; Offices</option>
+                	    <option value="E">Entertainment</option>
+                	    <!-- <option value="Bf">Business 'Framed'</option> -->
+                	    <option value="Hot">Hotels</option>
+                	    <!-- <option value="I">Interior Designers</option> -->
+                	    <option value="Li">Libraries</option>
+                	    <option value="Me">Medical Facilities</option>
+                	    <option value="Mu">Museums</option>
+                	    <option value="Rc">Residential Communities</option>
+                	    <option value="Re">Restaurants</option>
+                	    <option value="Ret">Retail</option>
+                	    <option value="S">Salons &amp; Spas</option>
+                	    <option value="Sc">Schools &amp; Universities</option>
+                	    <option value="Buo">Other</option>
+                	</select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="gallery-content" style="display: none;">
+        <div id="gallery-content-center">
+            
+        </div><!-- end gallery content center -->
+    </div><!-- end gallery content -->
+</div>
+<div data-remodal-id="gallery-modal" id="gallery-modal">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <div class="gallery-modal-box grid-container-spaced"></div>
+</div>
