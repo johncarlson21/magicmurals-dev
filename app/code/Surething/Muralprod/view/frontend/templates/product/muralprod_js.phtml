@@ -1,6 +1,6 @@
 <script>
 	var minSqFt = 0;
-	require(['jquery', 'jquery/ui'], function($){ 
+	require(['jquery', 'jquery/ui', 'jCrop'], function($){ 
 		
 <?php
 /*
@@ -550,8 +550,6 @@ foreach ( $orientationValues as $op ) {
 		updatePrice();
 	});
 </script>
-	
-<p>Product: <?php echo $minSqFt;?></p>
 
 
 	

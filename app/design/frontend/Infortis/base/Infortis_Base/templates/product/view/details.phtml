@@ -3,23 +3,43 @@
 ?>
 <?php
     $theme = $this->helper('Infortis\Base\Helper\Data');
-    $showTabs = $theme->getCfg('product_page/tabs'); //$block->getData('show_tabs');
-    $containerClasses = '';
     $innerContainerClasses = '';
-    if ($showTabs)
+    $jsScriptInit = '';
+
+    $mode = $theme->getCfg('product_page/tabs');
+    $openedTab = $theme->getCfg('product_page/opened_tab');
+    $jsOpenedTab = '';
+    if ($openedTab !== null)
     {
-        $containerClasses .= ' collateral-tabs';
-        $innerContainerClasses .= 'product data items ' . $theme->getCfg('product_page/tabs_style');
+        $jsOpenedTab = ', "active": ' . $openedTab;
     }
     else
     {
-        $containerClasses .= ' collateral-stacked';
+        $jsOpenedTab = ', "active": null';
+    }
+
+    switch ($mode)
+    {
+        case 1:
+            $innerContainerClasses = 'product data items ' . $theme->getCfg('product_page/tabs_style') . ' show-tabs';
+            $jsScriptInit = '{"tabs": {"openedState": "active", "collapsible": true' . $jsOpenedTab . '}}';
+            break;
+
+        case 2:
+            $innerContainerClasses = 'product data items ' . $theme->getCfg('product_page/tabs_style');
+            $jsScriptInit = '{"tabs": {"openedState": "active", "collapsible": true' . $jsOpenedTab . '}}';
+            break;
+        
+        default:
+            $innerContainerClasses = 'product data items style1 stacked-tabs';
+            $jsScriptInit = '{"tabs": {"openedState": "active", "collapsible": true}}';
+            break;
     }
 ?>
 <?php if ($detailedInfoGroup = $block->getGroupChildNames('detailed_info', 'getChildHtml')):?>
-    <div class="product info detailed box-collateral collateral-container<?php echo $containerClasses; ?>">
+    <div class="product info detailed collateral-container">
         <?php $layout = $block->getLayout(); ?>
-        <div class="<?php echo $innerContainerClasses; ?>" <?php if ($showTabs): ?>data-mage-init='{"tabs":{"openedState":"active"}}'<?php endif; ?>>
+        <div class="<?php echo $innerContainerClasses; ?>" <?php if ($jsScriptInit): ?>data-mage-init='<?php echo $jsScriptInit; ?>'<?php endif; ?>>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
@@ -29,31 +49,20 @@
                     $alias = $layout->getElementAlias($name);
                     $label = $block->getChildData($alias, 'title');
                 ?>
-                <?php if ($showTabs): ?>
-                    <div class="data item title"
-                         aria-labeledby="tab-label-<?php /* @escapeNotVerified */ echo $alias; ?>-title"
-                         data-role="collapsible" id="tab-label-<?php /* @escapeNotVerified */ echo $alias; ?>">
-                        <a class="data switch"
-                           tabindex="-1"
-                           data-toggle="switch"
-                           href="#<?php /* @escapeNotVerified */ echo $alias; ?>"
-                           id="tab-label-<?php /* @escapeNotVerified */ echo $alias; ?>-title">
-                            <?php /* @escapeNotVerified */ echo $label; ?>
-                        </a>
-                    </div>
-                    <div class="data item content" id="<?php /* @escapeNotVerified */ echo $alias; ?>" data-role="content">
-                        <?php /* @escapeNotVerified */ echo $html; ?>
-                    </div>
-                <?php else: ?>
-                    <div class="block collateral-block collateral-block-<?php /* @escapeNotVerified */ echo $alias; ?>">
-                        <div class="block-title">
+                <div class="data item title"
+                    aria-labeledby="tab-label-<?php /* @escapeNotVerified */ echo $alias; ?>-title"
+                    data-role="collapsible" id="tab-label-<?php /* @escapeNotVerified */ echo $alias; ?>">
+                    <a class="data switch"
+                        tabindex="-1"
+                        data-toggle="switch"
+                        href="#<?php /* @escapeNotVerified */ echo $alias; ?>"
+                        id="tab-label-<?php /* @escapeNotVerified */ echo $alias; ?>-title">
                             <strong><?php /* @escapeNotVerified */ echo $label; ?></strong>
-                        </div>
-                        <div class="block-content" id="<?php /* @escapeNotVerified */ echo $alias; ?>">
-                            <?php /* @escapeNotVerified */ echo $html; ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                    </a>
+                </div>
+                <div class="data item content" id="<?php /* @escapeNotVerified */ echo $alias; ?>" data-role="content">
+                    <?php /* @escapeNotVerified */ echo $html; ?>
+                </div>
             <?php endforeach;?>
         </div>
     </div>

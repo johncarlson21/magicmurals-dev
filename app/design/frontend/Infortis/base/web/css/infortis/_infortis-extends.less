@@ -29,9 +29,11 @@
 
 .abs-sidebar-block-title {
     .lib-sidebar-block-title();
-    > strong {
+
+    strong {
         .lib-sidebar-block-title-text();
     }
+
     &:extend(.abs-global-border-color all);
 }
 
@@ -85,6 +87,7 @@
     text-transform: uppercase;
     font-weight: @font-weight__semibold;
     letter-spacing: .05em;
+
     .lib-icon-font(
         @_icon-font-content: '',
         @_icon-font-size: 16px,
@@ -92,6 +95,7 @@
         @_icon-font-margin: -2px 5px 0 0,
         @_icon-font-vertical-align: middle
     );
+
     &:hover {
         .lib-css(color, @addto-hover-color);
         text-decoration: none;

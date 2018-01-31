@@ -2,6 +2,9 @@
 
 namespace Infortis\Base\Model\System\Config\Source\Design\Font\Family;
 
+/**
+ * @deprecated
+ */
 class Groupcustomgoogle
 {
     public function toOptionArray()

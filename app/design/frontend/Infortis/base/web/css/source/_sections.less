@@ -6,6 +6,24 @@
 & when (@media-common = true) {
 
     //
+    //  Add brackets to counters inside tabs
+    //  ---------------------------------------------
+    .product.data.items {
+        > .item.title {
+            > .switch {
+                .counter {
+                    &:before {
+                        content: '(';
+                    }
+                    &:after {
+                        content: ')';
+                    }
+                }
+            }
+        }
+    }
+
+    //
     //  Blank style
     //  ---------------------------------------------
     .product.data.items {
@@ -71,6 +89,9 @@
             }
             > .switch {
                 //&:extend(.abs-global-border-color all);
+                strong {
+                    font-weight: normal;
+                }
             }
         }
         > .item.content {
@@ -128,6 +149,44 @@
         }
     }
 
+    //
+    //  Tabs styled like vertically stacked blocks
+    //  ---------------------------------------------
+    .product.data.items.stacked-tabs {
+        > .item.title {
+            &:extend(.abs-sidebar-block-title all);
+
+            > .switch,
+            &:not(.disabled) > .switch:active,
+            &.active > .switch,
+            &.active > .switch:focus,
+            &.active > .switch:hover {
+                border: none;
+                height: inherit;
+                line-height: 1;
+                margin: 0;
+                padding: 0;
+            }
+
+            a {
+                &:after {
+                    display: none;
+                }
+            }
+        }
+
+        > .item.content {
+            border: none;
+            margin: 0 0 30px;
+            padding: 0;
+
+            &:last-child {
+                // Remove bottom border from the last panel
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+        }
+    }
 }
 
 //
@@ -135,7 +194,7 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .product.data.items {
+    .product.data.items.show-tabs {
         .lib-data-tabs(
             @_tab-content-border-top-status: true,
             @_tab-control-color-visited: false,
@@ -146,7 +205,7 @@
     //
     //  Luma style
     //  ---------------------------------------------
-    .product.data.items.style-luma {
+    .product.data.items.style-luma.show-tabs {
         // We need to insert tabs variables which Luma theme overrides.
         // @_tab-content-margin-top = @_tab-control-height + @_tab-control-border-width + @_tab-control-padding-top + @_tab-control-padding-bottom
         .lib-data-tabs(
@@ -181,7 +240,7 @@
         }
         > .item.content {
             &:last-child {
-                // Remove bottom border from the last panel (which was added for accordion)
+                // Remove bottom border from the last panel
                 border-bottom: none;
             }
         }
@@ -190,7 +249,7 @@
     //
     //  Style 1
     //  ---------------------------------------------
-    .product.data.items.style1 {
+    .product.data.items.style1.show-tabs {
         // @_tab-content-border-top-status set to "true" adds top border to the content panels
         // @_tab-content-margin-top = @_tab-control-height + @_tab-control-border-width + @_tab-control-padding-top + @_tab-control-padding-bottom
         // In this case tabs have transparent border so we need to increase @_tab-content-margin-top by one (despite that @_tab-control-border-width = 0)
@@ -238,7 +297,7 @@
         }
         > .item.content {
             &:last-child {
-                // Remove bottom border from the last panel (which was added for accordion)
+                // Remove bottom border from the last panel
                 border-bottom: none;
             }
         }
@@ -247,7 +306,7 @@
     //
     //  Style 1 small (modification of Style 1)
     //  ---------------------------------------------
-    .product.data.items.style1.style1-small {
+    .product.data.items.style1.style1-small.show-tabs {
         > .item.title {
             > .switch {
                 font-size: 14px;
@@ -277,4 +336,18 @@
         }
     }
 
+    //
+    //  Tabs styled like vertically stacked blocks
+    //  ---------------------------------------------
+    .product.data.items.stacked-tabs {
+        > .item.title {
+            > .switch {
+                cursor: default;
+            }
+        }
+
+        > .item.content {
+            display: block !important; // IMPORTANT: force display of each block (to override "tabs" widget's behavior)
+        }
+    }
 }

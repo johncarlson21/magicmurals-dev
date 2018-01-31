@@ -7,8 +7,10 @@
             , searchBlockSelector: '#header-search'
             , compareBlockSelector: '#mini-compare'
             , cartBlockSelector: '#minicart'
+            , cartDropdownContentSelector: '#header-cart'
             , accountLinksBlockSelector: '#header-account'
             , dropdownBlockClass: 'dropdown-block'
+            , dropdownBlockActiveClass: 'active open'
         }
 
         , rootContainer: undefined
@@ -18,6 +20,7 @@
         , searchBlock: undefined
         , compareBlock: undefined
         , cartBlock: undefined
+        , cartDropdownContent: undefined
         , accountLinksBlock: undefined
 
         , _create: function()
@@ -32,8 +35,9 @@
             // Initialize plugin basic properties
             this.rootContainer = this.element;
             this.searchBlock = $(this.options.searchBlockSelector);
-            this.compareBlock = $(this.options.compareBlockSelector);
+            // this.compareBlock = $(this.options.compareBlockSelector);
             this.cartBlock = $(this.options.cartBlockSelector);
+            this.cartDropdownContent = $(this.options.cartDropdownContentSelector);
             this.accountLinksBlock = $(this.options.accountLinksBlockSelector);
 
             // Activate header mode
@@ -138,11 +142,8 @@
         , _moveElementsToMobilePosition: function()
         {
             $('#mini-cart-marker-mobile').after(this.cartBlock);
-
             $('#search-marker-mobile').after(this.searchBlock);
-
-            $('#mini-compare-marker-mobile').after(this.compareBlock);
-
+            // $('#mini-compare-marker-mobile').after(this.compareBlock);
             $('#account-links-marker-mobile').after(this.accountLinksBlock);
 
             // Move main menu
@@ -155,23 +156,21 @@
             $('.skip-active').removeClass('skip-active');
             
             // Disable dropdowns
+
             // TODO: it may be good idea to disable the dropdowns before moving the dropdown blocks
             this.cartBlock.removeClass(this.options.dropdownBlockClass);
-            this.compareBlock.removeClass(this.options.dropdownBlockClass);
+            // this.compareBlock.removeClass(this.options.dropdownBlockClass);
 
-            // Clean up after dropdowns: reset the "display" property
-            $('#header-cart').css('display', '');
-            $('#header-compare').css('display', '');
+            // Remove "display: block". Otherwise the block would be visible before the skip link is clicked to open the block.
+            this.cartDropdownContent.css('display', '');
+            // $('#header-compare').css('display', '');
         }
 
         , _moveElementsToRegularPosition: function()
         {
             $('#mini-cart-marker-regular').after(this.cartBlock);
-
             $('#search-marker-regular').after(this.searchBlock);
-
-            $('#mini-compare-marker-regular').after(this.compareBlock);
-
+            // $('#mini-compare-marker-regular').after(this.compareBlock);
             $('#account-links-marker-regular').after(this.accountLinksBlock);
 
             // Move main menu
@@ -185,7 +184,18 @@
 
             // Enable dropdowns
             this.cartBlock.addClass(this.options.dropdownBlockClass);
-            this.compareBlock.addClass(this.options.dropdownBlockClass);
+            this.cartBlock.removeClass(this.options.dropdownBlockActiveClass);
+            // this.compareBlock.addClass(this.options.dropdownBlockClass);
+
+            // Check whether dropdown content box is a widget (whether dropdownDialog widget was already initialized).
+            // If not, we can't set "display: block" again. When widget will be initialized,
+            // it will automatically set "display: block", so we don't need to do this.
+            if (this.cartDropdownContent.hasClass('ui-widget-content'))
+            {
+                // Set again "display: block", it is needed by the mini cart script. See #10.
+                this.cartDropdownContent.css('display', 'block');
+                // $('#header-compare').css('display', 'block');
+            }
         }
 
         // , print: function(msg)

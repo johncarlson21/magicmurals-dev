@@ -2,7 +2,8 @@ var config = {
     paths: {
         'smartheader': 'Infortis_Base/js/smartheader',
         'stickyheader': 'Infortis_Base/js/stickyheader',
-        'qtycontrol': 'Infortis_Base/js/qtycontrol'
+        'qtycontrol': 'Infortis_Base/js/qtycontrol',
+        'expandingsearch': 'Infortis_Base/js/expandingsearch'
     },
     shim: {
         'smartheader': {
@@ -12,6 +13,9 @@ var config = {
             deps: ['jquery', 'jquery/ui', 'enquire']
         },
         'qtycontrol': {
+            deps: ['jquery', 'jquery/ui']
+        },
+        'expandingsearch': {
             deps: ['jquery', 'jquery/ui']
         }
     }

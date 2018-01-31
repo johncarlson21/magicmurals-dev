@@ -35,8 +35,21 @@ class Logo extends MagentoHeaderLogo
     }
 
     /**
+     * Get logo image URL by suffix
+     *
+     * @param string
+     * @return string|false
+     */
+    public function getLogoSrcBySuffix($suffix)
+    {
+        return $this->getAdditionalLogoSrc($suffix);
+    }
+
+    /**
      * TODO: Optimize: probably no need to find out default logo path again. It's already done in parent class method _getLogoUrl(). Override that method.
      * Get logo image URL with suffix
+     * TODO: Or better: move to separate method the code which retrieves the logo file configured via admin panel and result of that method
+     * save in a property for later use (this method can be used when retrieving sticky logo and mobile logo).
      *
      * @param string
      * @return string|false

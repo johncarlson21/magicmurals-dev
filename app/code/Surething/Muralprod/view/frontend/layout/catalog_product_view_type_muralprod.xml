@@ -6,9 +6,12 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<!-- <head>
+		<script src="Surething_Muralprod::js/jcrop/js/jquery.Jcrop.min.js" defer="defer"/>
+	</head> -->
     <body>
         <referenceContainer name="main.content">
-            <block class="Magento\Framework\View\Element\Template" name="muralprod_js" as="muralprod_js" after="-" template="Surething_Muralprod::product/muralprod_js.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="muralprod_js" template="Surething_Muralprod::product/muralprod_js.phtml" />
             <referenceBlock name="product.info.options">
             	<action method="setTemplate">
                     <argument name="template" xsi:type="string">Surething_Muralprod::product/view/options.phtml</argument>

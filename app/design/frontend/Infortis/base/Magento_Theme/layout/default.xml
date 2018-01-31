@@ -24,8 +24,14 @@
                 <block class="Infortis\Base\Block\Html\Header\Logo" name="site-logo" template="html/header/logo.phtml">
                     <arguments>
                         <argument name="logo_file" xsi:type="string">images/logo.png</argument>
-                        <argument name="logo_img_width" xsi:type="number">290</argument>
-                        <argument name="logo_img_height" xsi:type="number">100</argument>
+                    </arguments>
+                </block>
+
+                <!-- Mobile logo -->
+                <block class="Infortis\Base\Block\Html\Header\Logo" name="site-logo-mobile" template="html/header/logo_secondary.phtml">
+                    <arguments>
+                        <!-- Required the same image path as for the default site logo (see inside "site-logo" block) -->
+                        <argument name="logo_file" xsi:type="string">images/logo.png</argument>
                     </arguments>
                 </block>
 

@@ -2,12 +2,11 @@
     "name": "infortis/theme-frontend-base",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/theme-frontend-blank": "100.0.*",
-        "magento/framework": "100.0.*"
+        "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0",
+        "magento/theme-frontend-blank": "^100.0.0"
     },
     "type": "magento2-theme",
-    "version": "2.6.1",
+    "version": "2.7.1",
     "license": [
         "Proprietary"
     ],

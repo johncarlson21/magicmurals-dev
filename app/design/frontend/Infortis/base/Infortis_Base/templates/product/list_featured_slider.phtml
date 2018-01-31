@@ -290,13 +290,14 @@
                 <?php endif; ?>
 
                 <div class="item">
-                    <?php
-                        $productNameEscaped = $block->escapeHtml($_product->getName());
-                    ?>
                     <div class="product-item-info">
+                        <?php
+                            $productNameEscaped = $block->escapeHtml($_product->getName());
+                            $actualImgWidth = $imgWidth;
+                        ?>
                         <div class="product-item-img">
 
-                            <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo">
+                            <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo"<?php if (!empty($actualImgWidth)): ?> style="max-width:<?php echo $actualImgWidth; ?>px;"<?php endif; ?>>
 
                                 <?php if ($lazy && $numberOfRows < 2): ?>
                                     <img class="product-image-photo lazyOwl" 

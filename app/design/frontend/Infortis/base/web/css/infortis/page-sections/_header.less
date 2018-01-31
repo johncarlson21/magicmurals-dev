@@ -93,34 +93,6 @@
 }
 
 //
-//  Skip links
-//  ---------------------------------------------
-
-// Product counter
-.skip-link .counter {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-    font-size: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    background-color: red;
-    color: #fff;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    /* To display products counter sticked above the icon, uncomment this code: */
-    /*
-    margin-left: -14px;
-    margin-right: -7px;
-    margin-top: -22px;
-    position: relative;
-    */
-}
-
-//
 //  Block markers
 //  ---------------------------------------------
 
@@ -372,19 +344,6 @@
             text-align: right;
         }
 
-        /* Dropdowns
-        -------------------------------------------------------------- */
-        /* Force left-aligned edge of dropdowns */
-        .header-m-container .item-left .dropdown-block .dropdown-content {
-            left: 0;
-            right: auto;
-        }
-        /* Force right-aligned edge of dropdowns */
-        .header-m-container .item-right .dropdown-block .dropdown-content {
-            left: auto;
-            right: 0;
-        }
-
 
         /* Selected elements
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -548,15 +507,33 @@
             text-decoration: none;
         }
 
-        /* Skip link elements
+        /* Skip link icon
         -------------------------------------------------------------- */
         .skip-link .icon {
             display: inline-block;
             vertical-align: middle;
             margin-right: 3px;
-            font-size: 16px;
+            font-size: 16px !important; /* Override possible inline styles */
             line-height: 16px;
         }
+
+        /* In mobile view override desktop view styles of iconbox */
+        .skip-link .icon.ib {
+            line-height: 50px;
+            height: 50px;
+            width: 16px;
+            background-color: transparent;
+            color: inherit; /* Inherit from skip links */
+
+            /* Override (remove) transitions. 
+               Note: if you want to add transitions, add them for the entire skip link */
+            -webkit-transition: none;
+            -moz-transition: none;
+            transition: none;
+        }
+
+        /* Skip link elements
+        -------------------------------------------------------------- */
         // Important: make the selector more specific, because label can be hidden (cart and compare dropdowns) with class "hide"
         .skip-link.dropdown-heading .label.hide,
         .skip-link .label {
@@ -566,10 +543,23 @@
             font-size: 14px;
             font-weight: 600;
         }
+
+        // Product counter in mobile header view (when dropdown is not active)
         .skip-link .counter {
             display: inline-block;
             vertical-align: middle;
+
+            // The same styles as for ".dropdown-block .dropdown-heading .counter" in _dropdown.less
+            line-height: 24px;
+            height: 24px;
+            width: 24px;
+            font-size: 11px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            color: #fff;
+            background-color: #333;
         }
+        
         .skip-link .caret {
             display: none;
         }
@@ -580,12 +570,6 @@
         .skip-link:hover {
             color: inherit;
         }
-        .skip-link.skip-active span {
-            color: inherit;
-        }
-        // .skip-link.skip-active .counter {
-        //     color: #fff;
-        // }
 
         /* Size
         -------------------------------------------------------------- */
@@ -616,7 +600,7 @@
            blocks are styled.
         -------------------------------------------------------------- */
         .skip-content--style {
-            clear: both; //TODO: remove if clearfix works correctly on this element
+            clear: both; /* Required instead of clearfix */
             padding: 20px;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -629,17 +613,9 @@
             &:extend(.abs-add-clearfix-mobile-m all); //TODO: check if applied inside this custom breakpoint
         }
 
-        #header-nav.skip-content--style {
-            padding: 0;
-        }
-
-        // .skip-content--style:before,
-        // .skip-content--style:after {
-        //     display: table;
-        //     content: " ";
-        // }
-        // .skip-content--style:after {
-        //     clear: both;
+        // // Removes padding around skip content when it's menu
+        // #header-nav.skip-content--style {
+        //     padding: 0;
         // }
 
 
@@ -657,12 +633,6 @@
         /* Selected skip content
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         */
-        /* Height of mobile menu items and vertical inline links
-        -------------------------------------------------------------- */
-        .nav-mobile .nav-item > a, /* Important: do not add ".header-mobile" at the beginning, height needs to be applied */
-        .account-links .links > li > a {
-            line-height: 50px;
-        }
 
         /* Generic vertical inline links (e.g. account links)
         -------------------------------------------------------------- */
@@ -671,8 +641,11 @@
         }
         .account-links .links > li > a {
             background-image: none; /* Remove link separators */
-            font-weight: 600;
-            font-size: 1.6rem;
+        }
+        .account-links.links-wrapper-separators .links > li:first-child,
+        .account-links.links-wrapper-separators-left .links > li:first-child {
+            /* In links with separators, we can't remove the negative margin in first item */
+            margin-left: -1px;
         }
 
         /* Cart + compare
@@ -711,6 +684,23 @@
         .minicart-items {
             // Override fixed height which is applied to list of items of dropdown minicart
             height: auto !important;
+        }
+
+
+        /* Search
+        -------------------------------------------------------------- */
+        .skip-content .block-search {
+            display: block; /* Inside skip-content, search box needs to have block display */
+        }
+
+        /* Additional styles for dropdownDialog widget
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        */
+        // We need to make the wrapper (added by the dropdownDialog widget) always 
+        // displayed when header is in mobile view.
+        // Otherwise, the wrapper will be shown on mouse hover over the skip link.
+        .mini-cart .mage-dropdown-dialog {
+            display: block !important;
         }
 
     } // end: mobile header mode
@@ -797,13 +787,10 @@
         /* Left column 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         */
+
         /* Dropdowns
         -------------------------------------------------------------- */
-        /* Force left-aligned edge of dropdowns */
-        .left-column .dropdown-block .dropdown-content {
-            left: 0;
-            right: auto;
-        }
+
         /* Avoid dropdown heading stretched in containing block */
         .left-column .dropdown-block {
             display: inline-block;
@@ -811,13 +798,13 @@
 
         /* Search box
         -------------------------------------------------------------- */
-        .left-column .search-wrapper {
-            float: left;
-        }
+        // .left-column .block-search {
+        //     float: left;
+        // }
 
         /* Elements of User Menu
         -------------------------------------------------------------- */
-        .left-column .user-menu .search-wrapper,
+        .left-column .user-menu .block-search,
         .left-column .user-menu .mini-cart,
         .left-column .user-menu .mini-compare,
         .left-column .user-menu .top-links,
@@ -839,27 +826,18 @@
         /* Right column
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         */
+
         /* Dropdowns
         -------------------------------------------------------------- */
-        /* Force right-aligned edge of dropdowns */
-        .right-column .dropdown-block .dropdown-content {
-            left: auto;
-            right: 0;
-        }
+
         /* Avoid dropdown heading stretched in containing block */
         .right-column .dropdown-block {
             display: inline-block;
         }
 
-        /* Search box
-        -------------------------------------------------------------- */
-        .right-column .search-wrapper {
-            float: right;
-        }
-
         /* Elements of User Menu
         -------------------------------------------------------------- */
-        .right-column .user-menu .search-wrapper,
+        .right-column .user-menu .block-search,
         .right-column .user-menu .mini-cart,
         .right-column .user-menu .mini-compare,
         .right-column .user-menu .top-links,
@@ -897,7 +875,7 @@
             float: none;
             width: auto;
         }
-        .central-column .user-menu .search-wrapper,
+        .central-column .user-menu .block-search,
         .central-column .user-menu #mini-cart-wrapper-regular, /* IMPORTANT: cart wrapper also needs to float */
         .central-column .user-menu .mini-cart,
         .central-column .user-menu .mini-compare,
@@ -955,7 +933,7 @@
 
         //  Let the search box have the same width as containing block
 
-        .search-wrapper {
+        .block-search {
             width: 100%;
         }
 
@@ -963,7 +941,6 @@
         //  Logo
         //  ---------------------------------------------
 
-        //  TODO:
         //  Fix for Firefox and IE. In regular header, stretch the image to full width.
         //  Thanks to that, on small screens when logo is scaled down it will not expand its container. */
 
@@ -997,9 +974,8 @@
         /*.header-top .lang-switcher,
         .header-top .currency-switcher, */
         #lang-switcher-wrapper-regular,
-        #currency-switcher-wrapper-regular,
-        .header-top .dropdown-block {
-            margin:0;
+        #currency-switcher-wrapper-regular {
+            margin: 0;
         }
 
 
@@ -1013,17 +989,8 @@
         /* Deprecated rules to hide elements in regular header (left for backward compatibility) */
         .skip-link,
         .logo-wrapper--mobile,
-        .logo--mobile,
         .header-collateral,
-        .after-mobile-logo,
-        #user-menu-wrapper-mobile,
-
-        /* Deprecated identifiers of wrappers */
-        #search-wrapper-mobile,
-        #account-links-wrapper-mobile,
-        #mini-cart-wrapper-mobile,
-        #mini-compare-wrapper-mobile,
-        #nav-wrapper-mobile
+        .after-mobile-logo
         {
             display: none;
         }
@@ -1117,10 +1084,16 @@
             
         /* Search
         -------------------------------------------------------------- */
-        .hp-blocks-holder--stacked .search-wrapper {
+        .hp-blocks-holder--stacked .block-search {
+            display: block;
             float: none;
             max-width: 440px;
             margin: 10px auto; /* Add space above and below search box */
+        }
+
+        /* But if search box is inside nav-holder, remove margin */
+        .hp-blocks-holder--stacked .nav-holder .block-search {
+            margin: 0;
         }
 
     }

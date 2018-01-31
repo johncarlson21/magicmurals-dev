@@ -11,8 +11,9 @@
  */
 <?php
     $storeCode = $block->getStoreViewCode();
-    $t = $this->helper('Infortis\Base\Helper\Data'); //Base theme helper
-    $helperDesign = $this->helper('Infortis\Base\Helper\Design'); //Base theme design helper
+    $t = $this->helper('Infortis\Base\Helper\Data'); // Base theme helper
+    $helperDesign = $this->helper('Infortis\Base\Helper\Design'); // Base theme design helper
+    $helperFont = $this->helper('Infortis\Base\Helper\Fonts');
     $d = $t->getCfgSectionDesign($storeCode);
     $b = $block;
 
@@ -24,10 +25,11 @@
 
 
 <?php
-//Global
+//Global variables
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ?>
+
 <?php
     //Determine background color of the main content area
     $mainBgColor = '#fff';
@@ -43,12 +45,22 @@
     {
         $mainBgColor = $d['page']['bg_color'];
     }
+?>
 
-    //Convert the value to an integer. In previous versions the font size was stored as a number with "px" suffix.
-    $baseFontSize = trim($d['font']['font_size']);
-    if (strpos($baseFontSize, "px") !== FALSE)
+
+
+<?php
+//Fonts
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+?>
+
+<?php
+    // Default font size of the text. In previous versions the font size was stored as a number with "px" suffix, so strip it out.
+    $baseFontSize = trim($d['font']['body_font_size']);
+    if (strpos($baseFontSize, "px") !== false)
     {
-        //If "px" found in the string
+        // If "px" found in the string
         $part = explode("px", $baseFontSize);
         $baseFontSize = intval($part[0]);
     }
@@ -59,8 +71,112 @@
 
     if (empty($baseFontSize))
     {
-        $baseFontSize = 12;
+        $baseFontSize = 14;
     }
+
+    // Fallback font stack, alternative for body font
+    $fallbackBodyFontStack = $helperFont->getFallbackFontStack();
+    if (empty($fallbackBodyFontStack))
+    {
+        $fallbackBodyFontStack = "Arial, 'Helvetica Neue', Helvetica, sans-serif";
+    }
+?>
+
+
+<?php
+/* Define local custom fonts
+-------------------------------------------------------------- */
+?>
+
+<?php foreach ($helperFont->getLocalFontsFontface() as $fontface): ?>
+    @font-face {
+        font-family: <?php echo $fontface['font-family']; ?>;
+        font-weight: normal;
+        font-style: normal;
+        <?php echo $fontface['src']; ?> <?php // Important: here no semicolon at the end! ?>
+    }
+<?php endforeach; ?>
+
+
+<?php
+/* Body font
+-------------------------------------------------------------- */
+?>
+
+body {
+    <?php if ($d['font']['body_font_family']): ?>
+        font-family: <?php echo $d['font']['body_font_family'] . ', ' . $fallbackBodyFontStack; ?>;
+    <?php else: ?>
+        font-family: <?php echo $fallbackBodyFontStack; ?>;
+    <?php endif; ?>
+
+    font-size: <?php echo $baseFontSize; ?>px;
+}
+
+
+<?php
+/* Headings font
+-------------------------------------------------------------- */
+?>
+/* Class for elements in custom content */
+.headings-font,
+.main-font, <?php // For backward compatibility ?>
+
+/* Headings */
+h1, h2, h3, h4, h5,
+.section-title,
+.products-list .product-name,
+.filter .block-subtitle,
+
+/* Generic  */
+.feature .heading,
+.uaccordion .heading,
+
+/* Block headings */
+.block .block-title,
+
+/* Checkout headings */
+#opc-login h3,
+
+/* Multiple checkout */
+/*.fieldset .legend,
+.multiple-checkout .col2-set h2.legend,
+.info-set h2.legend,*/
+
+/* Account */
+.box-account .box-head h2,
+.order-items h2.table-caption,
+.order-items h2.sub-title,
+.order-items .order-comments h2,
+
+/* Product page tabs */
+.product.data.items > .item.title > .switch,
+
+/* Footer headings */
+.footer .heading,
+#subscribe-form label,
+
+/* Captions */
+.caption .heading
+{
+    <?php if ($d['font']['headings_font_family']): ?>
+        font-family: <?php echo $d['font']['headings_font_family']; ?>;
+    <?php endif; ?>
+
+    <?php
+        $headingsFontWeight = trim($d['font']['headings_font_weight']);
+    ?>
+    <?php if ($headingsFontWeight): ?>
+        font-weight: <?php echo $headingsFontWeight; ?>;
+    <?php endif; ?>
+}
+
+
+
+<?php
+//Global elements
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ?>
 
 <?php /*
@@ -81,8 +197,6 @@ body
     <?php if ($b->isColor($d['colors']['color'])): ?>
         color: <?php echo $d['colors']['color']; ?>;
     <?php endif; ?>
-
-    font-size: <?php echo $baseFontSize; ?>px;
 }
 
 a
@@ -178,11 +292,6 @@ p.product-name a:hover
 .opc-progress-bar-item._active:before,
 .opc-progress-bar-item._active > span:before,
 .opc-wrapper .shipping-address-item.selected-item:after,
-/*
-.minicart-wrapper .action.showcart .counter.qty,
-.mini-cart .dropdown-heading.action .counter.qty,
-.mini-compare .dropdown-heading.action .counter.qty,
-*/
 .filter-title strong[data-count]:after,
 .main-color--bg
 {
@@ -210,7 +319,6 @@ p.product-name a:hover
 {
     outline-color: #333;
 }
-
 
 
 <?php
@@ -278,93 +386,21 @@ p.product-name a:hover
 }
 
 <?php // Dropdown counters ?>
-.minicart-wrapper .action.showcart .counter.qty, <?php // Magento's default selector for counter, e.g. needed for mini cart on checkout page  ?>
-.mini-cart .dropdown-heading.action .counter.qty,
-.mini-compare .dropdown-heading.action .counter.qty,
-.dropdown-heading.action .counter.qty,
-.skip-link .counter <?php // This one may be not needed any more ?> 
+.minicart-wrapper .action.showcart .counter:not(.ib), <?php // Magento's default selector for counter, e.g. needed for cart on checkout page  ?>
+.header-container .skip-link .counter, <?php // Counter in mobile header view (when mini cart dropdown is not active) ?>
+.dropdown-block .dropdown-heading .counter
 {
-    background-color: <?php echo $d['header']['counter_color']; ?>;
+    <?php if ($d['dropdowns']['cart_counter_bg_color']): ?>
+        background-color: <?php echo $d['dropdowns']['cart_counter_bg_color']; ?>;
+    <?php endif; ?>
 }
 
-
-<?php
-//Main font
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-?>
-/* Custom content class */
-.main-font,
-
-/* Headings */
-h1, h2, h3, h4, h5,
-.section-title,
-.products-list .product-name,
-.filter .block-subtitle,
-
-/* Generic  */
-.feature .heading,
-.uaccordion .heading,
-
-/* Main menu */
-    /* Regular mode */
-    .nav-regular .nav-item.level0 > a, /* level 1 */
-
-        /* Mega dropdown */
-        .nav-regular .nav-submenu--mega > li > a, /* First level of mega dropdown */
-
-    /* Mobile mode */
-    .menu-trigger,
-    .nav-mobile .nav-item.level0 > a,
-    .nav-mobile .nav-item.level1 > a,
-    .nav-mobile .nav-item.level2 > a,
-
-    /* Holder for additional elements inside the menu bar */
-    .nav-holder .dropdown-block .dropdown-heading,
-
-/* Block headings */
-.block .block-title,
-
-/* Checkout headings */
-#opc-login h3,
-
-/* Multiple checkout */
-/*.fieldset .legend,
-.multiple-checkout .col2-set h2.legend,
-.info-set h2.legend,*/
-
-/* Account */
-.box-account .box-head h2,
-.order-items h2.table-caption,
-.order-items h2.sub-title,
-.order-items .order-comments h2,
-
-/* TODO: Product page */
-.gen-tabs .tabs a, <?php //TODO: deprecated, remove ?>
-.product-view .product.data.items > .item.title > .switch,
-
-/* Footer headings */
-.footer .heading,
-#subscribe-form label,
-
-/* Captions */
-.caption .heading
+<?php // Dropdown counters (without mobile header's mini cart skip link) ?>
+.minicart-wrapper .action.showcart .counter:not(.ib), <?php // Magento's default selector for counter, e.g. needed for cart on checkout page  ?>
+.dropdown-block .dropdown-heading .counter
 {
-    <?php if ($d['font']['primary_font_family_group'] == 'google'): //Google Fonts ?>
-        font-family: "<?php echo $d['font']['primary_font_family']; ?>", georgia, serif;
-    <?php elseif ($d['font']['primary_font_family_group'] == 'custom'): //User-defined font stack ?>
-        font-family: <?php echo $d['font']['primary_font_family_custom']; ?>;
-    <?php else: //Predefined font stack ?>
-        font-family: <?php echo $d['font']['primary_font_family_group']; ?>;
-    <?php endif; ?>
-
-    <?php
-        $primaryFontWeight = $d['font']['primary_font_weight'];
-        $primaryFontWeight = trim($primaryFontWeight);
-        // If it doesn't contain comma (which indicates multiple weights), print the weight
-    ?>
-    <?php if ($primaryFontWeight && strpos($primaryFontWeight, ',') === FALSE): ?>
-        font-weight: <?php echo $primaryFontWeight; ?>;
+    <?php if ($b->isColor($d['dropdowns']['cart_counter_border_color'])): ?>
+        border: 2px solid <?php echo $d['dropdowns']['cart_counter_border_color']; ?>;
     <?php endif; ?>
 }
 
@@ -1063,20 +1099,6 @@ h1, h2, h3, h4, h5,
     <?php if ($d['header']['inner_bg_color']): ?>
         background-color: <?php echo $d['header']['inner_bg_color']; ?>;
     <?php endif; ?>
-    
-    <?php if ($b->isColor($d['header']['color'])): ?>
-        color: <?php echo $d['header']['color']; ?>;
-    <?php endif; ?>
-}
-.header a {
-    <?php if ($b->isColor($d['header']['link_color'])): ?>
-        color: <?php echo $d['header']['link_color']; ?>;
-    <?php endif; ?>
-}
-.header a:hover {
-    <?php if ($b->isColor($d['header']['link_hover_color'])): ?>
-        color: <?php echo $d['header']['link_hover_color']; ?>;
-    <?php endif; ?>
 }
 
 <?php //Additional spacing - it's applied to the third div (lowermost "layer") of the outer header container ?>
@@ -1096,72 +1118,226 @@ h1, h2, h3, h4, h5,
 /* Search box
 -------------------------------------------------------------- */
 ?>
-<?php //Important: set width only in regular header ?>
-<?php if (trim($d['header']['search_max_width']) !== '' ): ?>
-.header-regular .search-wrapper {
-    max-width: <?php echo $d['header']['search_max_width']; ?>;
-}
-<?php endif; ?>
 
-.header-regular .block-search .input-text
-{
-    background-color: <?php echo $d['header']['search_bg_color']; ?>;
-    border-color: <?php echo $d['header']['search_border_color']; ?>;
-}
-.header-regular .block-search .input-text:hover,
-.header-regular .block-search .input-text:focus
-{
-    background-color: <?php echo $d['header']['search_hover_bg_color']; ?>;
-    border-color: <?php echo $d['header']['search_border_hover_color']; ?>;
-}
+<?php // Width: ?>
 
-<?php if ($b->isColor($d['header']['search_color'])): ?>
-.header-regular .block-search .input-text,
-.header-regular .block-search .action.search:before 
-{
-    color: <?php echo $d['header']['search_color']; ?>;
-}
-.header-regular .block-search .input-text::-webkit-input-placeholder 
-<?php /*
-.header-regular .block-search .input-text:-moz-placeholder,
-.header-regular .block-search .input-text::-moz-placeholder,
-.header-regular .block-search .input-text:-ms-input-placeholder */ ?>
-{
-    color: <?php echo $d['header']['search_color']; ?>;
-}
-<?php endif; ?>
+    <?php // Important: set width only in regular header ?>
+    <?php if (trim($d['search']['width']) !== '' ): ?>
+        .header-regular .block-search.expanding._active, <?php // Expanding search box ?>
 
-<?php if ($b->isColor($d['header']['search_hover_color'])): ?>
-.header-regular .block-search .input-text:hover,
-.header-regular .block-search .input-text:focus,
-.header-regular .block-search .action.search:hover,
-.header-regular .block-search .action.search:focus,
-.header-regular .block-search .action.search:hover:before,
-.header-regular .block-search .action.search:focus:before
-{
-    color: <?php echo $d['header']['search_hover_color']; ?>;
-}
-.header-regular .block-search .input-text:hover::-webkit-input-placeholder,
-.header-regular .block-search .input-text:focus::-webkit-input-placeholder 
-<?php /*
-.header-regular .block-search .input-text:hover:-moz-placeholder,
-.header-regular .block-search .input-text:focus:-moz-placeholder,
-.header-regular .block-search .input-text:hover::-moz-placeholder,
-.header-regular .block-search .input-text:focus::-moz-placeholder,
-.header-regular .block-search .input-text:hover:-ms-input-placeholder,
-.header-regular .block-search .input-text:focus:-ms-input-placeholder */ ?>
-{
-    color: <?php echo $d['header']['search_hover_color']; ?>;
-}
-<?php endif; ?>
+        .header-regular .block-search 
+        {
+            width: <?php echo $d['search']['width']; ?>;
+        }
+    <?php else: ?>
+        <?php 
+        // Important: if no width specified by user, set default width 
+        // but only for the special mode of the search box.
+        ?>
+        .header-regular .block-search.expanding._active <?php // Expanding search box ?>
+        {
+            width: 185px;
+        }
+    <?php endif; ?>
 
-<?php
-    // If no border color, then remove border and button's margin 
-    // important: not only for regular header.
-?>
-<?php if ($b->isColor($d['header']['search_border_color']) == false && $b->isColor($d['header']['search_border_hover_color']) == false): ?>
-    .block-search .input-text { border: none; }
-<?php endif; ?>
+<?php // Background and text: ?>
+
+    <?php // Default ?>
+    .header-regular .block-search .input-text,
+    .header-regular .block-search .action.search .icon,
+    .header-regular .block-search.expanding .input-text <?php // Expanding search box ?>
+    {
+        <?php if ($d['search']['bg_color']): ?>
+            background-color: <?php echo $d['search']['bg_color']; ?>;
+        <?php endif; ?>
+
+        <?php if ($b->isColor($d['search']['color'])): ?>
+            color: <?php echo $d['search']['color']; ?>;
+        <?php endif; ?>
+    }
+
+    <?php // Hover, focus, active ?>
+    .header-regular .block-search .input-text:hover,
+    .header-regular .block-search .input-text:focus,
+    .header-regular .block-search .action.search:hover .icon,
+    .header-regular .block-search .action.search:focus .icon,
+    .header-regular .block-search.expanding._active .input-text <?php // Expanding search box ?>
+    {
+        <?php if ($d['search']['hover_bg_color']): ?>
+            background-color: <?php echo $d['search']['hover_bg_color']; ?>;
+        <?php endif; ?>
+
+        <?php if ($b->isColor($d['search']['hover_color'])): ?>
+            color: <?php echo $d['search']['hover_color']; ?>;
+        <?php endif; ?>
+    }
+
+    <?php // When expanding search block is active, icon gets the same color as on hover ?>
+    .header-regular .block-search.expanding._active .action.search .icon {
+        <?php if ($b->isColor($d['search']['hover_color'])): ?>
+            color: <?php echo $d['search']['hover_color']; ?>;
+        <?php endif; ?>
+    }
+
+    <?php 
+    // For now the button is transparent, only the icon is visible.
+    // IMPORTANT: apply for all types of header.
+    ?>
+    .block-search .action.search .icon
+    {
+        background-color: transparent !important;
+
+        <?php
+        // Icon needs to have the same color as text.
+        // Otherwise in mobile header it will be white (default text color of iconbox) on white background. 
+        ?>
+        <?php if ($b->isColor($d['search']['color'])): ?>
+            color: <?php echo $d['search']['color']; ?>;
+        <?php endif; ?>
+    }
+
+<?php // Button: ?>
+
+    <?php /* // FEATURE: add these four options to the admin and uncomment the code:
+    .header-regular .block-search .action.search .icon
+    {
+        <?php if ($d['search']['button_bg_color']): ?>
+            background-color: <?php echo $d['search']['button_bg_color']; ?>;
+        <?php endif; ?>
+
+        <?php if ($b->isColor($d['search']['button_color'])): ?>
+            color: <?php echo $d['search']['button_color']; ?>;
+        <?php endif; ?>
+    }
+
+    .header-regular .block-search .action.search:hover .icon,
+    .header-regular .block-search .action.search:focus .icon
+    {
+        <?php if ($d['search']['button_hover_bg_color']): ?>
+            background-color: <?php echo $d['search']['button_hover_bg_color']; ?>;
+        <?php endif; ?>
+
+        <?php if ($b->isColor($d['search']['button_hover_color'])): ?>
+            color: <?php echo $d['search']['button_hover_color']; ?>;
+        <?php endif; ?>
+    }
+    */ ?>
+
+<?php // Border: ?>
+
+    <?php if ($d['search']['border_color']): ?>
+        .header-regular .block-search .input-text
+        {
+            border-color: <?php echo $d['search']['border_color']; ?>;
+        }
+    <?php endif; ?>
+
+    <?php if ($d['search']['border_hover_color']): ?>
+        .header-regular .block-search .input-text:hover,
+        .header-regular .block-search .input-text:focus
+        {
+            border-color: <?php echo $d['search']['border_hover_color']; ?>;
+        }
+    <?php endif; ?>
+
+    <?php /*
+    <?php // If no border color, then remove border. Important: not only for regular header. ?>
+    <?php if ($b->isColor($d['search']['border_color']) == false && $b->isColor($d['search']['border_hover_color']) == false): ?>
+        .block-search .input-text 
+        {
+            border: none;
+        }
+    <?php endif; ?>
+    */ ?>
+
+    <?php // Border radius ?>
+    <?php if ($d['search']['border_radius']): ?>
+        .header-regular .block-search .input-text,
+        .header-regular .block-search form, <?php // For additional border ?>
+        .header-regular .block-search .action.search .icon <?php // For button ?>
+        {
+            border-radius: <?php echo $d['search']['border_radius']; ?>;
+        }
+    <?php endif; ?>
+
+<?php // Additional border: ?>
+
+    <?php /* // FEATURE: add these options to the admin and uncomment the code: 
+    <?php if ($d['search']['outline_color'] && $d['search']['outline_width']): ?>
+        .header-regular .block-search form
+        {
+            border: <?php echo $d['search']['outline_width']; ?>px solid <?php echo $d['search']['outline_color']; ?>;
+        }
+    <?php endif; ?>
+    */ ?>
+
+<?php // Input placeholder, text label, Magento's default icon ?>
+
+    <?php if ($b->isColor($d['search']['color'])): ?>
+        .header-regular .block-search .action.search, <?php // For text label ?>
+        .header-regular .block-search .action.search:before, <?php // Magento's default icon ?>
+        .header-regular .block-search .input-text::-webkit-input-placeholder,
+        .header-regular .block-search .input-text:-moz-placeholder,
+        .header-regular .block-search .input-text::-moz-placeholder,
+        .header-regular .block-search .input-text:-ms-input-placeholder,
+        .header-regular .block-search .input-text::placeholder
+        {
+            color: <?php echo $d['search']['color']; ?>;
+        }
+    <?php endif; ?>
+
+    <?php if ($b->isColor($d['search']['hover_color'])): ?>
+        .header-regular .block-search .action.search:hover, <?php // For text label ?>
+        .header-regular .block-search .action.search:focus, <?php // For text label ?>
+        .header-regular .block-search .action.search:hover:before, <?php // Magento's default icon ?>
+        .header-regular .block-search .action.search:focus:before, <?php // Magento's default icon ?>
+        .header-regular .block-search .input-text:hover::-webkit-input-placeholder,
+        .header-regular .block-search .input-text:focus::-webkit-input-placeholder,
+        .header-regular .block-search .input-text:hover:-moz-placeholder,
+        .header-regular .block-search .input-text:focus:-moz-placeholder,
+        .header-regular .block-search .input-text:hover::-moz-placeholder,
+        .header-regular .block-search .input-text:focus::-moz-placeholder,
+        .header-regular .block-search .input-text:hover:-ms-input-placeholder,
+        .header-regular .block-search .input-text:focus:-ms-input-placeholder,
+        .header-regular .block-search .input-text:hover::placeholder,
+        .header-regular .block-search .input-text:focus::placeholder
+        {
+            color: <?php echo $d['search']['hover_color']; ?>;
+        }
+    <?php endif; ?>
+
+<?php // Shadow effects: ?>
+
+    <?php
+        $searchShadow = $d['search']['shadow'];
+        $searchFocusShadow = $d['search']['focus_shadow'];
+    ?>
+
+    <?php // Default ?>
+    <?php if ($searchShadow): ?>
+        .header-regular .block-search .input-text
+        {
+            box-shadow: <?php echo $searchShadow; ?>;
+        }
+    <?php else: ?>
+        .header-regular .block-search .input-text
+        {
+            box-shadow: none;
+        }
+    <?php endif; ?>
+
+    <?php // Focus ?>
+    <?php if ($searchFocusShadow): ?>
+        .header-regular .block-search .input-text:focus
+        {
+            box-shadow: <?php echo $searchFocusShadow; ?>;
+        }
+    <?php else: ?>
+        .header-regular .block-search .input-text:focus
+        {
+            box-shadow: none;
+        }
+    <?php endif; ?>
 
 
 <?php
@@ -1175,41 +1351,105 @@ h1, h2, h3, h4, h5,
    be also placed inside menu (inside nav-holder class).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */?>
 
-.header-container .dropdown-block .dropdown-content,
-.header-container .dropdown-block.open > .dropdown-heading.cover > *,
-.header-container .truncated .truncated_full_value .item-options, <?php //Deprecated ?>
-.header-container .form-search .search-autocomplete
+<?php // Background and colors of dropdown:  ?>
+
+    <?php // Dropdown content ?>
+    .header-container .dropdown-block .dropdown-content,
+
+    <?php // Dropdown heading when heading is "filled" ?>
+    .header-container .dropdown-block.filled-heading.open .dropdown-heading .inner-heading,
+    .header-container .dropdown-block.open .dropdown-heading.filled .inner-heading,
+    .header-container .dropdown-block.open .dropdown-heading.cover .inner-heading, <?php // For backward compatibility ?>
+
+    <?php // Search autocomplete ?>
+    .header-container .block-search .search-autocomplete ul li
+    {
+        <?php if ($b->isColor($d['dropdowns']['bg_color'])): ?>
+            background-color: <?php echo $d['dropdowns']['bg_color']; ?>;
+        <?php else: ?>
+            background-color:#fff;
+        <?php endif; ?>
+        
+        <?php if ($b->isColor($d['dropdowns']['color'])): ?>
+            color: <?php echo $d['dropdowns']['color']; ?>; <?php //It will be inherited by child elements ?>
+        <?php endif; ?>
+    }
+
+    <?php // Icon when it's not iconbox ?>
+    .header-container .dropdown-block.filled-heading.open .dropdown-heading .icon:not(.ib),
+    .header-container .dropdown-block.open .dropdown-heading.filled .icon:not(.ib),
+    .header-container .dropdown-block.open .dropdown-heading.cover .icon:not(.ib) <?php // For backward compatibility ?>
+    {
+        <?php if ($b->isColor($d['dropdowns']['color'])): ?>
+            color: <?php echo $d['dropdowns']['color']; ?>; <?php // It will be inherited by child elements ?>
+        <?php endif; ?>
+    }
+
+<?php // Link inside dropdown: ?>
+
+    <?php // Inside dropdown content ?>
+    .header-container .dropdown-block .dropdown-content a,
+    .header-container .dropdown-block .dropdown-content .action:before,
+
+    <?php // Inside dropdown heading when heading is "filled" ?>
+    .header-container .dropdown-block.filled-heading.open .dropdown-heading a,
+    .header-container .dropdown-block.open .dropdown-heading.filled a,
+    .header-container .dropdown-block.open .dropdown-heading.cover a <?php // For backward compatibility ?>
+    {
+        <?php if ($b->isColor($d['dropdowns']['link_color'])): ?>
+            color: <?php echo $d['dropdowns']['link_color']; ?>;
+        <?php endif; ?>
+    }
+
+    .header-container .dropdown-block .dropdown-content a:hover,
+    .header-container .dropdown-block .dropdown-content .action:hover:before,
+    .header-container .dropdown-block.filled-heading.open .dropdown-heading a:hover,
+    .header-container .dropdown-block.open .dropdown-heading.filled a:hover,
+    .header-container .dropdown-block.open .dropdown-heading.cover a:hover, <?php // For backward compatibility ?>
+
+    <?php // Search autocomplete - items on hover get the same color as links ?>
+    .header-container .block-search .search-autocomplete ul li:hover,
+    .header-container .block-search .search-autocomplete ul li.selected <?php // ".selected" is Magento's class ?>
+    {
+        <?php if ($b->isColor($d['dropdowns']['link_hover_color'])): ?>
+            color: <?php echo $d['dropdowns']['link_hover_color']; ?>;
+        <?php endif; ?>
+    }
+
+<?php // Dropdown content - with border and pointer: ?>
+
+    .dropdown-block.show-pointer .dropdown-content:before {
+        border-bottom-color: <?php echo $d['dropdowns']['bg_color']; ?>;
+    }
+    .dropdown-block.show-border .dropdown-content:after {
+        border-bottom-color: <?php echo $d['dropdowns']['border_color']; ?>;
+    }
+    .dropdown-block.show-border .dropdown-content,
+    .dropdown-block.show-border.filled-heading.open .dropdown-heading {
+        border-color: <?php echo $d['dropdowns']['border_color']; ?>;
+    }
+
+
+<?php
+/* Mini cart drop-down
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */?>
+
+<?php // Icon color ?>
+.dropdown-block .dropdown-heading .icon
 {
-    <?php if ($b->isColor($d['header']['dropdown_bg_color'])): ?>
-        background-color: <?php echo $d['header']['dropdown_bg_color']; ?>;
-    <?php else: ?>
-        background-color:#fff;
-    <?php endif; ?>
-    
-    <?php if ($b->isColor($d['header']['dropdown_color'])): ?>
-        color: <?php echo $d['header']['dropdown_color']; ?>; <?php //It will be inherited by child elements ?>
+    <?php if ($b->isColor($d['dropdowns']['cart_icon_color'])): ?>
+        color: <?php echo $d['dropdowns']['cart_icon_color']; ?>;
     <?php endif; ?>
 }
 
-<?php //Header drop-downs: link colors ?>
-.header-container .dropdown-block .dropdown-content a,
-.header-container .dropdown-block .dropdown-content .action:before,
-.header-container .dropdown-block.open > .dropdown-heading.cover a,
-.header-container .form-search .search-autocomplete li
+<?php // Background color when icon is in iconbox ?>
+.dropdown-block .dropdown-heading .icon.ib
 {
-    <?php if ($b->isColor($d['header']['dropdown_link_color'])): ?>
-        color: <?php echo $d['header']['dropdown_link_color']; ?>;
+    <?php if ($d['dropdowns']['cart_iconbox_bg_color']): ?>
+        background-color: <?php echo $d['dropdowns']['cart_iconbox_bg_color']; ?>;
     <?php endif; ?>
 }
-.header-container .dropdown-block .dropdown-content a:hover,
-.header-container .dropdown-block .dropdown-content .action:hover:before,
-.header-container .dropdown-block.open > .dropdown-heading.cover a:hover,
-.header-container .form-search .search-autocomplete li:hover
-{
-    <?php if ($b->isColor($d['header']['dropdown_link_hover_color'])): ?>
-        color: <?php echo $d['header']['dropdown_link_hover_color']; ?>;
-    <?php endif; ?>
-}
+
 
 
 
@@ -1264,23 +1504,58 @@ h1, h2, h3, h4, h5,
 
 
 <?php
-/* Height of the top header.
-   Important: set max height to improve layout of inline elements.
+/* Style of elements inside the top header
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */?>
 <?php
+    $topHeaderFontFamily = $d['header_top']['font_family'];
+    $topHeaderFontSize = $d['header_top']['font_size'];
+    $topHeaderFontWeight = $d['header_top']['font_weight'];
+    $topHeaderFontUppercase = $d['header_top']['font_uppercase']; //
     $topHeaderLineHeight = $d['header_top']['line_height'];
 ?>
-<?php if ($topHeaderLineHeight): ?>
-    .header-top,
-    .header-top .dropdown-block .dropdown-heading,
-    .header-top .links > li > *
-    {
+.header-top .local-font,
+.header-top .dropdown-block .dropdown-heading,
+.header-top .links > li > * 
+{
+    <?php if ($topHeaderFontFamily): ?>
+        font-family: <?php echo $topHeaderFontFamily; ?>;
+    <?php endif; ?>
+
+    <?php if ($topHeaderFontSize): ?>
+        font-size: <?php echo $topHeaderFontSize; ?>px;
+    <?php endif; ?>
+
+    <?php if ($topHeaderFontWeight): ?>
+        font-weight: <?php echo $topHeaderFontWeight; ?>;
+    <?php endif; ?>
+
+    <?php if ($topHeaderFontUppercase): ?>
+        text-transform: uppercase;
+    <?php endif; ?>
+    <?php // If option is false, disabling uppercase not needed (this selector doesn't need to override parent elements) ?>
+}
+
+.header-top .local-height,
+.header-top .dropdown-block .dropdown-heading,
+.header-top .links > li > * 
+{
+    <?php if ($topHeaderLineHeight): ?>
         line-height: <?php echo $topHeaderLineHeight; ?>px;
-        max-height: <?php echo $topHeaderLineHeight; ?>px;
-    }
+    <?php endif; ?>
+}
+
+<?php if ($topHeaderLineHeight): ?>
     .header-top .dropdown-block .dropdown-heading
     {
+        <?php // Set max height to improve layout of inline elements ?>
         max-height: <?php echo $topHeaderLineHeight; ?>px;
+    }
+
+    <?php // Top header is single line section so all elements inside need to have the same height ?>
+    .header-top
+    {
+        line-height: <?php echo $topHeaderLineHeight; ?>px;
+        <?php /* max-height: <?php echo $topHeaderLineHeight; ?>px; */ ?>
     }
 <?php endif; ?>
 
@@ -1311,11 +1586,9 @@ h1, h2, h3, h4, h5,
         background-color: <?php echo $d['header_primary']['inner_bg_color']; ?>;
     <?php endif; ?>
 
-    <?php /*
     <?php if ($b->isColor($d['header_primary']['color'])): ?>
         color: <?php echo $d['header_primary']['color']; ?>;
     <?php endif; ?>
-    */ ?>
 
     <?php if ($d['header_primary']['content_padding_top']): ?>
         padding-top: <?php echo intval($d['header_primary']['content_padding_top']); ?>px;
@@ -1324,35 +1597,49 @@ h1, h2, h3, h4, h5,
         padding-bottom: <?php echo intval($d['header_primary']['content_padding_bottom']); ?>px;
     <?php endif; ?>
 }
-<?php /*
-.header-primary a
-{
+.header-primary a {
     <?php if ($b->isColor($d['header_primary']['link_color'])): ?>
         color: <?php echo $d['header_primary']['link_color']; ?>;
     <?php endif; ?>
 }
-.header-primary a:hover
-{
+.header-primary a:hover {
     <?php if ($b->isColor($d['header_primary']['link_hover_color'])): ?>
         color: <?php echo $d['header_primary']['link_hover_color']; ?>;
     <?php endif; ?>
 }
-*/ ?>
+
 
 <?php
-/* Height of the elements in the primary header.
-   Important: set max height to improve layout of inline elements.
+/* Style of elements inside the primary header
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */?>
 <?php
+    $primaryHeaderFontFamily = $d['header_primary']['font_family'];
     $primaryHeaderFontSize = $d['header_primary']['font_size'];
+    $primaryHeaderFontWeight = trim($d['header_primary']['font_weight']);
+    $primaryHeaderFontUppercase = trim($d['header_primary']['font_uppercase']); //
     $primaryHeaderLineHeight = $d['header_primary']['line_height'];
 ?>
+.header-primary .local-font,
 .header-primary .dropdown-block .dropdown-heading,
 .header-primary .links > li > *
 {
+    <?php if ($primaryHeaderFontFamily): ?>
+        font-family: <?php echo $primaryHeaderFontFamily; ?>;
+    <?php endif; ?>
+
     <?php if ($primaryHeaderFontSize): ?>
         font-size: <?php echo $primaryHeaderFontSize; ?>px;
     <?php endif; ?>
+
+    <?php if ($primaryHeaderFontWeight): ?>
+        font-weight: <?php echo $primaryHeaderFontWeight; ?>;
+    <?php endif; ?>
+
+    <?php if ($primaryHeaderFontUppercase): ?>
+        text-transform: uppercase;
+    <?php endif; ?>
+    <?php // If option is false, disabling uppercase not needed (this selector doesn't need to override parent elements) ?>
+
     <?php if ($primaryHeaderLineHeight): ?>
         line-height: <?php echo $primaryHeaderLineHeight; ?>px;
     <?php endif; ?>
@@ -1360,6 +1647,7 @@ h1, h2, h3, h4, h5,
 <?php if ($primaryHeaderLineHeight): ?>
     .header-primary .dropdown-block .dropdown-heading
     {
+        <?php // Set max height to improve layout of inline elements ?>
         max-height: <?php echo $primaryHeaderLineHeight; ?>px;
     }
 <?php endif; ?>
@@ -1694,9 +1982,12 @@ li.level0 > a:hover > span > .pin-bottom:before,
 <?php //Top-level items ?>
 <?php if ($b->isColor($d['nav']['sticky_item_color'])): ?>
     .sticky-header .nav-regular:not(.nav-vert) .nav-item.level0 > a,
-    .sticky-header .nav-regular .nav-item--homeicon a, <?php //TODO: Single icon has the same color as default item ?>
-    .sticky-header .nav-regular .nav-item--homeicon.active a, <?php //TODO: ?>
-    .sticky-header .nav-holder .dropdown-block .dropdown-heading
+    .sticky-header .nav-regular .nav-item--homeicon a, <?php // TODO: Single icon has the same color as default item ?>
+    .sticky-header .nav-regular .nav-item--homeicon.active a,
+    .sticky-header .nav-holder .dropdown-block .dropdown-heading, <?php // E.g. for dropdown heading label ?>
+    .sticky-header .nav-holder .dropdown-block .dropdown-heading .icon:not(.ib), <?php // Only when icon is not in iconbox ?>
+    .sticky-header .nav-holder .dropdown-block .dropdown-heading a, <?php // Link inside dropdown heading ?>
+    .sticky-header .nav-holder .block-search.expanding:not(._active) .action.search .icon <?php // Expanding search box, when not active ?>
     {
         color: <?php echo $d['nav']['sticky_item_color']; ?>;
     }
@@ -1726,15 +2017,23 @@ li.level0 > a:hover > span > .pin-bottom:before,
     $navHoverColor          = $d['nav']['hover_color'];
 
     //Mobile menu
-    $mobNavBgColor          = $d['nav']['bg_color'];
-    $mobNavColor            = $d['nav']['color'];
-    $mobNavBgColorLevel2    = $d['nav']['bg_color'];
-    $mobNavColorLevel2      = $d['nav']['color'];
-    $mobNavActiveBgColor    = $d['nav']['active_bg_color'];
-    $mobNavActiveColor      = $d['nav']['active_color'];
-    $mobNavHoverBgColor     = $d['nav']['hover_bg_color'];
-    $mobNavHoverColor       = $d['nav']['hover_color'];
+    $mobNavBgColor          = $d['nav']['mobile_bg_color'];
+    $mobNavColor            = $d['nav']['mobile_color'];
+    $mobNavBgColorLevel2    = $d['nav']['mobile_bg_color'];
+    $mobNavColorLevel2      = $d['nav']['mobile_color'];
+    $mobNavActiveBgColor    = $d['nav']['mobile_active_bg_color'];
+    $mobNavActiveColor      = $d['nav']['mobile_active_color'];
+    $mobNavHoverBgColor     = $d['nav']['mobile_hover_bg_color'];
+    $mobNavHoverColor       = $d['nav']['mobile_hover_color'];
 ?>
+
+<?php //Height of mobile menu items and inline links inisde mobile header tabs ?>
+
+.nav-mobile .nav-item > a,
+.header-mobile .skip-content .links > li > a
+{
+    line-height: 50px;
+}
 
 <?php //Default item ?>
 
@@ -1750,10 +2049,10 @@ li.level0 > a:hover > span > .pin-bottom:before,
         .nav-regular:not(.nav-vert) .nav-item.level0 > a,
 
         <?php //Containers for additional elements in the menu bar ?>
-        .nav-holder .dropdown-block .dropdown-heading,
-
-        <?php //In case a link ("a" tag) is used as a dropdown heading, apply hover color to override link's default hover color ?>
-        .nav-regular .nav-holder a.dropdown-heading:hover
+        .nav-holder .dropdown-block .dropdown-heading, <?php // E.g. for dropdown heading label ?>
+        .nav-holder .dropdown-block .dropdown-heading .icon:not(.ib), <?php // Only when icon is not in iconbox ?>
+        .nav-holder .dropdown-block .dropdown-heading a, <?php // Link inside dropdown heading ?>
+        .nav-holder .block-search.expanding .action.search .icon <?php // Expanding search box ?>
         {
             color: <?php echo $navColor; ?>;
         }
@@ -1768,10 +2067,12 @@ li.level0 > a:hover > span > .pin-bottom:before,
     <?php //Mobile mode only ?>
 
         <?php //Level 1 ?>
-        .nav-mobile .nav-item.level0 > a
+        .nav-mobile .nav-item.level0 > a,
+        .header-mobile .skip-content .links > li > a <?php // Inline links inisde mobile header tabs ?>
         {
             background-color: <?php echo $mobNavBgColor; ?>;
             color: <?php echo $mobNavColor; ?>;
+            padding: 0 10px;
         }
         .nav-mobile .nav-item.level0 > .opener
         {
@@ -1779,7 +2080,7 @@ li.level0 > a:hover > span > .pin-bottom:before,
         }
 
         <?php //Level 2+ ?>
-        <?php //TODO: check. Important: added .navi to make rule more specific and override dropdown styles of the regular menu ?>
+        <?php //Important: added .navi to make rule more specific and override dropdown styles of the regular menu ?>
         .navi.nav-mobile ul.level0 .nav-item > a
         {
             background-color: <?php echo $mobNavBgColorLevel2; ?>;
@@ -1804,7 +2105,8 @@ li.level0 > a:hover > span > .pin-bottom:before,
     <?php //Mobile mode only ?>
 
         <?php //Level 1 ?>
-        .nav-mobile .nav-item.level0.current > a
+        .nav-mobile .nav-item.level0.current > a,
+        .header-mobile .skip-content .links > li.current > a <?php // Inline links inisde mobile header tabs ?>
         {
             background-color: <?php echo $mobNavActiveBgColor; ?>;
             color: <?php echo $mobNavActiveColor; ?>;
@@ -1840,7 +2142,8 @@ li.level0 > a:hover > span > .pin-bottom:before,
     <?php //Mobile mode only ?>
 
         <?php //Level 1 ?>
-        .nav-mobile .nav-item.level0 > a:hover
+        .nav-mobile .nav-item.level0 > a:hover,
+        .header-mobile .skip-content .links > li > a:hover <?php // Inline links inisde mobile header tabs ?>
         {
             background-color: <?php echo $mobNavHoverBgColor; ?>;
             color: <?php echo $mobNavHoverColor; ?>;
@@ -1964,16 +2267,13 @@ li.level0 > a:hover > span > .pin-bottom:before,
 <?php if ($d['nav']['line_height'] > 0): ?>
 
     <?php /* Top-level items and menu triggers */ ?>
-    .navi-wrapper .menu-trigger, /* TODO:NEW */
+    .navi-wrapper .menu-trigger,
     .nav-regular .nav-item.level0 > a {
         line-height: <?php echo $d['nav']['line_height']; ?>px;
     }
 
     <?php /* Position of the menu (displayed by vertical menu trigger) when vertical menu type is enabled */ ?>
-    .navi-wrapper .navi.nav-vert-triggerable /* TODO:NEW. Replace the old one (below) */
-    
-    /* , .navi.nav-vert-triggerable */
-
+    .navi-wrapper .navi.nav-vert-triggerable
     {
         top: <?php echo $d['nav']['line_height']; ?>px;
     }
@@ -2146,20 +2446,33 @@ li.level0 > a:hover > span > .pin-bottom:before,
 -------------------------------------------------------------- */
 ?>
 <?php
+    $navFontFamily                  = $d['nav']['level1_font_family'];
     $navFontSize                    = $d['nav']['level1_font_size'];
+    $navFontWeight                  = $d['nav']['level1_font_weight']; //
     $navFontUppercase               = $d['nav']['level1_font_uppercase'];
+
+    $navFontFamilyDropdowns         = $d['nav']['level2_font_family'];
     $navFontSizeDropdowns           = $d['nav']['level2_font_size'];
+    $navFontWeightDropdowns         = $d['nav']['level2_font_weight']; //
+    $navFontUppercaseDropdowns      = $d['nav']['level2_font_uppercase'];
 
+    $navFontFamilyMegaLevel1        = $d['nav']['mega_lev1_font_family'];
     $navFontSizeMegaLevel1          = $d['nav']['mega_lev1_font_size'];
+    $navFontWeightMegaLevel1        = $d['nav']['mega_lev1_font_weight']; //
     $navFontUppercaseMegaLevel1     = $d['nav']['mega_lev1_font_uppercase'];
-    $navFontSizeMegaLevel2          = $d['nav']['mega_lev2_font_size'];
 
+    $navFontSizeMegaLevel2          = $d['nav']['mega_lev2_font_size'];
+    $navFontUppercaseMegaLevel2     = $d['nav']['mega_lev2_font_uppercase'];
+
+    $mobNavFontFamily               = $d['nav']['mobile_level1_font_family'];
     $mobNavFontSize                 = $d['nav']['mobile_level1_font_size'];
+    $mobNavFontWeight               = $d['nav']['mobile_level1_font_weight']; //
     $mobNavFontUppercase            = $d['nav']['mobile_level1_font_uppercase'];
+
     $mobNavFontSizeLevel2           = $d['nav']['mobile_level2_font_size'];
     $mobNavFontUppercaseLevel2      = $d['nav']['mobile_level2_font_uppercase'];
 
-    //Font for level 3+
+    // Font for level 3+
     if ($mobNavFontSizeLevel2)
     {
         if ($mobNavFontSizeLevel2 >= 16)
@@ -2181,46 +2494,84 @@ li.level0 > a:hover > span > .pin-bottom:before,
             <?php //Level 1 ?>
             .vertnav-trigger,
             .nav-regular .nav-item.level0 > a,
-
-            <?php //Holders for additional elements in the menu bar ?>
-            .nav-holder .dropdown-block .dropdown-heading
+            .nav-holder .dropdown-block .dropdown-heading <?php //Holders for additional elements in the menu bar ?>
             {
+                <?php if ($navFontFamily): ?>
+                    font-family: <?php echo $navFontFamily; ?>;
+                <?php endif; ?>
+
                 <?php if ($navFontSize): ?>
                     font-size:<?php echo $navFontSize; ?>px;
                 <?php endif; ?>
 
+                <?php if ($navFontWeight): ?>
+                    font-weight: <?php echo $navFontWeight; ?>;
+                <?php endif; ?>
+
                 <?php if ($navFontUppercase): ?>
-                    text-transform:uppercase;
+                    text-transform: uppercase;
+                <?php else: ?>
+                    text-transform: none;
                 <?php endif; ?>
             }
 
-            <?php //Level 2+ ?>
-            <?php if ($navFontSizeDropdowns): ?>
-                .nav-regular .nav-item > a
-                {
+            <?php //All levels (for level 2+)
+                  //It has to be on top, settings for upper levels will override it ?>            
+            .nav-regular .nav-item > a
+            {
+                <?php if ($navFontFamilyDropdowns): ?>
+                    font-family: <?php echo $navFontFamilyDropdowns; ?>;
+                <?php endif; ?>
+
+                <?php if ($navFontSizeDropdowns): ?>
                     font-size:<?php echo $navFontSizeDropdowns; ?>px;
-                }
-            <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if ($navFontWeightDropdowns): ?>
+                    font-weight: <?php echo $navFontWeightDropdowns; ?>;
+                <?php endif; ?>
+
+                <?php if ($navFontUppercaseDropdowns): ?>
+                    text-transform:uppercase;
+                <?php endif; ?>
+                <?php // If option is false, disabling uppercase not needed (this selector doesn't need to override parent elements) ?>
+            }
 
         <?php //Mega dropdown: ?>
 
             <?php //Level 2 inside the mega dropdown  ?>
-            <?php if ($navFontSizeMegaLevel2): ?>
-                .nav-regular .nav-submenu--mega .nav-item > a
-                {
+            .nav-regular .nav-submenu--mega .nav-item > a
+            {
+                <?php if ($navFontSizeMegaLevel2): ?>
                     font-size:<?php echo $navFontSizeMegaLevel2; ?>px;
-                }
-            <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if ($navFontUppercaseMegaLevel2): ?>
+                    text-transform: uppercase;
+                <?php else: ?>
+                    text-transform: none;
+                <?php endif; ?>
+            }
 
             <?php //Level 1 inside the mega dropdown  ?>
             .nav-regular .nav-submenu--mega > .nav-item > a
             {
+                <?php if ($navFontFamilyMegaLevel1): ?>
+                    font-family: <?php echo $navFontFamilyMegaLevel1; ?>;
+                <?php endif; ?>
+
                 <?php if ($navFontSizeMegaLevel1): ?>
                     font-size:<?php echo $navFontSizeMegaLevel1; ?>px;
                 <?php endif; ?>
 
+                <?php if ($navFontWeightMegaLevel1): ?>
+                    font-weight: <?php echo $navFontWeightMegaLevel1; ?>;
+                <?php endif; ?>
+
                 <?php if ($navFontUppercaseMegaLevel1): ?>
-                    text-transform:uppercase;
+                    text-transform: uppercase;
+                <?php else: ?>
+                    text-transform: none;
                 <?php endif; ?>
             }
             
@@ -2228,7 +2579,7 @@ li.level0 > a:hover > span > .pin-bottom:before,
     <?php //Mobile menu ?>
 
         <?php //All levels (for level 3+)
-              //It has to be on top, settings for upper levels will override it ?>
+              //It has to be on top, settings for other levels will override it ?>
         <?php if (isset($level3FontSize)): ?>
             .nav-mobile li.nav-item > a
             {
@@ -2236,12 +2587,26 @@ li.level0 > a:hover > span > .pin-bottom:before,
             }
         <?php endif; ?>
 
+        <?php //All levels ?>
+        .nav-mobile .nav-item > a,
+        .header-mobile .skip-content .links > li > a <?php // Inline links inisde mobile header tabs ?>
+        {
+            <?php if ($mobNavFontFamily): ?>
+                font-family: <?php echo $mobNavFontFamily; ?>;
+            <?php endif; ?>
+        }
+
         <?php //Level 1, and mobile menu trigger ?>
         .mobnav-trigger,
-        .nav-mobile .nav-item.level0 > a
+        .nav-mobile .nav-item.level0 > a,
+        .header-mobile .skip-content .links > li > a <?php // Inline links inisde mobile header tabs ?>
         {
             <?php if ($mobNavFontSize): ?>
                 font-size:<?php echo $mobNavFontSize; ?>px;
+            <?php endif; ?>
+
+            <?php if ($mobNavFontWeight): ?>
+                font-weight: <?php echo $mobNavFontWeight; ?>;
             <?php endif; ?>
 
             <?php if ($mobNavFontUppercase): ?>
@@ -2577,12 +2942,30 @@ li.level0 > a:hover > span > .pin-bottom:before,
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ?>
 
+
 <?php
-/* Product page tabs
+/* Product page tabs - TODO
 -------------------------------------------------------------- */
 ?>
 
 <?php /*
+
+<?php 
+    $d['product_page']['tab_inner_bg_color'] = 'pink';
+
+    $d['product_page']['tab_bg_color'] = '#f0f0f0';
+    $d['product_page']['tab_color'] = '#7d7d7d';
+
+    $d['product_page']['tab_hover_bg_color'] = '#fcfcfc';
+    $d['product_page']['tab_hover_color'] = 'deepskyblue';
+
+    $d['product_page']['tab_active_bg_color'] = '#fff';
+    $d['product_page']['tab_active_color'] = 'coral';
+
+    $d['product_page']['tab_border_color'] = '#d1d1d1';
+    $d['product_page']['tab_panel_bg_color'] = '#fff';
+?>
+
 .product-view .product.data.items
 {
     <?php if ($d['product_page']['tab_inner_bg_color']): ?>
@@ -2635,14 +3018,15 @@ li.level0 > a:hover > span > .pin-bottom:before,
     background-color: <?php echo $d['product_page']['tab_panel_bg_color']; ?>;
     border-color: <?php echo $d['product_page']['tab_border_color']; ?>;
 }
+*/ ?>
 
+<?php /*
 <?php //Accordion: 
       //TODO: we need to add special class indicating that tabs are in accordion mode
 ?>
 
 <?php //Accordion default tab ?>
-<?php //TODO ?>
-.product-view .collateral-acco .product.data.items > .item.title > .switch
+.product-view .collateral-accordion .product.data.items > .item.title > .switch
 {
     background-color: <?php echo $d['product_page']['acco_bg_color']; ?>;
     color: <?php echo $d['product_page']['acco_color']; ?>;
@@ -2651,101 +3035,16 @@ li.level0 > a:hover > span > .pin-bottom:before,
 }
 
 <?php //Accordion active/hover tab ?>
-.product-view .collateral-acco .product.data.items > .item.title:not(.disabled) > .switch:focus,
-.product-view .collateral-acco .product.data.items > .item.title:not(.disabled) > .switch:hover,
-.product-view .collateral-acco .product.data.items > .item.title:not(.disabled) > .switch:active,
-.product-view .collateral-acco .product.data.items > .item.title.active > .switch,
-.product-view .collateral-acco .product.data.items > .item.title.active > .switch:focus,
-.product-view .collateral-acco .product.data.items > .item.title.active > .switch:hover
+.product-view .collateral-accordion .product.data.items > .item.title:not(.disabled) > .switch:focus,
+.product-view .collateral-accordion .product.data.items > .item.title:not(.disabled) > .switch:hover,
+.product-view .collateral-accordion .product.data.items > .item.title:not(.disabled) > .switch:active,
+.product-view .collateral-accordion .product.data.items > .item.title.active > .switch,
+.product-view .collateral-accordion .product.data.items > .item.title.active > .switch:focus,
+.product-view .collateral-accordion .product.data.items > .item.title.active > .switch:hover
 {
     background-color: <?php echo $d['product_page']['acco_active_bg_color']; ?>;
     color: <?php echo $d['product_page']['acco_active_color']; ?>;
 }
-
-*/ ?>
-
-
-
-
-<?php /* TODO: remove old styles
-
-<?php //Tabs wrapper class ?>
-.gen-tabs .tabs
-{
-    <?php if ($d['product_page']['tab_inner_bg_color']): ?>
-        background-color: <?php echo $d['product_page']['tab_inner_bg_color']; ?>;
-    <?php endif; ?>
-}
-
-<?php //Basic colors: default, hover, active ?>
-<?php //Default tab?>
-.gen-tabs .tabs a
-{
-    background-color: <?php echo $d['product_page']['tab_bg_color']; ?>;
-    color: <?php echo $d['product_page']['tab_color']; ?>;
-}
-
-<?php //Hover ?>
-.gen-tabs .tabs a:hover
-{
-    background-color: <?php echo $d['product_page']['tab_hover_bg_color']; ?>;
-    color: <?php echo $d['product_page']['tab_hover_color']; ?>;
-
-    <?php // Border of the item on hover has the same color as background of the item. Except bottom border which is transparent. ?>
-    border-color: <?php echo $d['product_page']['tab_hover_bg_color']; ?>;
-    border-bottom-color: transparent;
-}
-
-<?php //Active ?>
-.gen-tabs .tabs a.current
-{
-    background-color: <?php echo $d['product_page']['tab_active_bg_color']; ?>;
-    color: <?php echo $d['product_page']['tab_active_color']; ?>;
-}
-
-
-<?php //Borders and panels ?>
-.gen-tabs .tabs-panels
-{
-    background-color: <?php echo $d['product_page']['tab_panel_bg_color']; ?>;
-    border-top-color: <?php echo $d['product_page']['tab_border_color']; ?>;
-}
-.gen-tabs .tabs a.current
-{
-    <?php // Border of the active item has the same color as border of panels. Bottom border is transparent. ?>
-    border-color: <?php echo $d['product_page']['tab_border_color']; ?>;
-    border-bottom-color: transparent;
-}
-.gen-tabs .tabs a.current:hover
-{
-    <?php // Bottom border is transparent. ?>
-    border-bottom-color: transparent;
-}
-
-<?php //Accordion ?>
-
-<?php //Accordion default tab ?>
-.gen-tabs .acctab
-{
-    background-color: <?php echo $d['product_page']['acco_bg_color']; ?>;
-    color: <?php echo $d['product_page']['acco_color']; ?>;
-
-    border-color: <?php echo $d['product_page']['tab_border_color']; ?>;
-
-    <?php if ($b->isColor($d['product_page']['acco_bg_color'])): ?>
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-    <?php endif; ?>
-}
-
-<?php //Accordion active/hover tab ?>
-.gen-tabs .acctab:hover,
-.gen-tabs .acctab:focus,
-.gen-tabs .acctab.current {
-    background-color: <?php echo $d['product_page']['acco_active_bg_color']; ?>;
-    color: <?php echo $d['product_page']['acco_active_color']; ?>;
-}
-
 */ ?>
 
 
@@ -3189,7 +3488,10 @@ li.level0 > a:hover > span > .pin-bottom:before,
 .sticky-header .sticky-container,
 
 /* Dropdowns */
-.dropdown-block.open > .dropdown-heading.cover,
+.dropdown-block.filled-heading.open .dropdown-heading,
+.dropdown-block.open .dropdown-heading.filled,
+.dropdown-block.open .dropdown-heading.cover, <?php // For backward compatibility ?>
+
 .dropdown-block.open .dropdown-content,
 
 /* Search autocomplete */

@@ -114,6 +114,8 @@
     //  ---------------------------------------------
 
     .product-image-container {
+        // TODO: test it, the line with "display: inline-block" adds a small space below the image. 
+        // It can be removed when ".product-item-photo" has "display: flex".
         display: inline-block;
         max-width: 100%;
     }
@@ -598,21 +600,18 @@
                     margin-left: 5px;
                 }
             }
-            .input-text.qty {
-                width: @tocart-input-size + 2px;
-                height: @tocart-input-size + 2px;
-                text-align: center;
-            }
+            // .input-text.qty {
+            //     width: @tocart-input-size + 2px;
+            //     height: @tocart-input-size + 2px;
+            //     text-align: center;
+            // }
             .actions {
                 text-align: center;
             }
-            .action.tocart {
-                &:extend(.abs-button-l all);
 
-                //New:
-                min-width: 170px;
-                font-weight: @font-weight__semibold;
-            }
+            // .action.tocart {
+            //     &:extend(.abs-button-l all);
+            // }
 
             // New
             div.mage-error[generated] {
@@ -647,11 +646,36 @@
     }
 
     // New
+    // Code for instant purchase button from Magento_InstantPurchase module exists only in Luma theme:
+    // theme-frontend-luma/Magento_InstantPurchase/web/css/source/_module.less.
+    // We added it here so that it has the same styles as standard "add to cart" button.
+    .product-info-main,
+    .product-options-bottom,
+    .bundle-options-container {
+        .box-tocart {
+            .action.tocart,
+            .action.instant-purchase {
+                &:extend(.abs-button-l all);
+
+                min-width: 170px;
+                font-weight: @font-weight__semibold;
+            }
+
+            .action.instant-purchase {
+                margin-top: 15px;
+            }
+        }
+    }
+
+    // New
     .table.grouped,
+    .product-info-main,
+    .product-options-bottom,
     .bundle-options-container {
         .input-text.qty {
             width: @tocart-input-size + 2px;
             height: @tocart-input-size + 2px;
+            text-align: center;
         }
     }
 
@@ -878,30 +902,26 @@
             .lib-vendor-prefix-display(flex);
             .lib-vendor-prefix-flex-direction(column);
         }
+
         .product.media {
             .lib-vendor-prefix-order(-1);
         }
     }
-    .product-info-main .box-tocart {
-        .actions {
-            .action.tocart {
-                &:extend(.abs-button-responsive-smaller all);
-            }
-        }
-    }
-    .block.related {
-        .action.select {
-            // margin: @indent__xs 0;
-            // display: block;
-            // display: inline; // New:
-        }
 
-        // // New:
-        // .block-actions {
-        //     display: inline-block;
-        //     margin-left: 0;
-        // }
-    }
+    // .product-info-main .box-tocart {
+    //     .actions {
+    //         .action.tocart {
+    //             &:extend(.abs-button-responsive-smaller all);
+    //         }
+    //     }
+    // }
+
+    // .block.related {
+    //     .action.select {
+    //         display: block;
+    //         margin: @indent__xs 0;
+    //     }
+    // }
 
     .product-items .item .action.tocompare, // New
     .actions-secondary > .action.tocompare, // New: link placed outside standard wrappers (e.g. outside "product-item-actions")
@@ -911,6 +931,32 @@
     //[class*='block-compare'] { // New: changed to single quote (added in Mage 2.1)
     [class*="block-compare"] {
         display: none;
+    }
+
+    // New
+    .product-info-main,
+    .product-options-bottom,
+    .bundle-options-container {
+        .box-tocart {
+            .actions {
+                .action.tocart,
+                .action.instant-purchase {
+                    &:extend(.abs-button-responsive-smaller all);
+                }
+            }
+        }
+    }
+
+    // New
+    // Remove "display: inline-block" to allow streched buttons
+    .bundle-options-container {
+        .block-bundle-summary {
+            .box-tocart {
+                .actions {
+                    display: block;
+                }
+            }
+        }
     }
 
     // New: 
@@ -1051,10 +1097,13 @@
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    // New
     .product-info-main,
-    .product-options-bottom {
+    .product-options-bottom,
+    .bundle-options-container {
         .box-tocart {
-            .action.tocart {
+            .action.tocart,
+            .action.instant-purchase {
                 min-width: 190px;
             }
         }

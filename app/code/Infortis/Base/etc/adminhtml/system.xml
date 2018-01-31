@@ -42,6 +42,7 @@
           <label>Position</label>
           <source_model>Infortis\Base\Model\System\Config\Source\Header\Position\Primary</source_model>
         </field>
+
         <field id="heading_search" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Search</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -57,6 +58,7 @@
             <field id="search_position">userMenu</field>
           </depends>
         </field>
+
         <field id="heading_account_links" translate="label" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Account Links</label>
           <comment>Account Links block includes: 1. Magento's Top Links (links such as: Account, Wish List, Create an Account, Sign In etc.), 2. Additional optional custom links (content of built-in static block "block_header_top_links").</comment>
@@ -103,12 +105,8 @@
         </field>
         <field id="cart_position" translate="label" sortOrder="610" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Position</label>
+          <comment><![CDATA[Note that in order to display mini cart drop-down block, option <em>Display Shopping Cart Sidebar</em> under <em>Stores > Configuration > Checkout > Shopping Cart Sidebar</em> has to be enabled.]]></comment>
           <source_model>Infortis\Base\Model\System\Config\Source\Header\Position\Primarytopusermenuinsidemenu</source_model>
-        </field>
-        <field id="cart_label" translate="label" sortOrder="620" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Show Text Label "Cart"</label>
-          <comment>If set to "No", label "Cart" will be hidden in the Mini Cart drop-down block in the header. Note that in order to display Mini Cart drop-down block, option &lt;em&gt;"Display Shopping Cart Sidebar"&lt;/em&gt; under &lt;em&gt;System &gt; Configuration &gt; Checkout &gt; Shopping Cart Sidebar&lt;/em&gt; has to be enabled.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
         <!--
         <field id="heading_compare" translate="label" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -425,77 +423,38 @@
           <comment>Specify value in grid units (between 2 and 12).&lt;br/&gt;&lt;strong style="color:red;"&gt;Important&lt;/strong&gt;: Leave empty to remove this column.</comment>
           <validate>validate-number validate-number-range number-range-2-12</validate>
         </field>
-        <!-- <field id="container2_column" translate="label" sortOrder="60" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Product Options Secondary Container Width</label>
-          <comment>Specify value in grid units (between 2 and 12).&lt;br/&gt;Container for product options. Product options will be displayed in it if the &lt;em&gt;"Display Product Options In"&lt;/em&gt; field was set to &lt;strong&gt;"Block after Info Column"&lt;/strong&gt;&lt;br/&gt;in product's configuration (under &lt;em&gt;Catalog &gt; Manage Products&lt;/em&gt;). It's recommended to specify the same width as in the &lt;em&gt;"Lower Primary Column Width"&lt;/em&gt; field.</comment>
-          <validate>validate-number validate-number-range number-range-2-12 required-entry</validate>
-        </field> -->
+
         <field id="heading_collaterals" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Collateral Data</label>
-          <comment>Container for product collateral data (displayed as tabs or vertically stacked blocks).</comment>
+          <comment>Container for product collateral data, such as: product description, product attributes, product reviews etc.</comment>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
         <field id="collateral_position" translate="label" sortOrder="105" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Position</label>
-          <comment>Position of Collateral Data container.</comment>
+          <comment>Position of collateral data container.</comment>
           <source_model>Infortis\Base\Model\System\Config\Source\Product\Position\All</source_model>
         </field>
         <field id="tabs" translate="label" sortOrder="110" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Display Collateral Data as Tabs</label>
-          <comment>Display Collateral Data container as simple tabs. If set to "No", Collateral Data will be displayed as vertically stacked blocks.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <!-- <field id="tabs_mode" translate="label" sortOrder="112" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Mode</label>
-          <comment>- &lt;strong&gt;Tabs&lt;/strong&gt; - display Collateral Data in tabs&lt;br/&gt;
-								- &lt;strong&gt;Tabs/Accordion&lt;/strong&gt; - display Collateral Data in tabs which turn into accordion if browser viewport is narrower than the width specified in the &lt;em&gt;"Accordion Threshold"&lt;/em&gt; field.&lt;br/&gt;
-								- &lt;strong&gt;Accordion&lt;/strong&gt; - display Collateral Data in accordion&lt;br/&gt;</comment>
+          <label>Display Collateral Data As...</label>
+          <comment><![CDATA[- <strong>Tabs</strong> - display collateral data blocks as tabs (they will turn into accordion in mobile view)</br>- <strong>Accordion</strong> - display collateral data blocks as accordion</br>- <strong>Vertically stacked blocks</strong> - display collateral data blocks one below another]]></comment>
           <source_model>Infortis\Base\Model\System\Config\Source\Product\Tabs\Mode</source_model>
-        </field> -->
-        <!-- <field id="tabs_threshold" translate="label" sortOrder="114" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Accordion Threshold</label>
-          <comment>If option &lt;em&gt;"Mode"&lt;/em&gt; was set to "Tabs/Accordion", tabs will turn into accordion if browser viewport is narrower than the width specified in this field. Enter value in pixels.</comment>
-          <validate>validate-number validate-number-range number-range-120-3000 required-entry</validate>
-        </field> -->
-        <!-- <field id="tabs_collapsed" translate="label" sortOrder="116" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Accordion Initially Collapsed</label>
-          <comment>If set to "Yes", accordion will be collapsed.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field> -->
-        <field id="tabs_style" translate="label" sortOrder="140" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Style of Tabs</label>
-          <source_model>Infortis\Base\Model\System\Config\Source\Product\Tabs\Style</source_model>
+        </field>
+        <field id="opened_tab" translate="label" sortOrder="120" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Opened Tab</label>
+          <comment><![CDATA[Specify index of the tab which should be opened on page load. Numbering of tabs starts at zero. For example, to open the first tab, enter <em>0</em>, to open the second tab, enter <em>1</em>. To keep the tabs collapsed on page load, leave this field empty.]]></comment>
+          <validate>validate-number validate-number-range number-range-0-100</validate>
           <depends>
-            <field id="tabs">1</field>
+            <field id="tabs" separator=",">1,2</field>
           </depends>
         </field>
-        <!-- 
-        <field id="heading_separator1" translate="label" sortOrder="161" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Collateral Data - Selected Blocks</label>
-          <comment>Select blocks which will be displayed in the Collateral Data container.</comment>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        <field id="tabs_style" translate="label" sortOrder="140" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Style of Tabs/Accordion</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Product\Tabs\Style</source_model>
+          <depends>
+            <field id="tabs" separator=",">1,2</field>
+          </depends>
         </field>
-        <field id="collateral_reviews" translate="label" sortOrder="170" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Reviews in Collateral Data</label>
-          <comment>Display product reviews in Collateral Data container.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <field id="collateral_tags" translate="label" sortOrder="172" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Tags in Collateral Data</label>
-          <comment>Display product tags in Collateral Data container.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <field id="collateral_related" translate="label" sortOrder="174" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Related Products in Collateral Data</label>
-          <comment>Display related products in Collateral Data container.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <field id="collateral_upsell" translate="label" sortOrder="176" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Up-sell Products in Collateral Data</label>
-          <comment>Display up-sell products in Collateral Data container.</comment>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-         -->
+
         <field id="heading_related" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Related Products</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -546,11 +505,7 @@
             <field id="related_template">Infortis_Base::product/list/slider.phtml</field>
           </depends>
         </field>
-        <!-- <field id="replace_related" translate="label" sortOrder="370" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Replace Related Products With Static Block</label>
-          <comment>&lt;strong style="color:red;"&gt;Deprecated.&lt;/strong&gt; This option will be removed.&lt;br/&gt;Related Products can be replaced with static block. To replace Related Products, first create a static block with ID &lt;strong&gt;block_product_replace_related&lt;/strong&gt;.&lt;br/&gt;&lt;strong&gt;Important&lt;/strong&gt;: this feature will be ignored if option &lt;em&gt;"Related Products in Collateral Data"&lt;/em&gt; was set to "Yes".</comment>
-          <source_model>Infortis\Base\Model\System\Config\Source\Layout\Element\Replacewithblock</source_model>
-        </field> -->
+
         <field id="heading_upsell" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Up-sell Products</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -594,11 +549,7 @@
             <field id="upsell_template">Infortis_Base::product/list/slider.phtml</field>
           </depends>
         </field>
-        <!-- <field id="replace_upsell" translate="label" sortOrder="450" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Replace Up-sell Products With Static Block</label>
-          <comment>&lt;strong style="color:red;"&gt;Deprecated.&lt;/strong&gt; This option will be removed.&lt;br/&gt;Up-sell Products can be replaced with static block. To replace Up-sell Products, first create a static block with ID &lt;strong&gt;block_product_replace_upsell&lt;/strong&gt;.&lt;br/&gt;&lt;strong&gt;Important&lt;/strong&gt;: this feature will be ignored if option &lt;em&gt;"Up-sell Products in Collateral Data"&lt;/em&gt; was set to "Yes".</comment>
-          <source_model>Infortis\Base\Model\System\Config\Source\Layout\Element\Replacewithblock</source_model>
-        </field> -->
+
         <field id="heading_brand" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Brand Logo</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
@@ -628,12 +579,12 @@
         </field>
         <field id="magnifier_width" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Magnifier Width</label>
-          <comment>Width of the magnifier block. Enter value in pixels (do not enter "px" suffix).</comment>
+          <comment>Width of the magnifier block. Enter value in pixels, do not add "px" suffix.</comment>
           <validate>validate-number validate-number-range number-range-20-1920 required-entry</validate>
         </field>
         <field id="magnifier_height" translate="label" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Magnifier Height</label>
-          <comment>Height of the magnifier block. Enter value in pixels (do not enter "px" suffix).</comment>
+          <comment>Height of the magnifier block. Enter value in pixels, do not add "px" suffix.</comment>
           <validate>validate-number validate-number-range number-range-20-1920 required-entry</validate>
         </field>
       </group>
@@ -1022,48 +973,72 @@
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
       </group>
-      <group id="font" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-        <label>Font</label>
-        <field id="font_size" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Basic Font Size</label>
-          <comment>Size of the regular text. Font size of most of the other elements will be calculated relative to this value.</comment>
+      <group id="defined_fonts" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Defined Fonts</label>
+        <comment><![CDATA[In this section you can define fonts which will be used on the frontend of your store. Defined fonts will be available on a dropdown list in other sections of admin panel where you will be able to assign these fonts to selected sections of the frontend.<br/><strong>Important</strong>: when your configuration is ready, you need to save it (by clicking the <em>Save Config</em> button) in order to refresh the list of defined fonts.]]></comment>
+
+        <field id="heading_google_fonts" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Google Fonts</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="google_fonts_string" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Google Fonts Url</label>
+          <comment><![CDATA[Enter the URL string with Google Fonts to define which fonts you want to use in your store. The URL string can be generated on <a target="_blank" href="https://fonts.google.com/">Google Fonts website</a> - see the instructions in the theme user guide for more details. For example, to request "Open Sans" (regular weight and bold), use the following URL:<br/><code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">https://fonts.googleapis.com/css?family=Open+Sans:400,700</code></br><strong>Note:</strong> requesting multiple fonts may make your pages slow to load.]]></comment>
+        </field>
+
+        <field id="heading_local_fonts" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Local Fonts</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="local_fonts_string" translate="label" sortOrder="110" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Names of Local Fonts</label>
+          <comment><![CDATA[Specify name of custom local font which you want to use in your store. Font file need to be uploaded to proper folder (refer to the theme user guide for more details). Name of the font needs to match the name of the file. In case of multiple fonts, names need to be separated with semicolons.]]></comment>
+        </field>
+
+        <field id="heading_web_safe_fonts" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Web Safe Fonts</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="font_stacks_string" translate="label" sortOrder="210" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Web Safe Font Stack</label>
+          <comment><![CDATA[Specify web safe font stack, e.g.:<br/><code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">Arial, 'Helvetica Neue', Helvetica, sans-serif</code>. Web safe fonts are fonts that are pre-installed by many operating systems. While not all systems have the same fonts installed, you can use a web safe font stack to choose several fonts that look similar. Font stack should hold several font names as a fallback system, to ensure maximum compatibility between browsers/operating systems. If the browser does not support the first font, it tries the next font. See <a href="https://www.w3schools.com/cssref/css_websafe_fonts.asp">this article</a> for more details about web safe fonts.</br><strong>Note:</strong> to provide multiple stacks, separate them with semicolons.]]></comment>
+        </field>
+      </group>
+      <group id="font" translate="label" sortOrder="11" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Fonts</label>
+
+        <field id="heading_body_font" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Body Font</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="body_font_family" translate="label" sortOrder="110" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Body Font Family</label>
+          <comment><![CDATA[Select the default font family of the text on all pages.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="body_font_size" translate="label" sortOrder="120" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Body Font Size</label>
+          <comment><![CDATA[Specify the default font size of the text on all pages. Font size of other elements will be calculated relative to this value.]]></comment>
           <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Size\Basic</source_model>
         </field>
-        <field id="heading_heading_font" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Heading Font</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+        <field id="fallback_body_font_stack" translate="label" sortOrder="130" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Fallback Font Stack For Body Font</label>
+          <comment><![CDATA[Specify web safe font stack for body font, e.g.:<br/><code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">Arial, 'Helvetica Neue', Helvetica, sans-serif</code>. It will be used as a fallback for body font. E.g. if a font from Google Fonts was selected in the <en>Body Font Family</en> field and the web browser can't load that font (e.g. because of server failure), browser will use fonts from this stack. You should specify web safe fonts, see <a href="https://www.w3schools.com/cssref/css_websafe_fonts.asp">this article</a> for more details about web safe fonts.]]></comment>
         </field>
-        <field id="primary_font_family_group" translate="label" sortOrder="210" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Heading Font Family</label>
-          <comment>Select predefined font stack, Google Fonts or type in your custom font stack.</comment>
-          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\Groupcustomgoogle</source_model>
+
+        <field id="heading_headings_font" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Headings Font</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
-        <field id="primary_font_family_custom" translate="label" sortOrder="220" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Custom</label>
-          <comment>Type in your custom font stack, e.g.:&lt;br/&gt;&lt;em&gt;Arial, "Helvetica Neue", Helvetica, sans-serif&lt;/em&gt;.&lt;br/&gt;&lt;strong&gt;Important&lt;/strong&gt;: Do not add trailing semicolon.</comment>
-          <depends>
-            <field id="primary_font_family_group">custom</field>
-          </depends>
+        <field id="headings_font_family" translate="label" sortOrder="210" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Headings Font Family</label>
+          <comment><![CDATA[Select the default font family of the headings.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
         </field>
-        <field id="primary_font_family" translate="label" sortOrder="230" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Google Fonts</label>
-          <comment>Font preview is available on &lt;a target="_blank" href="http://www.google.com/webfonts"&gt;Google Web Fonts&lt;/a&gt;&lt;br/&gt;&lt;strong style="color:red;"&gt;Important&lt;/strong&gt;: most of the fonts from Google are not available in all weights. Make sure that you specified correct weight (field &lt;strong&gt;Font Weight&lt;/strong&gt; below) for selected font. Otherwise font will not be displayed. Refer to &lt;a target="_blank" href="http://www.google.com/webfonts"&gt;Google Web Fonts&lt;/a&gt; to check if the selected weight is available for your font.</comment>
-          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\Google</source_model>
-          <depends>
-            <field id="primary_font_family_group">google</field>
-          </depends>
-        </field>
-        <field id="primary_char_subset" translate="label" sortOrder="240" type="multiselect" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Character Sets</label>
-          <comment>Some of the fonts support multiple scripts (like Latin and Cyrillic for example). You need to select at least one character set.&lt;br/&gt;&lt;strong style="color:red;"&gt;Important&lt;/strong&gt;: not all fonts support extended character sets. For a complete list of available fonts and font subsets refer to &lt;a target="_blank" href="http://www.google.com/webfonts"&gt;Google Web Fonts&lt;/a&gt;.&lt;br/&gt;&lt;strong style="color:red;"&gt;Important&lt;/strong&gt;: using multiple character sets affects performance, so only select the character sets that you actually need.</comment>
-          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Google\Subset</source_model>
-          <depends>
-            <field id="primary_font_family_group">google</field>
-          </depends>
-        </field>
-        <field id="primary_font_weight" translate="label" sortOrder="250" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Font Weight</label>
-          <comment>Specify the weight of the font. You can only use &lt;strong&gt;numeric font weights&lt;/strong&gt; which are available for the CSS property &lt;a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight"&gt;&lt;em&gt;font-weight&lt;/em&gt;&lt;/a&gt;. E.g. normal weight is &lt;em&gt;400&lt;/em&gt;, bold is &lt;em&gt;700&lt;/em&gt;. Leave empty to use default weight.&lt;br/&gt;&lt;strong style="color:red;"&gt;Important&lt;/strong&gt;: if you selected a font from Google Fonts, note that some fonts are not available in all weights. Refer to &lt;a target="_blank" href="http://www.google.com/webfonts"&gt;Google Web Fonts&lt;/a&gt; to check if the selected weight is available for your font.</comment>
+        <field id="headings_font_weight" translate="label" sortOrder="220" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Headings Font Weight</label>
+          <comment><![CDATA[Specify the font weight of the headings. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.<br/><strong style="color:red;">Important</strong>: if you selected a font from Google Fonts, note that some fonts are not available in all weights.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
         </field>
       </group>
       <group id="effects" translate="label" sortOrder="15" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1144,22 +1119,12 @@
       <group id="header" translate="label" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>Header</label>
         <comment>In this tab, you can configure the header section of the page located at the very top.</comment>
+
         <field id="top_border_color" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Top Border Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="color" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Text Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="link_color" translate="label" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Link Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="link_hover_color" translate="label" sortOrder="40" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Link Hover Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
+
         <field id="heading_gap" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Outer Container</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -1211,6 +1176,7 @@
           <comment>Specify additional gap below the header section. Value in pixels.</comment>
           <validate>validate-number validate-number-range number-range-0-50</validate>
         </field>
+
         <field id="heading_inner" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Inner Container</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -1219,66 +1185,14 @@
           <label>Inner Background Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="heading_search" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Search box</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
-        </field>
-        <field id="search_bg_color" translate="label" sortOrder="410" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Background Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="search_hover_bg_color" translate="label" sortOrder="420" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Hover Background Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="search_color" translate="label" sortOrder="430" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Text Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="search_hover_color" translate="label" sortOrder="440" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Hover Text Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="search_border_color" translate="label" sortOrder="450" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Border Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="search_border_hover_color" translate="label" sortOrder="460" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Border Hover Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="search_max_width" translate="label" sortOrder="470" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Maximum Width</label>
-          <comment>Use to decrease the maximum width of the search box. It works similar to CSS property &lt;a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/max-width"&gt;&lt;em&gt;max-width&lt;/em&gt;&lt;/a&gt;. Example values: &lt;em&gt;200px&lt;/em&gt;, &lt;em&gt;75%&lt;/em&gt;, &lt;em&gt;10em&lt;/em&gt;. Leave empty to use the default width.&lt;br/&gt;&lt;strong&gt;Important:&lt;/strong&gt; don't forget to specify the unit.</comment>
-        </field>
-        <field id="heading_dropdown" translate="label" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Drop-down Boxes</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
-        </field>
-        <field id="counter_color" translate="label" sortOrder="805" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Product Counter Color</label>
-          <comment>Small box showing number of products added to the cart.</comment>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="dropdown_bg_color" translate="label" sortOrder="810" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Drop-down Background Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="dropdown_color" translate="label" sortOrder="820" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Drop-down Text Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="dropdown_link_color" translate="label" sortOrder="830" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Drop-down Link Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
-        <field id="dropdown_link_hover_color" translate="label" sortOrder="840" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Drop-down Link Hover Color</label>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
-        </field>
       </group>
       <group id="header_top" translate="label" sortOrder="35" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>Header - Top</label>
+
+        <field id="heading_text_colors" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Text Colors</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
         <field id="color" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
@@ -1291,11 +1205,6 @@
           <label>Link Hover Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="line_height" translate="label" sortOrder="50" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Line Height</label>
-          <comment>Minimum height of line of text. It works similar to CSS property &lt;a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/line-height"&gt;&lt;em&gt;line-height&lt;/em&gt;&lt;/a&gt;.</comment>
-          <validate>validate-number validate-number-range number-range-0-100</validate>
-        </field>
         <field id="heading_outer" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Outer Container</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -1336,38 +1245,68 @@
           <label>Side Padding</label>
           <tooltip>- &lt;strong&gt;Use Default&lt;/strong&gt; - use the default side padding (defined in &lt;em&gt;Page &amp;gt; Inner Container &amp;gt; Side Padding&lt;/em&gt;).&lt;br/&gt;- &lt;strong&gt;No Side Padding&lt;/strong&gt; - remove side padding.&lt;br/&gt;- &lt;strong&gt;Full Width&lt;/strong&gt; - stretch the inner container of this section to full width and use the default side padding.&lt;br/&gt;- &lt;strong&gt;Full Width, No Side Padding&lt;/strong&gt; - stretch the inner container of this section to full width and remove side padding.</tooltip>
           <source_model>Infortis\Base\Model\System\Config\Source\Design\Section\Sidepadding</source_model>
+        </field>
+        <field id="heading_style" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Style of Elements</label>
+          <comment>Style of elements: drop-downs, account links, custom links.</comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="font_family" translate="label" sortOrder="510" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Font Family</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="font_size" translate="label" sortOrder="520" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Font Size</label>
+          <validate>validate-number validate-number-range number-range-0-50</validate>
+        </field>
+        <field id="font_weight" translate="label" sortOrder="530" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Font Weight</label>
+          <comment><![CDATA[Make sure to specify weight which is available for selected font. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
+        </field>
+        <field id="font_uppercase" translate="label" sortOrder="540" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="line_height" translate="label" sortOrder="550" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Line Height</label>
+          <comment><![CDATA[Minimum height of line of text. It works similar to CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/line-height"><em>line-height</em></a>.]]></comment>
+          <validate>validate-number validate-number-range number-range-0-100</validate>
         </field>
       </group>
       <group id="header_primary" translate="label" sortOrder="36" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>Header - Primary</label>
-        <field id="heading_appearance" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Elements</label>
-          <comment>Style of elements: Mini Cart drop-down, Mini Compare drop-down, account links.</comment>
+
+        <field id="heading_text_colors" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Text Colors</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
-        <field id="font_size" translate="label" sortOrder="110" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Font Size</label>
-          <validate>validate-number validate-number-range number-range-0-50</validate>
+        <field id="color" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="line_height" translate="label" sortOrder="120" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Line Height</label>
-          <comment>Minimum height of line of text. It works similar to CSS property &lt;a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/line-height"&gt;&lt;em&gt;line-height&lt;/em&gt;&lt;/a&gt;.</comment>
-          <validate>validate-number validate-number-range number-range-0-100</validate>
+        <field id="link_color" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Link Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="heading_outer" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="link_hover_color" translate="label" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Link Hover Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="heading_outer" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Outer Container</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
         </field>
-        <field id="bg_color" translate="label" sortOrder="210" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="bg_color" translate="label" sortOrder="110" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Background Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="padding_top" translate="label" sortOrder="220" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="padding_top" translate="label" sortOrder="120" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Top Padding</label>
           <comment>Specify additional gap above this section of the header. Value in pixels.</comment>
           <validate>validate-number validate-number-range number-range-0-50</validate>
         </field>
-        <field id="padding_bottom" translate="label" sortOrder="230" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="padding_bottom" translate="label" sortOrder="130" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Bottom Padding</label>
           <comment>Specify additional gap below this section of the header. Value in pixels.</comment>
           <validate>validate-number validate-number-range number-range-0-50</validate>
@@ -1395,9 +1334,37 @@
           <tooltip>- &lt;strong&gt;Use Default&lt;/strong&gt; - use the default side padding (defined in &lt;em&gt;Page &amp;gt; Inner Container &amp;gt; Side Padding&lt;/em&gt;).&lt;br/&gt;- &lt;strong&gt;No Side Padding&lt;/strong&gt; - remove side padding.&lt;br/&gt;- &lt;strong&gt;Full Width&lt;/strong&gt; - stretch the inner container of this section to full width and use the default side padding.&lt;br/&gt;- &lt;strong&gt;Full Width, No Side Padding&lt;/strong&gt; - stretch the inner container of this section to full width and remove side padding.</tooltip>
           <source_model>Infortis\Base\Model\System\Config\Source\Design\Section\Sidepadding</source_model>
         </field>
+        <field id="heading_style" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Style of Elements</label>
+          <comment>Style of elements: mini cart drop-down, account links.</comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="font_family" translate="label" sortOrder="510" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Font Family</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="font_size" translate="label" sortOrder="520" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Font Size</label>
+          <validate>validate-number validate-number-range number-range-0-50</validate>
+        </field>
+        <field id="font_weight" translate="label" sortOrder="530" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Font Weight</label>
+          <comment><![CDATA[Make sure to specify weight which is available for selected font. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
+        </field>
+        <field id="font_uppercase" translate="label" sortOrder="540" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="line_height" translate="label" sortOrder="550" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Line Height</label>
+          <comment><![CDATA[Minimum height of line of text. It works similar to CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/line-height"><em>line-height</em></a>.]]></comment>
+          <validate>validate-number validate-number-range number-range-0-100</validate>
+        </field>
       </group>
       <group id="m_header" translate="label" sortOrder="37" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-        <label>Mobile Header</label>
+        <label>Header - Mobile</label>
+
         <field id="heading_outer" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Outer Container</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -1429,52 +1396,258 @@
           <tooltip>- &lt;strong&gt;Use Default&lt;/strong&gt; - use the default side padding (defined in &lt;em&gt;Page &amp;gt; Inner Container &amp;gt; Side Padding&lt;/em&gt;).&lt;br/&gt;- &lt;strong&gt;No Side Padding&lt;/strong&gt; - remove side padding.&lt;br/&gt;- &lt;strong&gt;Full Width&lt;/strong&gt; - stretch the inner container of this section to full width and use the default side padding.&lt;br/&gt;- &lt;strong&gt;Full Width, No Side Padding&lt;/strong&gt; - stretch the inner container of this section to full width and remove side padding.</tooltip>
           <source_model>Infortis\Base\Model\System\Config\Source\Design\Section\Sidepadding</source_model>
         </field>
-        <field id="heading_tabs" translate="label" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Mobile header tabs</label>
-          <comment>Buttons (i.e. menu, search, account, cart) displayed in mobile header.</comment>
+
+        <field id="heading_tabs" translate="label" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mobile Header Tabs</label>
+          <comment><![CDATA[Tabs (i.e. Menu, Search, Account, Cart) displayed in mobile header.]]></comment>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
-        <field id="tab_item_bg_color" translate="label" sortOrder="910" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_item_bg_color" translate="label" sortOrder="710" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Background Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_item_color" translate="label" sortOrder="911" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_item_color" translate="label" sortOrder="711" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_item_hover_bg_color" translate="label" sortOrder="920" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_item_hover_bg_color" translate="label" sortOrder="720" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Hover Background Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_item_hover_color" translate="label" sortOrder="921" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_item_hover_color" translate="label" sortOrder="721" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Hover Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_item_active_bg_color" translate="label" sortOrder="930" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_item_active_bg_color" translate="label" sortOrder="730" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Active Background Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_item_active_color" translate="label" sortOrder="931" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_item_active_color" translate="label" sortOrder="731" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Active Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_content_bg_color" translate="label" sortOrder="950" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+
+        <field id="heading_tabs_content" translate="label" sortOrder="750" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Content of Mobile Header Tabs</label>
+          <comment><![CDATA[Content of tabs displayed in mobile header.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="tab_content_bg_color" translate="label" sortOrder="755" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Content Background Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_content_color" translate="label" sortOrder="960" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_content_color" translate="label" sortOrder="760" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Content Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_content_link_color" translate="label" sortOrder="961" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_content_link_color" translate="label" sortOrder="761" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Content Link Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="tab_content_link_hover_color" translate="label" sortOrder="962" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="tab_content_link_hover_color" translate="label" sortOrder="762" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Content Link Hover Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
       </group>
+
+      <group id="search" translate="label" sortOrder="38" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Header - Search</label>
+
+        <field id="heading_general" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>General</label>
+          <comment><![CDATA[]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="mode" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mode</label>
+          <comment><![CDATA[- <strong>Standard</strong> - search input is always visible</br>- <strong>Expanding</strong> - only the search button is visible, search input will slide out on mouse hover]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Header\Search\Mode</source_model>
+        </field>
+        <field id="size" translate="label" sortOrder="20" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Size</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Header\Search\Size</source_model>
+        </field>
+        <field id="width" translate="label" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Width</label>
+          <comment><![CDATA[Specify maximum width of the search box. Use values which are allowed for CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/width"><em>width</em></a>. Example values: <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">200px</code>, <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">75%</code>, <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">10em</code>]]></comment>
+        </field>
+        <!-- <field id="max_width" translate="label" sortOrder="499" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Maximum Width</label>
+          <comment><![CDATA[Use to decrease the maximum width of the search box. It works similar to CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow"><em>max-width</em></a>. Example values: <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">200px</code>, <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">75%</code>, <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">10em</code><br/>Leave empty to use the default width. Remember to specify the unit.]]></comment>
+        </field> -->
+
+        <field id="heading_colors" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Appearance</label>
+          <comment><![CDATA[]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="bg_color" translate="label" sortOrder="410" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="hover_bg_color" translate="label" sortOrder="420" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Hover Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="color" translate="label" sortOrder="430" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="hover_color" translate="label" sortOrder="440" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Hover Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="border_color" translate="label" sortOrder="450" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Border Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="border_hover_color" translate="label" sortOrder="460" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Border Hover Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="border_radius" translate="label" sortOrder="470" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Border Radius</label>
+          <comment><![CDATA[Specify the border radius to make the corners of the search box rounded. Use values which are allowed for CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius"><em>border-radius</em></a>. E.g. for slightly rounded corners: <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">4px</code>]]></comment>
+        </field>
+        <field id="shadow" translate="label" sortOrder="480" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Shadow</label>
+          <comment><![CDATA[Specify one or more shadow effects (as a comma-separated list) to add shadow to the search box. Use values which are allowed for CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow"><em>box-shadow</em></a>. E.g. for soft gray shadow inside the box: <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">inset 0 1px 5px rgba(0, 0, 0, 0.075)</code>]]></comment>
+        </field>
+        <field id="focus_shadow" translate="label" sortOrder="490" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Shadow On Focus</label>
+          <comment><![CDATA[Specify one or more shadow effects (as a comma-separated list) to add shadow to the search box when search box has focus. Use values which are allowed for CSS property <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow"><em>box-shadow</em></a>. E.g. for soft blue shadow outside the box: <code style="background-color: #eaf5f8; color: #00a3db; padding: 1px 2px; display: inline-block;">0 0 5px rgba(81,167,232,0.5)</code>]]></comment>
+        </field>
+      </group>
+
+      <group id="dropdowns" translate="label" sortOrder="39" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Header - Drop-Downs</label>
+        <!-- <comment><![CDATA[Settings for drop-down boxes inside header.]]></comment> -->
+
+        <field id="heading_all" translate="label" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>All Drop-down Boxes</label>
+          <comment><![CDATA[Settings for all drop-down boxes inside header.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="bg_color" translate="label" sortOrder="710" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="color" translate="label" sortOrder="720" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="link_color" translate="label" sortOrder="730" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Link Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="link_hover_color" translate="label" sortOrder="740" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Link Hover Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="heading_filled" translate="label" sortOrder="750" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Dropdown Heading Filled With Background Color</label>
+          <comment><![CDATA[If set to "Yes", when the dropdown is opened, the heading of the dropdown will have a background color and will drop a shadow (the same as the content box of the dropdown). The color can be set in the <em>Drop-down Background Color</em> field. If set to "No", when the dropdown is opened, the heading of the dropdown will have no background color and will not drop any shadow.]]></comment>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="with_pointer" translate="label" sortOrder="760" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Show Pointer</label>
+          <comment><![CDATA[If set to "Yes", dropdown content box will have a small triangular pointer above the top edge.<br/><strong style="color:red;">Important</strong>: the pointer will not be visible if option <em>Dropdown Heading Filled With Background Color</em> was enabled.]]></comment>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+          <!-- <depends>
+            <field id="heading_filled">0</field>
+          </depends> -->
+        </field>
+        <field id="border_color" translate="label" sortOrder="770" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Border Color</label>
+          <comment><![CDATA[Add a border around the content box of the dropdown. If option <em>Dropdown Heading Filled With Background Color</em> was enabled, the heading of the dropdown will also have a border.<br/><strong>Note:</strong> leave empty if you don't want to add any border.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+
+        <field id="heading_cart_general" translate="label" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mini Cart - General</label>
+          <comment><![CDATA[Settings only for mini cart drop-down box.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="cart_label" translate="label" sortOrder="810" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Show Text Label "Cart"</label>
+          <comment><![CDATA[If set to "No", label "Cart" in the mini cart drop-down will be hidden.]]></comment>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="heading_cart_dropdown" translate="label" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mini Cart - Icon</label>
+          <comment><![CDATA[Settings only for mini cart drop-down box.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="cart_icon" translate="label" sortOrder="910" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Icon</label>
+          <comment><![CDATA[Type of the icon.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Header\Cart\Icon\Name</source_model>
+        </field>
+        <field id="cart_icon_size" translate="label" sortOrder="920" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Icon Size</label>
+          <comment><![CDATA[Font size of the icon. Enter value in pixels, do not add "px" suffix.]]></comment>
+          <validate>validate-number validate-number-range number-range-5-100</validate>
+        </field>
+        <field id="cart_icon_color" translate="label" sortOrder="930" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Icon Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="cart_iconbox_size" translate="label" sortOrder="950" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Iconbox Size</label>
+          <comment><![CDATA[Enable iconbox by selecting the size. When iconbox is enabled, the cart icon will be displayed inside a box with background color.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Header\Cart\Iconbox\Size</source_model>
+        </field>
+        <field id="cart_iconbox_bg_color" translate="label" sortOrder="955" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Iconbox Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+          <depends>
+            <field id="cart_iconbox_size" separator=",">l,m,s</field>
+          </depends>
+        </field>
+        <field id="cart_iconbox_shape" translate="label" sortOrder="960" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Iconbox Shape</label>
+          <comment><![CDATA[Shape of the iconbox.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Iconbox\Shape</source_model>
+          <depends>
+            <field id="cart_iconbox_size" separator=",">l,m,s</field>
+          </depends>
+        </field>
+
+        <field id="heading_counter" translate="label" sortOrder="969" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mini Cart - Product Counter</label>
+          <comment><![CDATA[Settings only for mini cart drop-down box.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="cart_counter_size" translate="label" sortOrder="970" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Counter Size</label>
+          <comment><![CDATA[Size of the box showing number of products added to the cart. Default size: <em>s</em>.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Iconbox\Size\Basic</source_model>
+        </field>
+        <field id="cart_counter_bg_color" translate="label" sortOrder="975" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Counter Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <!-- <field id="cart_counter_color" translate="label" sortOrder="976" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Counter Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field> -->
+        <field id="cart_counter_border_color" translate="label" sortOrder="977" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Counter Border Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="cart_counter_shape" translate="label" sortOrder="980" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Counter Shape</label>
+          <comment><![CDATA[Shape of the product counter.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Iconbox\Shape</source_model>
+        </field>
+        <field id="cart_counter_position" translate="label" sortOrder="985" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Product Counter Position</label>
+          <comment><![CDATA[Position of the product counter.]]></comment>
+          <source_model>Infortis\Base\Model\System\Config\Source\Header\Cart\Counter\Position\Over</source_model>
+        </field>
+      </group>
+
       <group id="nav" translate="label" sortOrder="40" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>Menu</label>
         <field id="heading_outer" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1502,7 +1675,7 @@
         </field>
         <field id="inner_bg_color" translate="label" sortOrder="45" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Inner Background Color (Outline)</label>
-          <comment>Background color of the inner container. Set this color to display an outline around the menu bar.&lt;/br&gt;&lt;strong&gt;Note:&lt;/strong&gt; if option &lt;strong&gt;Remove Content Side Padding&lt;/strong&gt; is enabled, the outline will not be visible because menu bar will cover the inner container.</comment>
+          <comment><![CDATA[Background color of the inner container. Set this color to display an outline around the menu bar.</br><strong>Note:</strong> if no padding was enabled for the inner container, the outline will not be visible because menu bar will cover the inner container.]]></comment>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
         <field id="content_padding_top" translate="label" sortOrder="50" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -1527,6 +1700,7 @@
             <field id="content_padding_side">override</field>
           </depends>
         </field>
+
         <field id="heading_bar" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Menu Bar</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -1545,9 +1719,11 @@
           <label>Bottom Border Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
+
         <field id="heading_items" translate="label" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Menu Item Colors</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+          <label>1st-Level Menu Items</label>
+          <comment><![CDATA[Colors of 1st-level menu items.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
         <field id="bg_color" translate="label" sortOrder="160" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Background Color</label>
@@ -1573,9 +1749,11 @@
           <label>Item Active Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
+
         <field id="heading_sticky_menu" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Sticky Header Menu</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+          <label>1st-Level Menu Items - Sticky Header</label>
+          <comment><![CDATA[Colors of 1st-level menu items when menu is displayed inside sticky header.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
         <field id="sticky_item_bg_color" translate="label" sortOrder="210" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Item Background Color</label>
@@ -1590,64 +1768,11 @@
           <comment>If the border at the bottom of the menu bar was enabled, set this option to "No" to hide that border in the sticky menu.</comment>
           <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
-        <field id="heading_fonts" translate="label" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Font Settings</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
-        </field>
-        <field id="level1_font_size" translate="label" sortOrder="255" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>1st-Level Item Font Size</label>
-          <validate>validate-number validate-number-range number-range-8-30</validate>
-        </field>
-        <field id="level1_font_uppercase" translate="label" sortOrder="260" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>1st-Level Item Uppercase</label>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <field id="level2_font_size" translate="label" sortOrder="265" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Drop-down Item Font Size</label>
-          <comment>Font size of the menu items on all levels inside drop-downs.</comment>
-          <validate>validate-number validate-number-range number-range-8-30</validate>
-        </field>
-        <field id="heading_mega_dd_fonts" translate="label" sortOrder="270" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Mega Drop-Down - Font Settings</label>
-          <comment>Additional font settings for menu items inside drop-downs configured as "Mega drop-down".</comment>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
-        </field>
-        <field id="mega_lev1_font_size" translate="label" sortOrder="275" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>1st-Level Item Font Size</label>
-          <validate>validate-number validate-number-range number-range-8-30</validate>
-        </field>
-        <field id="mega_lev1_font_uppercase" translate="label" sortOrder="280" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>1st-Level Item Uppercase</label>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <field id="mega_lev2_font_size" translate="label" sortOrder="285" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>2nd-Level Item Font Size</label>
-          <validate>validate-number validate-number-range number-range-8-30</validate>
-        </field>
-        <field id="heading_mobile_dd_fonts" translate="label" sortOrder="290" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Mobile Menu - Font Settings</label>
-          <comment>Additional font settings for the mobile menu.</comment>
-          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
-        </field>
-        <field id="mobile_level1_font_size" translate="label" sortOrder="291" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>1st-Level Item Font Size</label>
-          <validate>validate-number validate-number-range number-range-14-30</validate>
-        </field>
-        <field id="mobile_level1_font_uppercase" translate="label" sortOrder="292" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>1st-Level Item Uppercase</label>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <field id="mobile_level2_font_size" translate="label" sortOrder="293" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>2nd-Level Item Font Size</label>
-          <validate>validate-number validate-number-range number-range-14-30</validate>
-        </field>
-        <field id="mobile_level2_font_uppercase" translate="label" sortOrder="294" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>2nd-Level Item Uppercase</label>
-          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
+
         <field id="heading_dropdown" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Drop-down Boxes</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+          <comment><![CDATA[Settings for drop-down boxes with subcategories. Drop-down boxes configured as "Mega drop-down" can also display custom content from "category blocks".]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
         <field id="dropdown_shadow" translate="label" sortOrder="310" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Drop-down Shadow</label>
@@ -1688,20 +1813,162 @@
           <comment>If set to "No", only drop-down boxes of the top-level categories will have the border.</comment>
           <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
-        <field id="heading_menumobile" translate="label" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Mobile Menu</label>
+
+        <field id="heading_mobile_navigation" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mobile Menu Items</label>
+          <comment><![CDATA[Settings for menu items displayed inside mobile header. These settings are applied to Menu tab and Account tab.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="mobile_bg_color" translate="label" sortOrder="410" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Item Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="mobile_color" translate="label" sortOrder="412" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Item Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="mobile_hover_bg_color" translate="label" sortOrder="413" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Item Hover Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="mobile_hover_color" translate="label" sortOrder="414" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Item Hover Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="mobile_active_bg_color" translate="label" sortOrder="415" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Item Active Background Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+        <field id="mobile_active_color" translate="label" sortOrder="416" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Item Active Text Color</label>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
+        </field>
+
+        <field id="heading_mobile_other" translate="label" sortOrder="450" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mobile Menu - Other Settings</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
         </field>
-        <field id="mobile_link_separator_color" translate="label" sortOrder="610" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="mobile_link_separator_color" translate="label" sortOrder="451" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Link Separator Color</label>
           <comment>Vertical space between links in mobile version of the main menu. Leave empty to remove separator.</comment>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="mobile_shadow" translate="label" sortOrder="620" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+        <field id="mobile_shadow" translate="label" sortOrder="452" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Mobile Menu Drop-down Shadow</label>
-          <comment>If set to "Yes", mobile menu drop-down box will drop shadow if category contains any category blocks.</comment>
+          <comment>If set to "Yes", mobile menu drop-down box will drop shadow if drop-down contains any category blocks.</comment>
           <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
+
+        <field id="heading_fonts" translate="label" sortOrder="550" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Menu Items - Font Settings</label>
+          <comment><![CDATA[Font settings for 1st-level menu items.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="level1_font_family" translate="label" sortOrder="551" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Family</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="level1_font_size" translate="label" sortOrder="552" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Size</label>
+          <validate>validate-number validate-number-range number-range-8-30</validate>
+        </field>
+        <field id="level1_font_weight" translate="label" sortOrder="553" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Weight</label>
+          <comment><![CDATA[Make sure to specify weight which is available for selected font. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
+        </field>
+        <field id="level1_font_uppercase" translate="label" sortOrder="554" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="heading_dropdown_fonts" translate="label" sortOrder="560" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-Downs - Font Settings</label>
+          <comment><![CDATA[Font settings for menu items inside drop-downs (on all levels).]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="level2_font_family" translate="label" sortOrder="561" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Item Font Family</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="level2_font_size" translate="label" sortOrder="562" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Item Font Size</label>
+          <validate>validate-number validate-number-range number-range-8-30</validate>
+        </field>
+        <field id="level2_font_weight" translate="label" sortOrder="563" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Item Font Weight</label>
+          <comment><![CDATA[Make sure to specify weight which is available for selected font. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
+        </field>
+        <field id="level2_font_uppercase" translate="label" sortOrder="564" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Drop-down Item Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="heading_mega_dd_fonts" translate="label" sortOrder="570" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mega Drop-Downs - Font Settings</label>
+          <comment><![CDATA[Additional font settings for menu items inside drop-down boxes configured as "Mega drop-down". These settings override values from "Drop-Down - Font Settings".]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="mega_lev1_font_family" translate="label" sortOrder="571" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Family</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="mega_lev1_font_size" translate="label" sortOrder="572" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Size</label>
+          <validate>validate-number validate-number-range number-range-8-30</validate>
+        </field>
+        <field id="mega_lev1_font_weight" translate="label" sortOrder="573" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Weight</label>
+          <comment><![CDATA[Make sure to specify weight which is available for selected font. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
+        </field>
+        <field id="mega_lev1_font_uppercase" translate="label" sortOrder="574" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="mega_lev2_font_size" translate="label" sortOrder="580" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>2nd-Level Item Font Size</label>
+          <validate>validate-number validate-number-range number-range-8-30</validate>
+        </field>
+        <field id="mega_lev2_font_uppercase" translate="label" sortOrder="581" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>2nd-Level Item Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="heading_mobile_dd_fonts" translate="label" sortOrder="590" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Mobile Menu - Font Settings</label>
+          <comment><![CDATA[Additional font settings for menu items displayed inside mobile header. These settings are applied to Menu tab and Account tab.]]></comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+        </field>
+        <field id="mobile_level1_font_family" translate="label" sortOrder="591" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>All-Level Items Font Family</label>
+          <source_model>Infortis\Base\Model\System\Config\Source\Design\Font\Family\DefinedFonts</source_model>
+        </field>
+        <field id="mobile_level1_font_size" translate="label" sortOrder="592" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Size</label>
+          <validate>validate-number validate-number-range number-range-14-30</validate>
+        </field>
+        <field id="mobile_level1_font_weight" translate="label" sortOrder="593" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Font Weight</label>
+          <comment><![CDATA[Make sure to specify weight which is available for selected font. Use only numeric weights, e.g. normal weight is <em>400</em>, bold is <em>700</em>. Leave empty to use default weight.]]></comment>
+          <validate>validate-number validate-number-range number-range-100-900</validate>
+        </field>
+        <field id="mobile_level1_font_uppercase" translate="label" sortOrder="594" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>1st-Level Item Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="mobile_level2_font_size" translate="label" sortOrder="594" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>2nd-Level Item Font Size</label>
+          <validate>validate-number validate-number-range number-range-14-30</validate>
+        </field>
+        <field id="mobile_level2_font_uppercase" translate="label" sortOrder="595" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>2nd-Level Item Uppercase</label>
+          <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
         <field id="heading_vertical_items" translate="label" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Vertical Menu</label>
           <comment>Colors of: 1. the sidebar menu, 2. the top menu displayed as a vertical drop-down menu (when "Vertical Drop-down Menu" is enabled in menu settings).</comment>
@@ -1787,8 +2054,7 @@
       </group>
       <group id="main" translate="label" sortOrder="50" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>Main</label>
-        <comment>In this tab, you can configure the main content area - section of the page located
-between the header and the footer.</comment>
+        <comment>In this tab, you can configure the main section (located between the header and footer) which displays the main content of the page.</comment>
         <field id="heading_gap" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Outer Container</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -1922,7 +2188,8 @@ between the header and the footer.</comment>
         </field>
         <field id="heading_tool_icons" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Interface Icons</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+          <comment>Selected interface icons, e.g.: slider arrows.</comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
         <field id="tool_icon_bg_color" translate="label" sortOrder="510" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Icon Background Color</label>
@@ -1940,9 +2207,10 @@ between the header and the footer.</comment>
           <label>Icon Hover Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
-        <field id="heading_custom_icons" translate="label" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="1">
-          <label>Custom Icons</label>
-          <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+        <field id="heading_iconbox" translate="label" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="1">
+          <label>Iconbox</label>
+          <comment>Icon with background color (icon with the "ib" class).</comment>
+          <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
         </field>
         <field id="icon_bg_color" translate="label" sortOrder="610" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Icon Background Color</label>
@@ -2256,6 +2524,7 @@ between the header and the footer.</comment>
           <label>Active Item Text Color</label>
           <frontend_model>Infortis\Infortis\Block\Adminhtml\System\Config\Form\Field\Color</frontend_model>
         </field>
+
         <field id="heading_accordion" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Accordion Tabs</label>
           <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
@@ -2329,7 +2598,7 @@ between the header and the footer.</comment>
         </field>
         <field id="max_width_custom" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Custom Maximum Breakpoint</label>
-          <comment><![CDATA[This field defines custom maximum breakpoint and custom maximum width of the content area.<br/>Specify value in pixels, do not add "px" suffix.]]></comment>
+          <comment><![CDATA[This field defines custom maximum breakpoint and custom maximum width of the content area.<br/>Enter value in pixels, do not add "px" suffix.]]></comment>
           <validate>validate-number validate-number-range number-range-900-3000</validate>
           <depends>
             <field id="max_width">custom</field>

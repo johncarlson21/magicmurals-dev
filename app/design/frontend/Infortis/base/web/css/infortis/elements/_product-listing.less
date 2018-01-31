@@ -34,7 +34,9 @@
         color: inherit;
     }
 
-    // Product image and alternative image
+    // Product image container.
+    // This element needs to have "position: relative" because other elements
+    // are positioned relative: "add to" links, stickers, alternative image
     .product-item-img {
         position: relative;
         overflow: hidden;
@@ -220,10 +222,6 @@
         }
     }
 
-    .product-item-img {
-        margin: 0 auto;
-    }
-
     .product-item-name {
         margin: @product-listing__vert-space__l 0 @product-listing__vert-space__m;
 
@@ -362,6 +360,27 @@
                     position: static;
                     bottom: auto;
                 }
+            }
+        }
+
+        // Align image to the center. It also requires inline "max-width" set on this element.
+        .product-item-photo {
+            margin: 0 auto;
+            display: block;
+            position: relative; // Required for alternative image which is positioned relative to this element
+        }
+    }
+
+    //
+    //  Align to the center when equal height not enabled
+    //  ---------------------------------------------
+
+    &.centered:not(.equal-height) {
+        .item {
+            .actions {
+                // Actions container need to be inline (and can't float) to be correctly centered
+                display: inline-block;
+                float: none; // This is only to prevent floating after future changes
             }
         }
     }

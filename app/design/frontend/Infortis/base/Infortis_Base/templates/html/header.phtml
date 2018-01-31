@@ -21,6 +21,7 @@
     $compareHtml = $this->getChildHtml('compareMini'); //TODO: original name is catalog.compare.sidebar. Add it through layout and add custom name.
     $compareLinkHtml = $this->getChildHtml('catalog.compare.link'); //TODO: this is original block in the header with the link to compare 
     $logoHtml = $this->getChildHtml('site-logo');
+    $logoMobileHtml = $this->getChildHtml('site-logo-mobile');
     $searchHtml = $this->getChildHtml('topSearch'); //TODO: 
 
     $accountLinksHtml = $this->getChildHtml('account-links'); //('top.links')
@@ -257,47 +258,42 @@
 
                     <!-- Mobile logo -->
                     <div class="logo-wrapper--mobile">
-                        <?php echo $logoHtml; ?>
-                        <?php /* //TODO: original code for small logo. We may need to remove this in M2
-                        <a class="logo logo--mobile" href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>">
-                            <img src="<?php echo (($small = $this->getLogoSrcSmall()) ? $small : $this->getLogoSrc()); ?>" alt="<?php echo $this->getLogoAlt() ?>" />
-                        </a>
-                        */ ?>
+                        <?php echo $logoMobileHtml; ?>
                     </div>
                     <div class="clearer after-mobile-logo"></div>
 
                     <!-- Skip links -->
-                    <div class="skip-links-wrapper skip-links--<?php echo $skipLinksCount; ?>">
+                    <div id="skip-links" class="skip-links-wrapper skip-links--<?php echo $skipLinksCount; ?>">
 
                         <?php if (!empty($menuHtml)): ?>
-                            <a href="#header-nav" class="skip-link skip-nav">
+                            <div data-skiptarget="#header-nav" class="skip-link skip-nav">
                                 <span class="icon ic ic-menu"></span>
                                 <span class="label"><?php echo __('Menu'); ?></span>
-                            </a>
+                            </div>
                         <?php endif; ?>
 
                         <?php if (!empty($searchHtml)): ?>
-                            <a href="#header-search" class="skip-link skip-search">
+                            <div data-skiptarget="#header-search" class="skip-link skip-search">
                                 <span class="icon ic ic-search"></span>
                                 <span class="label"><?php echo __('Search'); ?></span>
-                            </a>
+                            </div>
                         <?php endif; ?>
 
                         <?php if (!empty($accountLinksHtml)): ?>
-                            <a href="#header-account" class="skip-link skip-account">
+                            <div data-skiptarget="#header-account" class="skip-link skip-account">
                                 <span class="icon ic ic-user"></span>
                                 <span class="label"><?php echo __('My Account'); ?></span>
-                            </a>
+                            </div>
                         <?php endif; ?>
 
                         <?php if (!empty($compareHtml)): ?>
-                            <a href="#header-compare" class="skip-link skip-compare">
+                            <div data-skiptarget="#header-compare" class="skip-link skip-compare">
                                 <span class="icon ic ic-compare"></span>
                                 <?php if (($compareCount = Mage::registry('miniCompareProductCount')) > 0): ?>
                                     <span class="count"><?php echo $compareCount; ?></span>
                                 <?php endif; ?>
                                 <span class="label"><?php echo __('Compare'); ?></span>
-                            </a>
+                            </div>
                         <?php endif; ?>
 
                         <?php //Skip content - ontainers for blocks displayed on mobile devices ?>
@@ -386,7 +382,7 @@
                     <?php endif; ?>
 
                     <?php if ($tmpHtml = $this->getWelcome()): ?>
-                        <div class="item item-left hide-below-960">
+                        <div class="item item-left local-font hidden-xs hidden-sm">
                             <div class="welcome"><?php echo $tmpHtml; ?></div>
                         </div>
                     <?php endif; ?>
@@ -485,14 +481,14 @@
 <script type="text/javascript">
 //<![CDATA[
 
-requirejs(['jquery', 'smartheader', 'stickyheader'], function(jQuery, smartheader, stickyheader) {
+requirejs(['jquery', 'smartheader', 'stickyheader', 'dropdownDialog'], function(jQuery, smartheader, stickyheader, dropdownDialog) {
 
     var theHeaderContainer = jQuery('#header-container');
 
     <?php //Important: mobile header code must be executed before sticky header code ?>
     <?php if ($mobileHeaderMode): ?>
 
-        //alert('header tpl, before smartheader'); ///TODO
+        //alert('header tpl, before smartheader');
 
         theHeaderContainer.smartheader();
 
@@ -500,31 +496,34 @@ requirejs(['jquery', 'smartheader', 'stickyheader'], function(jQuery, smartheade
 
     jQuery(function($) {
 
-        //console.log('header tpl, on(ready), ater smartheader'); ///
-        //alert('header tpl, on(ready), ater smartheader'); ///TODO
+        //console.log('header tpl, on(ready), ater smartheader');
+        //alert('header tpl, on(ready), ater smartheader');
 
         <?php if ($mobileHeaderMode): ?>
 
-            //Skip Links
+            // Skip Links
             var skipContents = $('.skip-content');
             var skipLinks = $('.skip-link');
-            skipLinks.on('click', function (e) {
-                e.preventDefault();
+
+            skipLinks.on('click', function (event) {
+
+                // In case skip link is "a" tag
+                event.preventDefault();
 
                 var self = $(this);
-                var target = self.attr('href');
+                var target = self.data('skiptarget');
 
-                //Get target element
+                // Get target element
                 var elem = $(target);
 
-                //Check if stub is open
+                // Check if stub is open
                 var isSkipContentOpen = elem.hasClass('skip-active') ? 1 : 0;
 
-                //Hide all stubs
+                // Hide all stubs
                 skipLinks.removeClass('skip-active');
                 skipContents.removeClass('skip-active');
 
-                //Toggle stubs
+                // Toggle stubs
                 if (isSkipContentOpen) {
                     self.removeClass('skip-active');
                 } else {

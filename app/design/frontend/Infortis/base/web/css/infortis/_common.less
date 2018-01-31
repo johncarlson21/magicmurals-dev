@@ -157,8 +157,6 @@ a.feature-icon-hover:hover > .ib
 
 /* Elements with animated color, background color and borders
 -------------------------------------------------------------- */
-/* Forms */
-input.input-text, select, textarea,
 .product-options ul.options-list,
 
 /* Search */
@@ -171,17 +169,26 @@ input.input-text, select, textarea,
 .mini-products-list .product-image,
 .cart .crosssell .product-image,
 
-/* Tabs & accordion */
-.gen-tabs .tabs a,
-.gen-tabs .acctab,
-
 /* OPC accordion */
 .opc .step-title
 {
-	transition:			color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
 	-moz-transition:	color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
 	-webkit-transition:	color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
 	-o-transition:		color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
+	transition:			color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
+}
+
+
+/* Forms
+-------------------------------------------------------------- */
+input.input-text, 
+select, 
+textarea
+{
+	-moz-transition: all 300ms ease-in-out, box-shadow 300ms ease-in-out;
+	-webkit-transition: all 300ms ease-in-out, box-shadow 300ms ease-in-out;
+	-o-transition: all 300ms ease-in-out, box-shadow 300ms ease-in-out;
+	transition: all 300ms ease-in-out, box-shadow 300ms ease-in-out;
 }
 
 

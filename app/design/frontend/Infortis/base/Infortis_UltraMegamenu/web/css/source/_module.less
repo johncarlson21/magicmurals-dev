@@ -451,46 +451,40 @@ li.level2 > a > span > .cat-label {
 
 /* Drop-downs
 -------------------------------------------------------------- */
-.nav-holder .dropdown-block .dropdown-heading .label {
-    vertical-align: baseline;
-}
+// // Deprecated: rule already exists in dropdown CSS
+// .nav-holder .dropdown-block .dropdown-heading .label {
+//     vertical-align: baseline; 
+// }
 
 /* Search box
 -------------------------------------------------------------- */
 /* Common styles for search box in holder, when it's displayed inisde menu bar */
-.nav-regular .nav-holder .search-wrapper, /* <-- Deprecated */
-.nav-holders-wrapper .nav-holder .search-wrapper
+.nav-regular .nav-holder .block-search, /* <-- Deprecated */
+.nav-holders-wrapper .nav-holder .block-search
 {
     width: inherit; /* Important: to avoid stretching the box to 100% */
     float: none !important;
     /* display: inline-block;
     vertical-align: middle; */
-    padding-left: 7px;
 
-    /* To center the search box vertically */
-    /* margin-bottom: 1px; */
+    /* IMPORTANT: use margin instead padding (to be able to set outline border for the search block) */
+    margin-left: 7px !important;
 
     /* Override styles of search box when its inside element with class ".hp-blocks-holder--stacked" */
     max-width: none;
     margin: 0;
 }
-.nav-regular .nav-holder .search-wrapper .input-text, /* <-- Deprecated */
-.nav-holders-wrapper .nav-holder .search-wrapper .input-text
-{
-    /* To center the search box vertically */
-    margin-bottom: 1px;
-}
-.nav-regular .nav-holder .search-wrapper .action.search, /* <-- Deprecated */
-.nav-holders-wrapper .nav-holder .search-wrapper .action.search {
-    /* TODO - temporary fix of button position */
-    top: 7px;
-}
 
 /* Drop-downs
 -------------------------------------------------------------- */
-.nav-holder .dropdown-block .dropdown-heading.cover > span,
-.nav-holder .dropdown-block .dropdown-heading.cover > div {
+/* Increase the default side padding when heading is "filled" */
+.nav-holder .dropdown-block.filled-heading .dropdown-heading .inner-heading {
     padding: 0 15px;
+}
+
+/* When heading is NOT "filled", add some space at the left side to move it away from other menu items */
+.nav-holder .dropdown-block:not(.filled-heading) {
+    margin-left: 7px !important;
 }
 
 /* Common styles with mobile menu trigger
@@ -1268,7 +1262,7 @@ li.level2 > a > span > .cat-label {
 -------------------------------------------------------------- */
 .nav-acco li.level0 > a {
     font-size: 18px;
-    text-transform: uppercase;
+    // text-transform: uppercase;
 }
 
 /* Level 2
@@ -1276,7 +1270,7 @@ li.level2 > a > span > .cat-label {
 .nav-acco li.level1 > a {
     padding-left: 30px;
     font-size: 16px;
-    text-transform: uppercase;
+    // text-transform: uppercase;
 }
 
 /* Level 3
@@ -1284,7 +1278,7 @@ li.level2 > a > span > .cat-label {
 .nav-acco li.level2 > a {
     padding-left: 50px;
     font-size: 16px;
-    text-transform: none;
+    // text-transform: none;
 }
 
 /* Level 4
@@ -1293,7 +1287,7 @@ li.level2 > a > span > .cat-label {
 {
     padding-left: 70px;
     font-size: 14px;
-    text-transform: none;
+    // text-transform: none;
 }
 
 /* Level 5+

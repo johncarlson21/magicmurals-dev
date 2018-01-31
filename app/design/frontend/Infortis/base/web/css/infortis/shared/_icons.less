@@ -285,22 +285,39 @@ i:before {
     width: 40px;
     height: 40px;
 }
+
+.ib-size-xs {
+    line-height: 18px;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+}
+.ib-size-s {
+    line-height: 28px;
+    width: 28px;
+    height: 28px;
+}
 .ib-size-l {
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+}
+.ib-size-xl {
     line-height: 60px;
     width: 60px;
     height: 60px;
 }
-.ib-size-xl {
+.ib-size-xxl {
     line-height: 80px;
     width: 80px;
     height: 80px;
 }
-.ib-size-xxl {
+.ib-size-xxxl {
     line-height: 100px;
     width: 100px;
     height: 100px;
 }
-.ib-size-xxxl {
+.ib-size-xxxxl {
     line-height: 120px;
     width: 120px;
     height: 120px;
@@ -312,19 +329,29 @@ i:before {
 */
 /* Label which immediately follows the iconbox */
 .ib + .label {
-    line-height: 40px;
     display: inline-block;
+    line-height: 40px;
+}
+
+.ib-size-xs + .label {
+    line-height: 18px;
+}
+.ib-size-s + .label {
+    line-height: 28px;
 }
 .ib-size-l + .label {
-    line-height: 60px;
+    line-height: 50px;
 }
 .ib-size-xl + .label {
-    line-height: 80px;
+    line-height: 60px;
 }
 .ib-size-xxl + .label {
-    line-height: 100px;
+    line-height: 80px;
 }
 .ib-size-xxxl + .label {
+    line-height: 100px;
+}
+.ib-size-xxxxl + .label {
     line-height: 120px;
 }
 
@@ -346,7 +373,6 @@ i:before {
 .ib.ic-char,
 .ib.i-char /* For backward compatibility */
 {
-    /*font-size: 16px;*/ /* Important: do not add font size here, it would override standard classes such as "ic-2x" */
     text-align: center;
 }
 
@@ -754,78 +780,118 @@ i:before {
     margin-left: 0;
 }
 
+/* X Small should be defined here but was omitted - it shouldn't be used with indent */
+
+/* Small */
+.feature.indent-size-s {
+    padding-left: 48px;
+}
+.rtl .feature.indent-size-s {
+    padding-right: 48px;
+    padding-left: 0;
+}
+
+.feature.indent-size-s > .ic:first-child, /* For backward compatibility */
+.feature.indent-size-s > .left {
+    margin-left: -48px;
+}
+.rtl .feature.indent-size-s > .ic:first-child, /* For backward compatibility */
+.feature.indent-size-s > .right {
+    margin-right: -48px;
+    margin-left: 0;
+}
+
 /* Large */
 .feature.indent-size-l {
-    padding-left: 80px;
+    padding-left: 70px;
 }
 .rtl .feature.indent-size-l {
-    padding-right: 80px;
+    padding-right: 70px;
     padding-left: 0;
 }
 
 .feature.indent-size-l > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-l > .left {
-    margin-left: -80px;
+    margin-left: -70px;
 }
 .rtl .feature.indent-size-l > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-l > .right {
-    margin-right: -80px;
+    margin-right: -70px;
     margin-left: 0;
 }
 
 /* X Large */
 .feature.indent-size-xl {
-    padding-left: 100px;
+    padding-left: 80px;
 }
 .rtl .feature.indent-size-xl {
-    padding-right: 100px;
+    padding-right: 80px;
     padding-left: 0;
 }
 
 .feature.indent-size-xl > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-xl > .left {
-    margin-left: -100px;
+    margin-left: -80px;
 }
 .rtl .feature.indent-size-xl > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-xl > .right {
-    margin-right: -100px;
+    margin-right: -80px;
     margin-left: 0;
 }
 
 /* XX Large */
 .feature.indent-size-xxl {
-    padding-left: 120px;
+    padding-left: 100px;
 }
 .rtl .feature.indent-size-xxl {
-    padding-right: 120px;
+    padding-right: 100px;
     padding-left: 0;
 }
 
 .feature.indent-size-xxl > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-xxl > .left {
-    margin-left: -120px;
+    margin-left: -100px;
 }
 .rtl .feature.indent-size-xxl > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-xxl > .right {
-    margin-right: -120px;
+    margin-right: -100px;
     margin-left: 0;
 }
 
 /* XXX Large */
 .feature.indent-size-xxxl {
-    padding-left: 140px;
+    padding-left: 120px;
 }
 .rtl .feature.indent-size-xxxl {
-    padding-right: 140px;
+    padding-right: 120px;
     padding-left: 0;
 }
 
 .feature.indent-size-xxxl > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-xxxl > .left {
-    margin-left: -140px;
+    margin-left: -120px;
 }
 .rtl .feature.indent-size-xxxl > .ic:first-child, /* For backward compatibility */
 .feature.indent-size-xxxl > .right {
+    margin-right: -120px;
+    margin-left: 0;
+}
+
+/* XXXX Large */
+.feature.indent-size-xxxxl {
+    padding-left: 140px;
+}
+.rtl .feature.indent-size-xxxxl {
+    padding-right: 140px;
+    padding-left: 0;
+}
+
+.feature.indent-size-xxxxl > .ic:first-child, /* For backward compatibility */
+.feature.indent-size-xxxxl > .left {
+    margin-left: -140px;
+}
+.rtl .feature.indent-size-xxxxl > .ic:first-child, /* For backward compatibility */
+.feature.indent-size-xxxxl > .right {
     margin-right: -140px;
     margin-left: 0;
 }

@@ -250,7 +250,7 @@ requirejs(['jquery'], function(jQuery) {
 
 
         // Drop-down
-        var ddBlockSelector = '.dropdown-block';
+        var ddBlockSelector = '.dropdown-block-trigger'; // '.dropdown-block';
         var ddOpenTimeout;
         var dMenuPosTimeout;
         var DD_DELAY_IN = 200;
@@ -278,9 +278,6 @@ requirejs(['jquery'], function(jQuery) {
                     
                     dd.addClass('open');
                     dd.data('ddOpened', true);
-                    ddContent.promise().done(function() {
-                        dd.trigger('dropdown-block-opened');
-                    });
                     
                 }, DD_DELAY_IN);
 

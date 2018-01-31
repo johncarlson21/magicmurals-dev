@@ -72,12 +72,12 @@ class Header extends AbstractHelper
      */
     public function getGridClasses()
     {
-        //Width (in grid units) of product page sections
+        // Width (in grid units) of product page sections
         $primLeftColUnits       = $this->theme->getCfg('header/left_column');
         $primCentralColUnits    = $this->theme->getCfg('header/central_column');
         $primRightColUnits      = $this->theme->getCfg('header/right_column');
 
-        //Grid classes
+        // Grid classes
         $grid = [];
         $classPrefix = 'grid12-';
 
@@ -178,4 +178,30 @@ class Header extends AbstractHelper
         return $display;
     }
 
+    /**
+     * Prepare classes for dropdowns
+     *
+     * @return string
+     */
+    public function getDropdownsClasses()
+    {
+        $blockClasses = '';
+
+        if ($this->theme->getCfgDesign('dropdowns/heading_filled'))
+        {
+            $blockClasses .= ' filled-heading';
+        }
+
+        if ($this->theme->getCfgDesign('dropdowns/with_pointer'))
+        {
+            $blockClasses .= ' show-pointer';
+        }
+
+        if ($this->theme->getCfgDesign('dropdowns/border_color'))
+        {
+            $blockClasses .= ' show-border';
+        }
+
+        return $blockClasses;
+    }
 }

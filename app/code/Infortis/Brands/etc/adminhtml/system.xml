@@ -12,7 +12,7 @@
                 <label>General</label>
                 <field id="attr_id" translate="label" sortOrder="10" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Brand Attribute Code</label>
-                    <comment>Identifier of the attribute which contains the information about brands in your store. Search for that code in &lt;em&gt;Catalog &gt; Attributes &gt; Manage Attributes&lt;/em&gt;.</comment>
+                    <comment><![CDATA[Identifier of the attribute which contains the information about brands in your store. To find the attribute code of existing attribute, go to <em>Stores > Attributes > Products</em> and find the attribute on the list. The code can be found in the <em>Attribute Code</em> column.]]></comment>
                 </field>
                 <field id="image_extension" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Brand Image File Extension</label>
@@ -44,7 +44,7 @@
                 <field id="append_category_suffix" translate="label" sortOrder="320" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Append Category URL Suffix</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>If &lt;strong&gt;Category URL Suffix&lt;/strong&gt; exists (in System &gt; Configuration &gt; Catalog), it can be appended at the end of the URL of a brand page. For example: www.example.com/brands/apple&lt;strong style="color:red"&gt;.html&lt;/strong&gt; (assuming that &lt;strong style="color:red"&gt;.html&lt;/strong&gt; was set as &lt;strong&gt;Category URL Suffix&lt;/strong&gt;).</comment>
+                    <comment><![CDATA[If <strong>Category URL Suffix</strong> was configured (under Stores > Configuration > Catalog), it can be appended at the end of the URL of a brand page. For example: www.example.com/brands/apple<strong style="color:red">.html</strong> (assuming that <strong style="color:red">.html</strong> was configured in the <strong>Category URL Suffix</strong>).]]></comment>
                 </field>
                 <field id="heading_seo" translate="label" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>SEO Settings</label>

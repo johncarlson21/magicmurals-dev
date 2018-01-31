@@ -20,21 +20,11 @@
 //  Product collateral data
 //  _____________________________________________
 
-// Decrease bottom margin if box is inside one of the main sections of product page
 .collateral-container {
     margin-bottom: 30px;
 }
 
 .collateral-container {
-
-    .product.data.items > .item.title .counter {
-        &:before {
-            content: '(';
-        }
-        &:after {
-            content: ')';
-        }
-    }    
 
     // Reviews
     .review-list {
@@ -59,8 +49,7 @@
 //  Collateral data blocks stacked vertically
 //  ---------------------------------------------
 
-//.collateral-container.collateral-stacked {}
-
+// Deprecated. Left for backward compatibility.
 .collateral-block {
     margin-bottom: 30px;
 
@@ -70,10 +59,6 @@
 
     > .block-title {
         &:extend(.abs-sidebar-block-title all);
-
-        // > strong {
-        //     font-size: 24px;
-        // }
 
         .counter {
             &:before {
@@ -85,12 +70,6 @@
         }
     }
 }
-
-//
-//  Collateral data blocks displayed as tabs
-//  ---------------------------------------------
-
-//.collateral-container.collateral-tabs {}
 
 //
 //  Unordered list in product description - add bullets
@@ -107,37 +86,6 @@
 .product-view .product.attibute.description ul:not(.ic-ul):not(.disc):not(.bullet) li {
     margin-bottom: 5px;
 }
-
-
-
-//
-//  TODO: Deprecated styles
-//  _____________________________________________
-
-// .product-view .product.attibute.overview ul:not(.ic-ul):not(.disc):not(.bullet) li,
-// .product-view .product.attibute.description ul:not(.ic-ul):not(.disc):not(.bullet) li
-// {
-//     background: url(../images/infortis/_shared/cck/list/bullet.png) -5px 2px no-repeat;
-//     padding-left: 20px;
-// }
-
-//  If unordered list has "disc" class, override it:
-
-// .product-view .product.attibute.overview ul.disc,
-// .product-view .product.attibute.description ul.disc
-// {
-//     list-style: disc outside none;
-//     padding-left: 1.5em;
-// }
-
-// .product-view .product.attibute.overview ul.disc li,
-// .product-view .product.attibute.description ul.disc li
-// {
-//     background-image: none;
-//     padding-left: 0;
-// }
-
-
 
 } // end: media-common
 

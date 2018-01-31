@@ -16,16 +16,18 @@
 
 
 //
-//  Focus border color
+//  Form fields focus border and shadow
+//  Magento/lib
+//  From: lib/web/css/source/lib/_resets.less
 //  ---------------------------------------------
 
-.header-regular .block-search .input-text:focus, // Focus border color for search box in the header
 ._keyfocus *,
 input:not([disabled]),
 textarea:not([disabled]),
 select:not([disabled]) {
     &:focus {
-        .lib-css(border-color, #51a7e8);
+        .lib-css(box-shadow, @focus__box-shadow);
+        .lib-css(border-color, @focus__border-color); // Base theme variable
     }
 }
 

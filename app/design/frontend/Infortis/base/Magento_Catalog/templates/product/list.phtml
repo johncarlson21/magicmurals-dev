@@ -200,12 +200,16 @@ use Magento\Framework\App\Action\Action;
                             $productImage = $block->getImage($_product, $imageTypeId);
                             $actualImgWidth = $productImage->getWidth(); // Get actual image width, needed for "product-item-img" container
                         }
+                        else
+                        {
+                            $actualImgWidth = $imgWidth;
+                        }
                     ?>
 
                     <?php // Product image container ?>
-                    <div class="product-item-img"<?php if ($actualImgWidth): ?> style="max-width:<?php echo $actualImgWidth; ?>px;"<?php endif; ?>>
+                    <div class="product-item-img">
 
-                        <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
+                        <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1"<?php if (!empty($actualImgWidth)): ?> style="max-width:<?php echo $actualImgWidth; ?>px;"<?php endif; ?>>
 
                             <?php // Main product image ?>
                             <?php if ($imageDimensions === 0): // No dimensions specified ?>
@@ -237,10 +241,10 @@ use Magento\Framework\App\Action\Action;
                                 <?php echo $theme->getAltImgHtml($_product, $imageTypeId, $imgWidth, $imgHeight ); ?>
                             <?php endif; ?>
 
-                            <?php // Product labels ?>
-                            <?php echo $helperLabels->getLabels($_product); ?>
-
                         </a>
+
+                        <?php // Product labels ?>
+                        <?php echo $helperLabels->getLabels($_product); ?>
 
                         <?php // Add-to links
                             $addtoLinksClasses = '';

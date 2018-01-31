@@ -1,23 +1,7 @@
 <?php
-    $theme = $this->helper('Infortis\Base\Helper\Data');
-
-    //Include Google Fonts
-    $amp = '&amp;';
-    $charSubset = '';
-    if ($subsets = $theme->getCfgDesign('font/primary_char_subset'))
-    {
-        $charSubset = "{$amp}subset={$subsets}";
-    }
-
-    $fontWeight = '';
-    $weight = $theme->getCfgDesign('font/primary_font_weight');
-    $weight = trim($weight);
-    if ($weight)
-    {
-        $fontWeight = ':' . $weight;
-    }
+    $helperFont = $this->helper('Infortis\Base\Helper\Fonts');
+    $url = $helperFont->getGoogleFontsFinalUrl();
 ?>
-<?php if ($theme->getCfgDesign('font/primary_font_family_group') == 'google'): ?>
-    <link href='//fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+', $theme->getCfgDesign('font/primary_font_family')); 
-        echo $fontWeight; echo $charSubset; ?>' rel='stylesheet' type='text/css' />
+<?php if (!empty($url)): ?>
+    <link href="<?php echo $url; ?>" rel="stylesheet" type="text/css" />
 <?php endif;?>
