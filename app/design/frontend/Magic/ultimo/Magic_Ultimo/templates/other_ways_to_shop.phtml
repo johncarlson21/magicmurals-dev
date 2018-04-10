@@ -1,0 +1,97 @@
+<div class="block block-vertnav hide-below-768">
+	<div class="block-title">
+		<strong><span>Other Ways to Shop</span></strong>
+	</div>
+	<div class="block-content">
+		<ul class="uaccordion uaccordion-style1 sideacco">
+			<li class="nav-item level0 nav-1 first parent">
+				<a href="/subject.html">Shop by Subject</a>
+				<span class="opener"></span>
+				<ul class="level0 nav-submenu" style="display: none;">
+					<?php
+					$children = $this->getCategories(2, false, true, true);
+					$c = 1;
+					foreach ($children as $category) {
+                    ?>
+					<li class="nav-item level1 nav-1-<?php echo $c;?>"><a href="/<?php echo $category->getRequestPath();?>"><span><?php echo $category->getName();?></span></a></li>
+					<?php
+					$c++;
+					}
+					?>
+				</ul>
+			</li>
+			<li class="nav-item level0 nav-2 first parent">
+				<a href="/shop-by-patterns.html">Shop by Patterns</a>
+				<span class="opener"></span>
+				<ul class="level0 nav-submenu" style="display: none;">
+					<?php
+					/*
+					$children = Mage::getModel('catalog/category')->getCategories(722);
+					$c = 1;
+					foreach ($children as $category) {
+                    ?>
+					<li class="nav-item level1 nav-2-<?php echo $c;?>"><a href="/<?php echo $category->getRequestPath();?>"><span><?php echo $category->getName();?></span></a></li>
+					<?php
+					$c++;
+					}*/
+					?>
+				</ul>
+			</li>
+			<li class="nav-item level0 nav-3 parent">
+				<a href="/collection.html">Shop by Collection</a>
+				<span class="opener"></span>
+				<ul class="level0 nav-submenu" style="display: none;">
+					<?php
+					/*
+					$children = Mage::getModel('catalog/category')->getCategories(307);
+					$c = 1;
+					foreach ($children as $category) {
+                    ?>
+					<li class="nav-item level1 nav-3-<?php echo $c;?>"><a href="/<?php echo $category->getRequestPath();?>"><span><?php echo $category->getName();?></span></a></li>
+					<?php
+					$c++;
+					}*/
+					?>
+				</ul>
+			</li>
+			<li class="nav-item level0 nav-4 parent">
+				<a href="/room.html">Shop by Room</a>
+				<span class="opener"></span>
+				<ul class="level0 nav-submenu" style="display: none;">
+					<?php
+					/*
+					$children = Mage::getModel('catalog/category')->getCategories(322);
+					$c = 1;
+					foreach ($children as $category) {
+                    ?>
+					<li class="nav-item level1 nav-4-<?php echo $c;?>"><a href="/<?php echo $category->getRequestPath();?>"><span><?php echo $category->getName();?></span></a></li>
+					<?php
+					$c++;
+					}*/
+					?>
+				</ul>
+			</li>
+			<li class="nav-item level0 nav-5">
+				<a href="/artist.html">Shop by Artist</a>
+			</li>
+			<li class="nav-item level0 nav-6">
+				<a href="/corporate.html">Business Murals</a>
+			</li>
+			<li class="nav-item level0 nav-7">
+				<a href="/deals.html">Deals</a>
+			</li>
+			<li class="nav-item level0 nav-8">
+				<a href="/collection/best-sellers.html">Best Sellers</a>
+			</li>
+			<li class="nav-item level0 nav-9">
+				<a href="/collection/dry-erase.html">Dry Erase Murals</a>
+			</li>
+			<li class="nav-item level0 nav-10">
+				<a href="/collection/clearance.html">Clearance Murals</a>
+			</li>
+			<li class="nav-item level0 nav-11">
+				<a href="/collection/colorme.html">ColorMe! Murals</a>
+			</li>
+		</ul>
+	</div>
+</div> <!-- end other ways block -->

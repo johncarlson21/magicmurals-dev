@@ -1,0 +1,74 @@
+<?php
+/* show category names and thumbnails */
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+
+<?php
+	$_category  = $this->getCurrentCategory();
+
+
+	if ( $_category->getChildrenCategories() && $_category->getParentId() == 2 ) {
+?>
+<div class="products wrapper grid items-grid items-grid-partitioned category-products-grid centered hover-effect equal-height">
+<ol id="category-collection" class="products list items product-items itemgrid">
+<?php
+		$child_categories = $_category->getChildrenCategories();
+		
+		//$child_ids_array = explode(',',$subcats);
+		
+		/*$child_categories = Mage::getModel('catalog/category')->getCollection()
+			->addAttributeToSelect('*')
+			->addAttributeToFilter('entity_id', array('in' => $child_ids_array))
+			->addAttributeToSort('position', 'ASC');*/
+		foreach ( $child_categories as $_cat ) {
+			/*$prodCollection = Mage::getResourceModel('catalog/product_collection')->addCategoryFilter($_category);
+			Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($prodCollection);
+        		Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($prodCollection);*/
+			
+			$category = $_objectManager->create('Magento\Catalog\Model\Category')->load($_cat->getId());
+
+			if ( $_cat->getIsActive() ) {
+				$caturl = $_cat->getURL();
+				$catname = htmlentities($_cat->getName());
+				//$catimg = ($_category->getThumbnail()) ? Mage::getBaseUrl('media') . 'catalog/category/'.$_category->getThumbnail() : $this->getBaseUrl().'media/placeholder.gif';
+				$catimg = $category->getImageUrl();
+				
+				if ($_cat->getName() == "National Geographic") {
+					?>
+</ol>
+<p><a id="brand-cat"></a>&nbsp;</p><p>&nbsp;</p>
+<div class="page-title category-title">
+		<h2 style="font-size: 2.6667em; line-height: 1.25em;">Shop by Brand</h2>
+</div>
+<ol id="category-collection" class="products list items product-items itemgrid">
+					<?php
+				}
+	?>
+	<li class="item product product-item">
+		<div class="product-item-info imgdim-295x295" data-container="product-grid">
+			<div class="product-item-img">
+				<a href="<?php echo $caturl ?>" class="product photo product-item-photo" style="max-width:295px;">
+					<!-- <span class="product-image-container" style="width:295px; height: auto;display: block;">
+						<span class="product-image-wrapper" style="padding-bottom: 100%; height: auto;display: block;"> -->
+							<img class="product-image-photo" src="<?php echo $catimg;?>" alt="<?php echo $catname;?>">
+						<!-- </span>
+					</span> -->
+				</a>
+			</div>
+			<div class="product details product-item-details">
+				<strong class="product name product-item-name product-name">
+					<a href="<?php echo $caturl; ?>" class="product-item-link" title="<?php echo $catname; ?>"><?php echo $catname; ?><span class="subhead"><?php //echo $prodCollection->getSize();?> Murals</span></a>
+				</strong>
+			</div>
+		</div><!-- end product-item-info -->
+	</li>
+	<?php				
+			} // end if for active
+		} // end foreach for categories
+?>
+</ol>
+<?php
+	} // end if category
+
+?>
+</div>

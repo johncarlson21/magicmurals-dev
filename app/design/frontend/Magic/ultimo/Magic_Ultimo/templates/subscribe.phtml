@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div id="subscribe-form" class="clearer">
+    <form action="" method="post" id="newsletter-validate-detail">
+        <div>
+            <label for="newsletter"><img alt="Sign Up &amp; Save" src="/pub/media/wysiwyg/SignUp-Save-envelope.png"> SIGN UP &amp; SAVE</label>
+            <div class="input-box">
+                <input type="text" name="email" id="newsletter" title="<?php echo __('Sign up for our newsletter') ?>" class="input-text required-entry validate-email" /><input type="hidden" name="subscribe" id="subscribe" value="1" />
+            </div>
+            <button type="submit" title="<?php echo __('Subscribe') ?>" class="button btn-inline" onClick="return footerSubmitForm();"><span><span><?php echo __('Subscribe') ?></span></span></button>
+        </div>
+    </form>
+</div>
+
+<!-- modal box for newsletter2 -->
+<div class="remodal" data-remodal-id="newsletter-modal2" data-remodal-options="hashTracking: false" id="newsletter-modal-box2">
+    <button class="remodal-close" data-remodal-action="close"></button>
+    <h3 class="verify-crop-title">Sign Up and Save with Our Newsletter</h3>
+    <div class="newsletter-box-statement">
+        <div class="statement-head">Get Exclusive Savings with coupon codes, free giveaways and more!</div>
+        <ul>
+            <li>Special savings exclusive to newsletter subscribers</li>
+            <li>Design Ideas from professionals and other customers</li>
+            <li>See unique and exciting ways to use your mural</li>
+            <li>Sneak peeks at hot new mural products</li>
+            <li>Access to free giveaways, gift cards and other promotions</li>
+        </ul>
+    </div>
+    <div class="newsletter-box-content"></div>
+    <div class="newsletter-box-privacy">We don&rsquo;t spam. Read our <a href="/privacy-policy/">Privacy Policy</a>.</div>
+</div>
+<!-- end modal box for newsletter2 --> 

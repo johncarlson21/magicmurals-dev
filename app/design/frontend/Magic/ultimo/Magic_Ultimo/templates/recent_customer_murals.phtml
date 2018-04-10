@@ -1,0 +1,201 @@
+<?php
+
+$testimonials = $this->getTestimonialsDESC();
+
+$media_folder = $this->getMediaDirectory();
+
+$helper = $this->getBrandHelper();
+
+?>
+
+<?php
+	$sliderClasses = '';
+	$imgClasses = '';
+
+	//Slider parameters
+	//--------------------------------------------------------------
+	//Responsive mode on/off
+	$isResponsive = $this->getIsResponsive(); //param: is_responsive
+	if ($isResponsive === NULL) //Param not set
+	{
+		$isResponsive = true; //IMPORTANT: enabled by default
+	}
+
+	//Assign number of items in a row to specific viewport width
+	$breakpoints = $this->getBreakpoints(); //param: breakpoints
+	if ($breakpoints === NULL) //Param not set
+	{
+		$breakpoints = '[0, 1], [320, 2], [480, 2], [768, 3], [960, 5], [1280, 5]'; //Set default breakpoints
+	}
+
+	//Number of items in a row displayed if responsive mode is off
+	$showItems = $this->getShowItems(); //param: show_items
+	if (!$showItems) //Param not set or equals zero
+	{
+		$showItems = 5; //Set default number of items
+	}
+
+	//Pagination on/off
+	$pagination = $this->getPagination(); //param: pagination
+
+	//Slider timeout. Set to enable automatic scrolling.
+	$timeout = $this->getTimeout(); //param: timeout
+	if ($timeout === NULL) //Param not set
+	{
+		$timeout = intval($helper->getCfg('slider/timeout'));
+	}
+	else
+	{
+		$timeout = intval($timeout);
+	}
+
+	//Number of items that should move on scrolling
+	$move = $this->getMove(); //param: move
+	if ($move === NULL) //Param not set
+	{
+		$move = 0; //By default scroll all visible items
+	}
+	else
+	{
+		$move = intval($move);
+	}
+
+	//If set, slider will loop.
+	$loop = $this->getLoop(); //param: loop
+	if ($loop === NULL) //Param not set
+	{
+		$loop = $helper->getCfg('slider/loop');
+	}
+
+	//Scrolling speed
+	$speed = intval($helper->getCfg('slider/speed'));
+
+	//Speed (automatic scrolling / pagination)
+	$autoSpeed = intval($helper->getCfg('slider/auto_speed'));
+
+	//Pause slider on mouse hover
+	$pause = $helper->getCfg('slider/pause');
+
+	//Lazy loading
+	$lazy = $helper->getCfg('slider/lazy');
+
+	//Slider classes
+	//--------------------------------------------------------------
+	if($isResponsive)
+	{
+		$sliderClasses .= ' itemslider-responsive';
+	}
+
+	$sliderId = "itemslider-recent-murals-{$this->getFrontendHash()}";
+?>
+<?php
+
+	//If lazy loading enabled
+	if ($lazy)
+	{
+		$srcAttribute = 'data-src';
+		$imgClasses = 'class="lazyOwl"';
+	}
+	else
+	{
+		$srcAttribute = 'src';
+		$imgClasses = '';
+	}
+?>
+
+<h3 class="recent-murals section-title padding-right">Murals from Recent Customers</h3>
+<div class="itemslider-wrapper recent-murals-slider-wrapper slider-arrows1 slider-arrows1-pos-top-right slider-pagination1 slider-pagination1-centered">
+	<div id="<?php echo $sliderId; ?>" class="itemslider<?php if($sliderClasses) echo $sliderClasses; ?> recent-murals-slider">
+	<?php foreach ($testimonials as $t): ?>
+		<?php
+        $url = $t->getTestimonyUrl();
+        $urls = explode(",", $url);
+		$brandPageUrl = $urls[0];
+		$brandImageUrl = "/lib/web/phpThumb/phpThumb.php?src=" . $media_folder.$t->getTestimonyFilename() . "&w=215&h=145&zc=c";
+		$brandDetailsHtml = '';
+        $imgTitle = "title=\"" . $t->getTestimonyHeadline() . "\"";
+        $brand = $t->getTestimonyHeadline();
+
+        if ($brandImageUrl)
+        {
+
+            //Build image tag
+            $brandDetailsHtml = "<img {$imgClasses} {$srcAttribute}=\"{$brandImageUrl}\" alt=\"{$brand}\" {$imgTitle}/>";
+        }
+        
+		?>
+		<?php if ($brandDetailsHtml): ?>
+
+			<div class="item">
+				<?php if ($brandPageUrl): ?>
+					<a class="fade-on-hover" href="<?php echo $brandPageUrl; ?>" title="<?php echo __('Click to view this mural!'); ?>"><?php echo $brandDetailsHtml; ?></a>
+				<?php else: ?>
+					<?php echo $brandDetailsHtml; ?>
+				<?php endif; ?>
+			</div>
+
+		<?php endif; ?>
+	<?php endforeach; ?>
+	</div> <!-- end: itemslider -->
+</div> <!-- end: itemslider-wrapper -->
+<script type="text/javascript">
+require(['jquery', 'owlcarousel'], function(){
+	jQuery(function($) {
+
+		var owl = $('#<?php echo $sliderId; ?>');
+		owl.owlCarousel({
+
+		<?php if ($lazy): ?>
+			lazyLoad: true,
+		<?php endif; ?>
+
+		<?php if (!$isResponsive): ?>
+			responsive: false,
+			items: <?php echo $showItems; ?>,
+		<?php else: ?>
+			itemsCustom: [ <?php echo $breakpoints; ?> ],
+			responsiveRefreshRate: 50,
+		<?php endif; ?>
+
+		<?php if ($speed): ?>
+			slideSpeed: <?php echo $speed; ?>,
+		<?php endif; ?>
+
+		<?php if ($autoSpeed): ?>
+			paginationSpeed: <?php echo $autoSpeed; ?>,
+		<?php endif; ?>
+
+		<?php if ($move !== 1): ?>
+			scrollPerPage: true,
+		<?php endif; ?>
+
+		<?php if ($timeout): ?>
+			autoPlay: <?php echo $timeout; ?>,
+		<?php endif; ?>
+
+		<?php if ($pause): ?>
+			stopOnHover: true,
+		<?php endif; ?>
+
+		<?php if ($loop): ?>
+			rewindNav: true,
+			rewindSpeed: 600,
+		<?php else: ?>
+			rewindNav: false,
+		<?php endif; ?>
+
+		<?php if ($pagination): ?>
+			pagination: true,
+			paginationSpeed: 600,
+		<?php else: ?>
+			pagination: false,
+		<?php endif; ?>
+
+			navigation: true,
+			navigationText: false
+
+		}); //end: owl
+
+	});
+});
+</script>

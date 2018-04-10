@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="reviews.tab" remove="true" />
+        <referenceBlock name="product.review.form" remove="true" />
+        <referenceBlock name="product.info.review" remove="true" />
+		<referenceBlock name="register-link" remove="true" /><!--for Create Account Link-->
+		<referenceBlock name="authorization-link" remove="true" /><!--for Sign In Link  -->
+		<referenceBlock name="catalog.compare.sidebar" remove="true"/>
+		<referenceBlock name="wishlist_sidebar" remove="true" />
+		
+		<referenceContainer name="sidebar.additional">
+            <block class="Surething\Magicmurals\Block\Otherways" name="other_ways_to_shop" template="Magic_Ultimo::other_ways_to_shop.phtml">
+            </block>
+        </referenceContainer>
+		
+    </body>
+</page>
