@@ -1,0 +1,25 @@
+{
+    "name": "surething/module-magicmurals",
+    "description": "Module for various extra MagicMurals functionality.",
+    "license": "proprietary",
+    "authors": [
+        {
+            "email": "info@mage2gen.com",
+            "name": "Mage2Gen"
+        },
+        {
+            "email": "johncarlson21@gmail.com",
+            "name": "John Carlson"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Surething\\Magicmurals\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
