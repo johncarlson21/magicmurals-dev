@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\Gallery
+ */
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$_product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+?>
+<div class="gallery-placeholder">
+	<?php
+		$imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+            ->init($block->getProduct(), 'product_page_image_large')
+            ->setImageFile($block->getImageFile())
+            ->getUrl();
+	?>
+	<img id="image-main" src="<?php echo $imageUrl;?>" data-remodal-target="zoom-image-modal" />
+</div>
+<!-- modal box for zoom image -->
+<div class="remodal" data-remodal-id="zoom-image-modal" data-remodal-options="hashTracking: false" id="zoom-image-modal-box">
+	<button data-remodal-action="close" class="remodal-close"></button>
+    <div class="zoom-image-box-content"><img src="<?php echo $imageUrl; ?>"
+             alt="<?php echo $this->escapeHtml($_product->getName()) ?>"
+             title="<?php echo $this->escapeHtml($_product->getName()); ?>" /></div>
+</div>
+<!-- end modal box for zoom image -->
+<div class="gallery-images">
+	<ul class="product-image-thumbs">
+<?php
+$i=0;
+foreach($block->getGalleryImages() as $image){ ?>
+    <?php //if(!$block->isMainImage($image)):?>
+		<?php
+		// split up the label for the classes and the actual title/label
+		//echo print_r($image->getData(),true); exit;
+		$label = "";
+		$title = $_product->getName();
+		$labelStr = $image->getLabel();
+		$labelParts = explode(" | ", $labelStr);
+		$label = $labelParts[0];
+		if ( !empty($labelParts[1])) {
+			$title = $labelParts[1];
+		}
+		?>
+		<li class="<?php echo $this->escapeHtml($label);?>">
+			<a class="thumb-link" href="javascript:void(0)" title="<?php echo $title; ?>" data-image-index="<?php echo $i; ?>" data-image-src="<?php echo $image->getData('large_image_url'); ?>">
+        		<img src="<?php echo $image->getData('small_image_url') ?>">
+			</a>
+		</li>
+    <?php //endif; 
+			$i++; ?>
+<?php } ?>
+	</ul>
+</div>

@@ -14,7 +14,7 @@
 <?php $_product = $block->getProduct(); ?>
 	<?php
 	$custom_upload_sku = "Custom Mural";
-	$opArray = array("Pattern Size", "Pattern Color", "Size", "height_ft", "height_in", "width_in", "width_ft", "Materials", "Finish", "Image");
+	$opArray = array("Pattern Repeat Size", "Pattern Color", "Size", "height_ft", "height_in", "width_in", "width_ft", "Materials", "Finish", "Image");
     $ops = array();
 	$avOps = array();
     foreach($_options as $_option): 
@@ -45,12 +45,12 @@
 	
 	<div class="grid-container top-options-box">
 		<div class="grid12-6 option-pattern-size">
-			<span style="display: inline-block; position: absolute; left: 90px;">
+			<span style="display: inline-block; position: absolute; left: 140px;">
                 <span class="tooltip" style="font-weight: bold;"><img src="/images/QuestionBtn.jpg" alt="?" width="16" /></span>
                 <div class="tooltiptitle">Pattern Size!</div>
-                <div class="tooltiptext"><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('tooltip-pat-size')->toHtml(); ?></div>
+                <div class="tooltiptext"><?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('tooltip-pat-size')->toHtml(); ?></div>
             </span>
-			<?php echo $this->getOptionHtml($ops['pattern size']) ?>
+			<?php echo $this->getOptionHtml($ops['pattern repeat size']) ?>
 		</div>
 		<div class="grid12-6 option-pattern-color">
 			<?php echo $this->getOptionHtml($ops['pattern color']) ?>
@@ -68,9 +68,9 @@
             <?php echo $this->getOptionHtml($ops['size']) ?>
             
             <?php if ($_product->getSku() == $custom_upload_sku) { ?>
-			<p><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('custom-mural-notification')->toHtml(); ?></p>
+			<p><?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('custom-mural-notification')->toHtml(); ?></p>
 			<?php } else { ?>
-       		<p style="display: none;" class="custom-notification"><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('mural-notification')->toHtml(); ?></p>
+       		<p style="display: none;" class="custom-notification"><?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mural-notification')->toHtml(); ?></p>
        		
        		<?php } ?>
         </div>
@@ -88,10 +88,10 @@ $pos = strpos($_product->getSku(), "MMC-");
             <br />Enter your dimensions below and then use the crop box on the image to select the final proportions.</p>
             <?php } ?>
             <div class="decimal-error"></div>
-            <div class="grid12-6 height-ft"><?php echo $this->getOptionHtml($ops['height_ft']) ?></div>
-            <div class="grid12-6 height-in"><?php echo $this->getOptionHtml($ops['height_in']) ?></div>
-            <div class="grid12-6 width-ft"><?php echo $this->getOptionHtml($ops['width_ft']) ?></div>
-            <div class="grid12-6 width-in"><?php echo $this->getOptionHtml($ops['width_in']) ?></div>
+            <div class="grid12-6 height-ft"><label class="label"><span>Height</span></label><?php echo $this->getOptionHtml($ops['height_ft']) ?></div>
+		<div class="grid12-6 height-in"><label class="label"><span>&nbsp;</span></label><?php echo $this->getOptionHtml($ops['height_in']) ?></div>
+		<div class="grid12-6 width-ft"><label class="label"><span>Width</span></label><?php echo $this->getOptionHtml($ops['width_ft']) ?></div>
+		<div class="grid12-6 width-in"><label class="label"><span>&nbsp;</span></label><?php echo $this->getOptionHtml($ops['width_in']) ?></div>
             <?php if ($_product->getTypeId() != "patternprod") { ?>
             <div class="grid12-12" style="text-align:right; padding-top: 8px;">
                 <label>HOW TO CROP MY IMAGE</label>
@@ -108,15 +108,56 @@ $pos = strpos($_product->getSku(), "MMC-");
         </div></div>
         <!-- end material grid -->
         <div class="grid12-5 product-mural-price-box">
-            <?php echo $this->getChildHtml('product_type_data'); ?>
+            <?php echo $this->getChildHtml('product.info.main.bottom.price'); ?>
         </div>
         <div class="grid12-12">
-    		<?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('product_page_material_description')->toHtml(); ?>
+    		<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('product_page_material_description')->toHtml(); ?>
     	</div>
     </div>
 
 <?php if (count($_options)):?>
-<p>We have options</p>
+    <?php 
+    $opArray = array("Color", "Image Orientation", "Square Ft", "crop_size", "End User Agreement", "Copyright");
+    foreach($_options as $_option): 
+        $title = $_option->getTitle();
+        $class_code = strtolower($title);
+        $replace = array("_", " ", "  ");
+        $class_code = str_replace($replace, "-", $class_code);
+        if ( in_array($title, $opArray) ) {
+    ?>    
+        <div class="grid12-12 <?php echo $class_code;?> bottom-options-box">
+            <?php if ($class_code == 'color' || $class_code == 'image-orientation' || $class_code == 'end-user-agreement') { 
+                $left = "45px";
+                if ($class_code == 'color') {
+                    $left = "50px";
+                } elseif ($class_code == 'image-orientation') {
+                    $left = "128px";
+                } elseif ($class_code == 'end-user-agreement') {
+                    $left = "150px";
+                }
+            ?>
+            <span style="display: inline-block; position: absolute; left: <?php echo $left;?>;">
+                <span class="tooltip" style="font-weight: bold;"><img src="/images/QuestionBtn.jpg" alt="?" width="16" /></span>
+                <?php if ($class_code == 'color') { ?>
+                <div class="tooltiptitle">Select a Color!</div>
+                <div class="tooltiptext"><?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('tooltip-color')->toHtml(); ?></div>
+                <?php } elseif ($class_code == 'image-orientation') { ?>
+                <div class="tooltiptitle">Choose an Orientation!</div>
+                <div class="tooltiptext"><?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('tooltip-orientation')->toHtml(); ?></div>
+                <?php } elseif ($class_code == 'end-user-agreement') { ?>
+                <div class="tooltiptitle">End User Agreement!</div>
+                <div class="tooltiptext"><?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('tooltip-agreement')->toHtml(); ?></div>
+                <?php } ?>
+            </span>
+            <?php } ?>
+            <?php echo $this->getOptionHtml($_option); ?>
+        </div>
+    <?php 
+        }
+    endforeach; ?>
+<?php endif; ?>
+
+<?php if (count($_options)):?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {

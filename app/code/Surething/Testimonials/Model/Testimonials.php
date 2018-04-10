@@ -102,5 +102,22 @@ class Testimonials extends \Magento\Framework\Model\AbstractModel implements Tes
 		$testArray['lastPage'] = $lastPage;
 		return $testArray;
 	}
+	
+	public function getMediaDirectory() {
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$filesystem = $objectManager->get('Magento\Framework\Filesystem');
+		$mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+		$fileDir = $mediaDirectory->getAbsolutePath('');
+		return $fileDir;
+	}
+	
+	public function getTestimonialsDESC() {
+		$testimonials = $this->getCollection()
+				->setOrder('testimony_order', 'DESC')
+				->setPageSize(15)
+				->setCurPage(1)
+				->load();
+		return $testimonials;
+	}
    
 }

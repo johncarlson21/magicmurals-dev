@@ -10,10 +10,58 @@
 /* This file is for the bottom options */
 ?>
 
-<?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php /* $_options = $block->decorateArray($block->getOptions()) ?>
 <?php $_productId = $block->getProduct()->getId() ?>
 <?php if (count($_options)):?>
     <?php foreach ($_options as $_option): ?>
         <?php echo $block->getOptionHtml($_option) ?>
     <?php endforeach; ?>
+<?php endif; */ ?>
+<?php //$_options = $block->decorateArray($block->getOptions()) ?>
+<?php //$_productId = $block->getProduct()->getId() ?>
+<?php $_objectManager = \Magento\Framework\App\ObjectManager::getInstance(); ?>
+<?php //$_product = $block->getProduct(); ?>
+<?php $_product = $_objectManager->get('Magento\Framework\Registry')->registry('current_product'); ?>
+<?php $_options = $_objectManager->get('Magento\Catalog\Model\Product\Option')->getProductOptionCollection($_product); ?>
+
+<?php if (count($_options)):?>
+    <?php 
+    $opArray = array("Color", "Image Orientation", "Square Ft", "crop_size", "End User Agreement", "Copyright");
+    foreach($_options as $_option): 
+        $title = $_option->getTitle();
+        $class_code = strtolower($title);
+        $replace = array("_", " ", "  ");
+        $class_code = str_replace($replace, "-", $class_code);
+        if ( in_array($title, $opArray) ) {
+    ?>    
+        <div class="grid12-12 <?php echo $class_code;?> bottom-options-box">
+            <?php if ($class_code == 'color' || $class_code == 'image-orientation' || $class_code == 'end-user-agreement') { 
+                $left = "45px";
+                if ($class_code == 'color') {
+                    $left = "50px";
+                } elseif ($class_code == 'image-orientation') {
+                    $left = "128px";
+                } elseif ($class_code == 'end-user-agreement') {
+                    $left = "150px";
+                }
+            ?>
+            <span style="display: inline-block; position: absolute; left: <?php echo $left;?>;">
+                <span class="tooltip" style="font-weight: bold;"><img src="/images/QuestionBtn.jpg" alt="?" width="16" /></span>
+                <?php if ($class_code == 'color') { ?>
+                <div class="tooltiptitle">Select a Color!</div>
+                <div class="tooltiptext"><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('tooltip-color')->toHtml(); ?></div>
+                <?php } elseif ($class_code == 'image-orientation') { ?>
+                <div class="tooltiptitle">Choose an Orientation!</div>
+                <div class="tooltiptext"><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('tooltip-orientation')->toHtml(); ?></div>
+                <?php } elseif ($class_code == 'end-user-agreement') { ?>
+                <div class="tooltiptitle">End User Agreement!</div>
+                <div class="tooltiptext"><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('tooltip-agreement')->toHtml(); ?></div>
+                <?php } ?>
+            </span>
+            <?php } ?>
+            <?php //echo $this->getOptionHtml($_option); ?>
+        </div>
+    <?php 
+        }
+    endforeach; ?>
 <?php endif; ?>

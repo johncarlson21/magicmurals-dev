@@ -1,7 +1,32 @@
 <script>
 	var minSqFt = 0;
-	require(['jquery', 'jquery/ui', 'jCrop'], function($){ 
-		
+	var mainImg = "image-main";
+	var imgWidth = null;
+	var imgHeight = null;
+	var sepia = false;
+	var mirror = false;	
+	var prodMatDesc = {
+			"UltraStik™ Pre-Pasted Wallpaper" : {
+				"Smooth Matte Finish" : "u-smooth"
+			},
+			"QuikStik™ for Smooth Walls" : {
+				"Smooth Matte Finish" : "q-smooth",
+				"Smooth Finish w/ Dry Erase Laminate" : "q-smooth-dry",
+				"Smooth Finish w/ Matte Protective Laminate" : "q-smooth-protect"
+			},
+			"QuikStik™ PLUS for Textured Walls" : {
+				"Smooth Matte Finish" : "qp-smooth",
+				"Gold Iridescent Finish" : "qp-gold",
+				"Silver Iridescent Finish" : "qp-silver"
+			},
+			"ProStik™ Type II" : {
+				"Smooth Matte Finish" : "p-smooth",
+				"Canvas Matte Finish" : "p-canvas"
+			},
+				"ecoProStik™ Type II" : {
+				"Smooth Matte Finish" : "e-smooth"
+			}
+		};
 <?php
 /*
  *	Muralprod and Pattern Prod Javascript Functions
@@ -13,7 +38,22 @@ $product = $objectManager->get('Magento\Framework\Registry')->registry('current_
 $productType = $product->getTypeId();
 $custom_upload_sku = "Custom Mural";
 $options = $product->getCustomOptions();
+	
+?>
+	var productType = "<?php echo $productType; ?>";
+	var customUploadSku = "<?php echo $custom_upload_sku;?>";
+	var currentSku = "<?php echo $product->getSku();?>";
+	var cropSizeId = null;
+	var defaultSizeVal = null;
+	var defaultSizeId = null;
+	var baddecimal = false;
+	var patternSizeOption = '';
+	var patternColorOption = '';
+	var patternPage = '<?php if ($productType == "patternprod") { echo "true"; } else { echo "false"; } ?>';
+	
+	require(['jquery', 'jquery/ui', 'jCrop', 'remodal'], function($, remodal){ 
 
+<?php
 // setup some variables
 $mini_sqft = $product->getData('mini_sq_ft');
 $small_sqft = $product->getData('small_sq_ft');
@@ -79,7 +119,7 @@ foreach ($product->getOptions() as $o) {
 	} elseif ($o->getTitle() == "Materials") {
 		$material_option_id = $o->getOptionId();
 		$materialOption = $o;
-	} elseif ($o->getTitle() == "Pattern Size") {
+	} elseif ($o->getTitle() == "Pattern Repeat Size") {
 		$patSizeOption = $o;
 		$patSizeOptionValues = $o->getValues();
 		$patSizeOption_id = $o->getOptionId();
@@ -92,6 +132,9 @@ foreach ($product->getOptions() as $o) {
 }
 
 $minSqFt = false;
+	?>
+	cropSizeId = "<?php echo $cropSizeId;?>";
+	<?php
 
 foreach ($optionValues as $op) {
 	$opData = $op->getData();
@@ -110,11 +153,19 @@ foreach ($optionValues as $op) {
 		$title = "Clearance";
     }
 	
+	
 	switch ($title) {
         /* size options */
 		case 'Mini':
 			if (!empty($mini_sqft)) {
-				$minSqFt = (!$minSqFt) ? $mini_sqft: $minSqFt;
+				//$minSqFt = (!$minSqFt) ? $mini_sqft: $minSqFt;
+				if (!$minSqFt) {
+					$minSqFt = $mini_sqft;
+					?>
+					defaultSizeVal = <?php echo $opData['option_type_id']; ?>;
+					defaultSizeId = <?php echo $opData['option_id']; ?>;
+					<?php
+				}
 			?>
 				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
 					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $mini_sqft; ?>);
@@ -126,7 +177,14 @@ foreach ($optionValues as $op) {
 		break;
 		case 'Small':
 			if (!empty($small_sqft)) {
-				$minSqFt = (!$minSqFt) ? $small_sqft: $minSqFt;
+				//$minSqFt = (!$minSqFt) ? $small_sqft: $minSqFt;
+				if (!$minSqFt) {
+					$minSqFt = $small_sqft;
+					?>
+					defaultSizeVal = <?php echo $opData['option_type_id']; ?>;
+					defaultSizeId = <?php echo $opData['option_id']; ?>;
+					<?php
+				}
 			?>
 				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
 					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $small_sqft; ?>); 
@@ -139,7 +197,14 @@ foreach ($optionValues as $op) {
 		break;
 		case 'Medium':
 			if (!empty($med_sqft)) {
-				$minSqFt = (!$minSqFt) ? $med_sqft: $minSqFt;
+				//$minSqFt = (!$minSqFt) ? $med_sqft: $minSqFt;
+				if (!$minSqFt) {
+					$minSqFt = $med_sqft;
+					?>
+					defaultSizeVal = <?php echo $opData['option_type_id']; ?>;
+					defaultSizeId = <?php echo $opData['option_id']; ?>;
+					<?php
+				}
 			?>
 				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
 					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $med_sqft; ?>);
@@ -152,7 +217,14 @@ foreach ($optionValues as $op) {
 		break;
 		case 'Large':
 			if (!empty($large_sqft)) {
-				$minSqFt = (!$minSqFt) ? $large_sqft: $minSqFt;
+				//$minSqFt = (!$minSqFt) ? $large_sqft: $minSqFt;
+				if (!$minSqFt) {
+					$minSqFt = $large_sqft;
+					?>
+					defaultSizeVal = <?php echo $opData['option_type_id']; ?>;
+					defaultSizeId = <?php echo $opData['option_id']; ?>;
+					<?php
+				}
 			?>
 				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
 					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $large_sqft; ?>);
@@ -165,7 +237,14 @@ foreach ($optionValues as $op) {
 		break;
         case 'XLarge':
 			if (!empty($xlarge_sqft)) {
-				$minSqFt = (!$minSqFt) ? $xlarge_sqft: $minSqFt;
+				//$minSqFt = (!$minSqFt) ? $xlarge_sqft: $minSqFt;
+				if (!$minSqFt) {
+					$minSqFt = $xlarge_sqft;
+					?>
+					defaultSizeVal = <?php echo $opData['option_type_id']; ?>;
+					defaultSizeId = <?php echo $opData['option_id']; ?>;
+					<?php
+				}
 			?>
 				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() { 
 					$("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $xlarge_sqft; ?>);
@@ -177,7 +256,14 @@ foreach ($optionValues as $op) {
 		break;
 		case 'Clearance':
 			if (!empty($clear_sqft)) {
-				$minSqFt = (!$minSqFt) ? $clear_sqft: $minSqFt;
+				//$minSqFt = (!$minSqFt) ? $clear_sqft: $minSqFt;
+				$minSqFt = $clear_sqft;
+				if (!$minSqFt) {
+					?>
+					defaultSizeVal = <?php echo $opData['option_type_id']; ?>;
+					defaultSizeId = <?php echo $opData['option_id']; ?>;
+					<?php
+				}
 			?>
 				$('input[value="<?php echo $opData['option_type_id']; ?>"]').click(function() {
                                         $("#options_<?php echo $sqft_optionId; ?>_text").val(<?php echo $clear_sqft; ?>);
@@ -197,26 +283,26 @@ foreach ($optionValues as $op) {
 				minSqFt = 0;
 				updatePrice();
 				
-				/*
+				
 				// function to change buttons
 				<?php if ($productType != "patternprod") { ?>
                 // hide origial add to cart button
-                $("#addtocart-btn").hide();
+                $("#product-addtocart-button").hide();
                 <?php if ( $product->getSku() == $custom_upload_sku ) { ?>
                 $("#verify-crop-btn.analyze-btn").show();
                 <?php } else { ?>
                 $("#verify-crop-btn").show();
                 <?php } ?>
 				<?php } ?>
-				*/
+				
 				
 				// enable size boxes
                 $(".option-custom-sizes").show();
                 $("#conv-calculator").hide();
 				$(".custom-notification").show();
-				/*customImageCrop();
+				customImageCrop();
                 $("#image-main").removeClass("visible");
-				calculateCustomSqFt();*/
+				calculateCustomSqFt();
 				
 				$("#options_<?php echo $wfId; ?>_text").keyup(function() {
 					calculateCustomSqFt();
@@ -231,85 +317,6 @@ foreach ($optionValues as $op) {
 					calculateCustomSqFt();
 				});
 				
-				var baddecimal = false;
-	
-				function checkDecimal() {
-					var height_ft = $("#options_<?php echo $hfId; ?>_text").val();
-					var height_in = $("#options_<?php echo $hiId; ?>_text").val();
-					var width_ft = $("#options_<?php echo $wfId; ?>_text").val();
-					var width_in = $("#options_<?php echo $wiId; ?>_text").val();
-
-					var decimal = false;
-
-					if (height_ft.indexOf(".") != -1) {
-						decimal = true;
-					}else if (height_in.indexOf(".") != -1) {
-						decimal = true;
-					}else if (width_ft.indexOf(".") != -1) {
-						decimal = true;
-					}else if (width_in.indexOf(".") != -1) {
-						decimal = true;
-					}
-
-					if (decimal == true) {
-						$(".decimal-error").text("Custom size dimensions cannot contain a decimal point (.) Please round to the nearest inch.").css({padding:"5px",border:"#FF0000 solid 1px",color:"#FF0000"});
-						baddecimal = true;
-						return true;
-					} else {
-						$(".decimal-error").text("").css({padding:"0px",border:"none",color:"#FF0000"});
-						baddecimal = false;
-						return false;
-					}
-				}
-
-				function checkModal() {
-					if (baddecimal === true) {
-						return false;
-					} else {
-						inst.open();
-						return false;
-					}
-				}
-
-
-				function calculateCustomSqFt() {
-					if ($('input[value="<?php echo $opData['option_type_id'];?>"]').is(':checked')) {
-						// check for a decimal
-						var decimal = checkDecimal();
-						if (decimal == true) { return; }
-
-						// calculate sqft based on custom height and width
-						var height_ft = parseFloat($("#options_<?php echo $hfId; ?>_text").val());
-						var height_in = parseFloat($("#options_<?php echo $hiId; ?>_text").val());
-						var width_ft = parseFloat($("#options_<?php echo $wfId; ?>_text").val());
-						var width_in = parseFloat($("#options_<?php echo $wiId; ?>_text").val());
-						var height = 0;
-						var width = 0;
-
-						if (height_ft > 0) { height = height_ft * 12; }
-						if (height_in > 0) { height = height + height_in; }
-						height = (height / 12);
-						height = height.toFixed(2);
-
-						if (width_ft > 0) { width = width_ft * 12; }
-						if (width_in > 0) { width = width + width_in; }
-						width = (width / 12);
-						width = width.toFixed(2);
-
-						if (height > 0 && width > 0) {
-							var sqft = height * width;
-							sqft = Math.round(sqft);
-							if (sqft < 12) { sqft = 12; }
-							$("#options_<?php echo $sqft_optionId; ?>_text").val(sqft);
-							calculateDimension();
-
-							updatePrice();
-						}
-						return;
-					} else {
-						return;
-					}
-				}
 			}); // end click function
 			<?php
 		break;
@@ -369,45 +376,215 @@ foreach ( $orientationValues as $op ) {
         break;
     }// end switch 
 } // end foreach for orientation values
+/* ********** Added for Patterns ********** */
+	
+?>
+
+<?php
+	
+$defPatSize = false;
+$defPatColor = false;
+
+if (!empty($patSizeOptionValues)) {
+	$c = 1;
+	foreach ( $patSizeOptionValues as $op ) {
+		$opData = $op->getData();
+		$title = '';
+		if ( stripos($opData['title'], "12") !== false ) {
+			$title = "12";
+		} elseif ( stripos($opData['title'], "24") !== false ) {
+			$title = "24";
+		} elseif ( stripos($opData['title'], "48") !== false ) {
+			$title = "48";
+		}
+		if ( $c == 1 ) { ?> patternSizeOption = '<?php echo $title;?>'; <?php }
+		switch ($title) {
+			case "48":
+				$defPatSize = (!$defPatSize) ? $opData['option_type_id']: $defPatSize;
+				?>
+				$j('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+					patternSizeOption = 48;
+					setPatternImages();
+				});
+				<?php
+			break;
+			case "12":
+				$defPatSize = (!$defPatSize) ? $opData['option_type_id']: $defPatSize;
+				?>
+				$j('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+					patternSizeOption = 12;
+					setPatternImages();
+				});
+				<?php
+			break;
+			case "24":
+				$defPatSize = (!$defPatSize) ? $opData['option_type_id']: $defPatSize;
+				?>
+				$j('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+					patternSizeOption = 24;
+					setPatternImages();
+				});
+				<?php
+			break;
+			
+		} // end switch
+	} // end foreach pattern size values
+} // end if for pattern size values
+	
+if (!empty( $patColorOptionValues )) {
+	$c = 1;
+	foreach ( $patColorOptionValues as $op ) {
+		$opData = $op->getData();
+		if ( $c == 1 ) { $defPatColor = (!$defPatColor) ? $opData['option_type_id']: $defPatColor; }
+		$title = strtolower(trim($opData['title']));
+		$title = str_replace(" ", "-", $title);
+		$title = str_replace("/", "-", $title);
+		
+		if ( $c == 1 ) { ?> patternColorOption = '<?php echo $title;?>'; <?php }
+		?>
+		$j('input[value="<?php echo $opData['option_type_id'];?>"]').click(function() {
+			patternColorOption = '<?php echo $title;?>';
+			setPatternImages();
+		});
+		<?php
+		$c++;
+	} // end foreach pattern color values
+} // end if for pattern color values
 
 ?>
+	
+// Pattern page functions
+	
+function setPatternColor(id) {
+	$j('#options_value_'+id).trigger("click");
+}
+	
+function setPatternImages() {
+	//alert('pattern size: ' + patternSizeOption + '; pattern color: ' + patternColorOption);
+	
+	$j('.product-image-thumbs li').css({ display: "none" });
+	$j('.'+patternSizeOption+'.'+patternColorOption).css({ display: "list-item" });
+	$j('.'+patternSizeOption+'.'+patternColorOption+' a').first().trigger("click");
+	// $j('.'+patternColorOption).css({ display: "list-item" }); // color only
+}
+	
+// end pattern page functions
 		
 		/* options for jcrop */
-
-		var mainImg = ".fotorama__img";
-		var api = null;
-		var verify_api = null;
-		var sepia = false;
-		var mirror = false;
-		var productType = "<?php echo $productType; ?>";
+		
+		<?php
+		
+		$object_manager = \Magento\Framework\App\ObjectManager::getInstance();
+		$dir = $object_manager->get('\Magento\Framework\Filesystem\DirectoryList');            
+		$base = $dir->getPath('media') . '/catalog/product';
+		
+		//echo "dir: " . $base; exit;
+		
+		
+		if ( $product->getSku() == $custom_upload_sku ) {
+			require_once($_SERVER['DOCUMENT_ROOT'] . '/lib/web/phpThumb/phpthumb.functions.php');
+			list($source_w, $source_h) = GetImageSize($_SERVER['DOCUMENT_ROOT'] . $custom_upload_dir . $custom_file);
+			$max_w = 800;
+			$max_h = 800;
+			list($newW, $newH) = phpthumb_functions::ProportionalResize($source_w, $source_h, $max_w, $max_h);
+			$imgHeight = $newH;
+			$imgWidth = $newW;
+		} else {
+			// images uploaded should be no larger than 1000px wide so no reason to resize.
+			list($source_w, $source_h) = GetImageSize($base . $product->getImage());
+			$imgHeight = $source_h;
+			$imgWidth  = $source_w;
+		}
+		
+		?>
+		
+		imgWidth = <?php echo $imgWidth;?>;
+		imgHeight = <?php echo $imgHeight;?>;
 		
 		// functions
 		
-		function destroyCrop() {
-			if (api !== null) {
-				api.destroy();
-				api = null;
+
+
+		function checkDecimal() {
+			var height_ft = $("#options_<?php echo $hfId; ?>_text").val();
+			var height_in = $("#options_<?php echo $hiId; ?>_text").val();
+			var width_ft = $("#options_<?php echo $wfId; ?>_text").val();
+			var width_in = $("#options_<?php echo $wiId; ?>_text").val();
+
+			var decimal = false;
+
+			if (height_ft.indexOf(".") != -1) {
+				decimal = true;
+			}else if (height_in.indexOf(".") != -1) {
+				decimal = true;
+			}else if (width_ft.indexOf(".") != -1) {
+				decimal = true;
+			}else if (width_in.indexOf(".") != -1) {
+				decimal = true;
 			}
-			$("#image-main").addClass("visible");
-			// show add to cart button and hide verify
-			<?php if ( $product->getSku() == $custom_upload_sku ) { ?>
-			$("#verify-crop-btn.analyze-btn").hide();
-			<?php } else { ?>
-			$("#verify-crop-btn").hide();
-			<?php } ?>
-			$("#addtocart-btn").show();
-			$(".option-custom-sizes").hide();
-			$("#conv-calculator").show();
-			$(".custom-notification").hide();
+
+			if (decimal == true) {
+				$(".decimal-error").text("Custom size dimensions cannot contain a decimal point (.) Please round to the nearest inch.").css({padding:"5px",border:"#FF0000 solid 1px",color:"#FF0000"});
+				baddecimal = true;
+				return true;
+			} else {
+				$(".decimal-error").text("").css({padding:"0px",border:"none",color:"#FF0000"});
+				baddecimal = false;
+				return false;
+			}
 		}
 
-		function showCoords(c) {
-			if (productType == "patternprod") { return; }
-
-			//update jcrop coordinates
-			$("#options_<?php echo $cropSizeId; ?>_text").val(c.x + ',' + c.y + ',' + c.w + ',' + c.h);
+		function checkModal() {
+			if (baddecimal === true) {
+				return false;
+			} else {
+				inst.open();
+				return false;
+			}
 		}
-				
+		
+		window.checkModal = checkModal;
+
+
+		function calculateCustomSqFt() {
+			if ($('input[value="<?php echo $custId;?>"]').is(':checked')) {
+				// check for a decimal
+				var decimal = checkDecimal();
+				if (decimal == true) { return; }
+
+				// calculate sqft based on custom height and width
+				var height_ft = parseFloat($("#options_<?php echo $hfId; ?>_text").val());
+				var height_in = parseFloat($("#options_<?php echo $hiId; ?>_text").val());
+				var width_ft = parseFloat($("#options_<?php echo $wfId; ?>_text").val());
+				var width_in = parseFloat($("#options_<?php echo $wiId; ?>_text").val());
+				var height = 0;
+				var width = 0;
+
+				if (height_ft > 0) { height = height_ft * 12; }
+				if (height_in > 0) { height = height + height_in; }
+				height = (height / 12);
+				height = height.toFixed(2);
+
+				if (width_ft > 0) { width = width_ft * 12; }
+				if (width_in > 0) { width = width + width_in; }
+				width = (width / 12);
+				width = width.toFixed(2);
+
+				if (height > 0 && width > 0) {
+					var sqft = height * width;
+					sqft = Math.round(sqft);
+					if (sqft < 12) { sqft = 12; }
+					$("#options_<?php echo $sqft_optionId; ?>_text").val(sqft);
+					minSqFt = sqft;
+					calculateDimension();
+					updatePrice();
+				}
+				return;
+			} else {
+				return;
+			}
+		}
+		
 		function calculateDimension() {
 			if (productType == "patternprod") { return; }
 
@@ -438,119 +615,442 @@ foreach ( $orientationValues as $op ) {
 
 		}
 				
-		/* metric calculations */
-
-		function roundit(which){
-			return Math.round(which*100)/100
-		}
-
-		function cmconvert(){
-			with (document.cminch){
-				feet.value = roundit(cm.value/30.84);
-				inch.value = roundit(cm.value/2.54);
-			}
-		}
-
-		function inchconvert(){
-			with (document.cminch){
-				cm.value = roundit(inch.value*2.54);
-				feet.value=roundit(inch.value/12);
-			}
-		}
-
-		function feetconvert(){
-			with (document.cminch){
-				cm.value=roundit(feet.value*30.48);
-				inch.value=roundit(feet.value*12);
-			}
-		}
-
-		function calcReset() {
-			$j("#calc-feet").val("");
-			$j("#calc-inch").val("");
-			$j("#calc-feet-w").val("");
-			$j("#calc-inch-w").val("");
-			$j("#calc-cm").val("");
-			$j("#calc-cm-w").val("");
-		}
-
-		function calcCM() {
-			if ( $j("#calc-feet").val() == "" ) {
-				calcFtIn();
-				return;
-			}
-			feet = roundit($j("#calc-feet").val()*30.48);
-			inches = roundit($j("#calc-inch").val()*2.54);
-			total = (feet+inches).toFixed(2);
-			$j("#calc-cm").val(total);
-			feetW = roundit($j("#calc-feet-w").val()*30.48);
-			inchesW = roundit($j("#calc-inch-w").val()*2.54);
-			totalW = (feetW+inchesW).toFixed(2);
-			$j("#calc-cm-w").val(totalW);
-		}
-
-		function calcFtIn() {
-			height = $j("#calc-cm").val()/2.54; // we have inches now
-			width = $j("#calc-cm-w").val()/2.54; // we have inches now
-
-			feet_height = Math.floor(height/12);
-			inch_height = Math.floor(height %= 12);
-			feet_width = Math.floor(width/12);
-			inch_width = Math.floor(width %= 12);
-
-			$j("#calc-feet").val(feet_height); // height feet
-			$j("#calc-inch").val(inch_height); // height inch
-			$j("#calc-feet-w").val(feet_width); // width feet
-			$j("#calc-inch-w").val(inch_width); // width inch
-
-			calculateCustomSqFt();
-		}
-
 		function convertCM() {
-			height = $j("#calc-cm-height").val()/2.54; // we have inches now
-			width = $j("#calc-cm-width").val()/2.54; // we have inches now
+			height = $("#calc-cm-height").val()/2.54; // we have inches now
+			width = $("#calc-cm-width").val()/2.54; // we have inches now
 
 			feet_height = Math.floor(height/12);
 			inch_height = Math.floor(height %= 12);
 			feet_width = Math.floor(width/12);
 			inch_width = Math.floor(width %= 12);
 
-			$j("#options_<?php echo $hfId;?>_text").val(feet_height); // height feet
-			$j("#options_<?php echo $hiId;?>_text").val(inch_height); // height inch
-			$j("#options_<?php echo $wfId;?>_text").val(feet_width); // width feet
-			$j("#options_<?php echo $wiId;?>_text").val(inch_width); // width inch
+			$("#options_<?php echo $hfId;?>_text").val(feet_height); // height feet
+			$("#options_<?php echo $hiId;?>_text").val(inch_height); // height inch
+			$("#options_<?php echo $wfId;?>_text").val(feet_width); // width feet
+			$("#options_<?php echo $wiId;?>_text").val(inch_width); // width inch
 
 			calculateCustomSqFt();
-		}
-		
-		function setColor(color) {
-			if (color == "original") {
-				$(mainImg).css({filter:"none",WebkitFilter:"none"});
-			} else if (color == "grayscale") {
-				$(mainImg).css({filter:"grayscale(100%)",WebkitFilter:"grayscale(100%)"});
-			} else if (color == "sepia") {
-				$(mainImg).css({filter:"sepia(100%)",WebkitFilter:"sepia(100%)"});
-			}
-		}
-		
-		function setOrientation(orient) {
-			if (orient == "mirror") {
-				$(mainImg).css({transform:"none",WebkitTransform:"scaleX(-1)",top:"0",left:"0"});
-			} else if (orient == "original") {
-				$(mainImg).css({transform:"",WebkitTransform:"",top:"",left:""});
-			}
-		}
-		
-		//used to update price
-		function updatePrice() {
-			$("div.price-box .price-final_price").trigger("updatePrice");
 		}
 		
 		minSqFt = <?php echo $minSqFt;?>;
 		updatePrice();
+		
+		// setup some events on page load.
+		
+		$(document).ready(function() {
+			<?php 
+			$custom_upload_sku = "Custom Mural";
+			if ( $product->getSku() == $custom_upload_sku ) { ?>
+			setTimeout( function() { 
+				$('#options_value_<?php echo $custId; ?>').trigger("click");
+			}, 800);
+			<?php } else { ?>
+			setTimeout( function() { 
+				$('#options-' + defaultSizeId + '-list input[value="' + defaultSizeVal + '"').trigger("click"); 
+			}, 800);
+			<?php } ?>
+			
+			if (patternPage) {
+				$j('.product-image-thumbs li').click(function() {
+					$j('.product-image-thumbs li').css({"border": "#FFF solid 2px"});
+					$j(this).css({"border": "#999999 solid 2px"});
+				});
+				setTimeout( function() { $j('input[value="<?php echo $defPatSize; ?>"]').trigger("click"); }, 800);
+				setTimeout( function() { $j('input[value="<?php echo $defPatColor; ?>"]').trigger("click"); }, 800);
+			}
+			
+			window.inst = $('#verify-crop-box').remodal();
+			
+			<?php if ($finish_option_id != "") { ?>
+			/* material and finish option functions */
+			$("#select_<?php echo $material_option_id;?>").on('change', function() {
+				var sid = $(this).attr('id');
+				var sop = $("#" + sid + " option:selected").text();
+				setFinishOptions(sop);
+			});
+			// handles showing the material information
+			/*$("#select_<?php echo $finish_option_id;?>").on('change', function() {
+				var material = $("#select_<?php echo $material_option_id;?> option:selected").text();
+				var finish_id = $(this).attr('id');
+				var finish = $("#" + finish_id + " option:selected").text();
+				var finish_class = prodMatDesc[material][finish];
+				$('.mat-item').css({display: 'none'});
+				$('.' + finish_class).css({display: 'block'});
+			});*/
+			// initially hide all finish options
+
+			var finishOptions = {
+				"Smooth Matte Finish": "",
+				"Canvas Matte Finish": "",
+				"Smooth Finish w/ Dry Erase Laminate": "",
+				"Smooth Finish w/ Matte Protective Laminate": "",
+				"Gold Iridescent Finish": "",
+				"Silver Iridescent Finish": ""
+			};	
+
+			finOp = $("#select_<?php echo $finish_option_id;?>");
+			$("#" + finOp.attr('id') + " option").each(function() {
+				var oText = $(this).text();
+
+				finishOptions[ oText ] = $(this).clone();
+
+				$(this).css({display:"none"});
+				$(this).prop('selected', false);
+				if (oText == "-- Please Select --") {
+					$(this).css({display:"block"});
+				} else {
+					$(this).remove();
+				}
+			});
+			
+
+			var finishArray = [
+				[ // ultrastik
+					"Smooth Matte Finish"
+				],
+				[ // quikstik
+					"Smooth Matte Finish",
+					"Smooth Finish w/ Dry Erase Laminate",
+					"Smooth Finish w/ Matte Protective Laminate"
+				],
+				[ // quikstik plus
+					"Smooth Matte Finish",
+					"Gold Iridescent Finish",
+					"Silver Iridescent Finish"
+				],
+				[ // prostik
+					"Smooth Matte Finish",
+					"Canvas Matte Finish"
+				],
+				[ // ecoProStik
+					"Smooth Matte Finish"
+				]
+			];
+
+			function setFinishOptions(sop) {
+				if (sop == "") { return; }
+				//console.log('sop: ' + sop);
+				var finOp = $("#select_<?php echo $finish_option_id;?>");
+				//console.log('finOp: ' + finOp);
+				var sop_id = null;
+				// need to run through and hide the options that are not available for this material
+				// hide all options first
+				$("#" + finOp.attr('id') + " option").each(function() {
+					$(this).remove();
+				});
+				if (sop == "UltraStik™ Pre-Pasted Wallpaper") {
+					sop_id = 0;
+				} else if(sop == "QuikStik™ for Smooth Walls") {
+					sop_id = 1;
+				} else if(sop == "QuikStik™ PLUS for Textured Walls") {
+					sop_id = 2;
+				} else if(sop == "ProStik™ Type II") {
+					sop_id = 3;
+				} else if (sop == "ecoProStik™ Type II") {
+					sop_id = 4;
+				}
+				//console.log('sop_id: ' + sop_id);
+				//console.log(finishArray[sop_id]);
+				if (sop_id != null) {
+					var fLen = finishArray[sop_id].length;
+					$c = 0;
+					for($i=0; $i<fLen; $i++) {
+						$("#" + finOp.attr('id')).append(finishOptions[ finishArray[sop_id][$i] ]);
+						$c+=1;
+					}
+					$("#" + finOp.attr('id'))[0].selectedIndex = 0;
+					finOp.trigger('change');
+				}
+			}
+
+			<?php } // end if for finish option ?>			
+			
+			
+		}); // end document ready
+		
+		
 	});
 </script>
 
 
-	
+<!-- modal box for convert to metric -->
+<div class="remodal" data-remodal-id="convert-modal" data-remodal-options="hashTracking: false" id="convert-modal-box">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <h3 class="verify-crop-title">Metric Calculator</h3>
+    <p>Enter US dimensions for Metric conversions or enter Metric dimensions for US conversions.<br />Use the Reset button to start over.</p>
+    <div class="convert-info">
+        <div class="grid-container">
+            <div class="grid12-6">
+                <fieldset><label class="fieldset-label">US</label>
+                    <div class="grid12-12 clearer">
+                        <div class="grid12-4"><label>HEIGHT</label></div>
+                        <div class="grid12-8">
+                            <p><input type="text" name="calc-feet" id="calc-feet" /> Ft</p>
+                            <p><input type="text" name="calc-inch" id="calc-inch" /> In</p>
+                        </div>
+                    </div>
+                    <div class="grid12-12"><hr style="margin: 10px 0; clear: both;" /></div>
+                    <div class="grid12-12 clearer">
+                        <div class="grid12-4"><label>WIDTH</label></div>
+                        <div class="grid12-8">
+                            <p><input type="text" name="calc-feet-w" id="calc-feet-w" /> Ft</p>
+                            <p><input type="text" name="calc-inch-w" id="calc-inch-w" /> In</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="grid12-6">
+                <fieldset><label class="fieldset-label">Metric</label>
+                    <div class="grid12-12 clearer">
+                        <div class="grid12-4"><label style="margin-top: 17%;">HEIGHT</label></div>
+                        <div class="grid12-8">
+                            <p><input type="text" name="calc-cm" id="calc-cm" /> Cm</p>
+                        </div>
+                        <div class="grid12-12"><hr style="margin: 10px 0;" /></div>
+                        <div class="grid12-4"><label style="margin-top: 17%;">WIDTH</label></div>
+                        <div class="grid12-8">
+                            <p><input type="text" name="calc-cm-w" id="calc-cm-w" /> Cm</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="calc-modal-buttons" style="clear: both;">
+        <button class="remodal-confirm" style="margin-right:10px;" id="calc-calc">Calculate</button>
+        <button class="remodal-confirm" style="margin-left: 10px;" id="calc-reset" onclick="calcReset();">Reset</button>
+    </div>
+</div>
+<!-- end modal box for conver to metric -->
+
+<!-- modal box for convert to metric -->
+<div class="remodal" data-remodal-id="convert-modal-custom" data-remodal-options="hashTracking: false, closeOnOutsideClick: false, appendTo: document.mural-prod-img-col" id="convert-modal-box-custom">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <h3 class="verify-crop-title">Metric Converter</h3>
+    <p>Enter Metric dimensions below which will convert and populate US dimensions in the Custom Size fields.</p>
+    <div class="convert-info">
+        <div class="grid-container">
+            <div class="grid12-3">&nbsp;</div>
+            <div class="grid12-6">
+                <fieldset>
+                    <div class="grid12-4"><label>Height</label></div>
+                    <div class="grid12-8"><p><input type="text" name="calc-cm-height" id="calc-cm-height" /> Cm</p></div>
+                    <div class="grid12-12">&nbsp;</div>
+                    <div class="grid12-4"><label>Width</label></div>
+                    <div class="grid12-8"><p><input type="text" name="calc-cm-width" id="calc-cm-width" /> Cm</p></div>
+                </fieldset>
+            </div>
+            <div class="grid12-3">&nbsp;</div>
+        </div>
+    </div>
+    <div class="verify-crop-buttons" style="clear: both;">
+        <button data-remodal-action="confirm" onclick="convertCM();" class="remodal-confirm">Convert</button>
+    </div>
+</div>
+<!-- end modal box for conver to metric -->
+
+<!-- modal box for crop verify -->
+<div class="remodal" data-remodal-id="modal" data-remodal-options="hashTracking: false" id="verify-crop-box">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <h3 class="verify-crop-title">Verify Crop</h3>
+    <div class="verify-crop-sku"></div>
+    <div class="verify-crop-img"><img style="width: 100%;" /></div>
+    <div class="verify-crop-info">
+        <div class="verify-crop-size" style="width: 47%; text-align: center; float: left;"></div>
+        <div class="verify-crop-watermark" style="width: 47%; text-align: center; float: right;">*Watermarks are removed from finished murals.</div>
+        <div class="verify-crop-accept" style="margin: 8px 0; clear: both;">Click &quot;Add to Cart&quot; if you accept
+this crop indicated by the red outline.</div>
+    </div>
+    <div class="verify-crop-buttons" style="clear: both;">
+        <button data-remodal-action="confirm" class="remodal-confirm">Add to Cart</button>
+        <button data-remodal-action="cancel" class="remodal-cancel">This is not correct!</button>
+    </div>
+</div>
+
+<?php if ( $product->getSku() == $custom_upload_sku ) { ?>
+
+<!-- modal box for submit for review -->
+<div class="remodal" data-remodal-id="submit-modal" data-remodal-options="hashTracking: false" id="submit-review-modal-box">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <h3 class="verify-crop-title">REVIEW MY IMAGE</h3>
+    <div class="verify-crop-info">
+        <p> Please complete the form below and we will respond to you by email as soon as possible. </p>
+        <form name="submitreview" id="submitreview" action="/coupon/index/review/">
+        <table cellspacing="5" cellpadding="5" border="0" id="review_mural_table">
+            <tbody>
+                <tr>
+                    <td>Image</td>
+                    <td><img id="review-img" src="" width="215px" />
+                    <input type="hidden" id="review-img-orig" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Image Orientation</td>
+                    <td id="img-orientation">Original</td>
+                </tr>
+                <tr>
+                    <td>Material</td>
+                    <td id="material">UltraStik&trade;</td>
+                </tr>
+                <tr>
+                    <td>Color</td>
+                    <td id="color">Original</td>
+                </tr>
+                <tr>
+                    <td>Mural Height</td>
+                    <td id="mural-height">1' 0"</td>
+                </tr>
+                <tr>
+                    <td>Mural Width</td>
+                    <td id="mural-width">2' 0"</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td><input class="input-text required-entry" type="text" id="name" value="" name="name"></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input class="input-text required-entry validate-email" type="text" id="email" value="" name="email"></td>
+                </tr>
+                <tr>
+                    <td>Telephone</td>
+                    <td><input class="input-text required-entry" type="text" id="phone" value="" name="phone"></td>
+                </tr>
+                <tr>
+                    <td>Additional Notes / Comments</td>
+                    <td><textarea class="input-text required-entry" style="width:415px;height:150px;" id="notes" name="notes"></textarea></td>
+                </tr>
+                <tr>
+                    <td align="center"></td>
+                    <td align="center"><a href="javascript:void(0);" id="review-submit-btn-new" class='button'><span>Submit for Review</span></a></td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+</div>
+
+<!-- modal box for analyze -->
+<div class="remodal" data-remodal-id="analyze-modal" data-remodal-options="hashTracking: false" id="analyze-modal-box">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    <h3 class="verify-crop-title">ANALYZE MY IMAGE</h3>
+    <div class="verify-crop-info">
+    </div>
+</div>
+
+<script type="text/javascript">
+var subModal = $j('#submit-review-modal-box').remodal();
+
+$j(document).on('opening', '#submit-review-modal-box.remodal', function () {
+    loadSubmitReview();
+});
+$j(document).on('opening', '#analyze-modal-box.remodal', function () {
+  analyzePopup();
+});
+$j("#review-submit-btn-new").click( function() {
+    submitReview();
+});
+function submitReview() {
+    message = "";
+    if (jQuery('#submitreview #email').val() == '') {
+        message += "- Email\n";
+    }
+    if (jQuery('#submitreview #phone').val() == '') {
+        message += "- Phone\n";
+    }
+    if (jQuery('#submitreview #name').val() == '') {
+        message += "- Name\n";
+    }
+    if (jQuery('#submitreview #notes').val() == '') {
+        message += "- Notes\n";
+    }
+    if (message != '') {
+        message = "Please provide required fields:\n" + message;
+        alert(message);
+    } else {
+        jQuery.ajax({
+            url: jQuery('#submitreview').attr('action'),
+            type: "POST",
+            data: "name=" + jQuery('#submitreview #name').val() +
+            "&email=" + jQuery('#submitreview #email').val() +
+            "&phone=" + jQuery('#submitreview #phone').val() +
+            "&notes=" + jQuery('#submitreview #notes').val() +
+            "&image=https://www.magicmurals.com<?php echo $custom_upload_dir . $custom_file;?>" +
+            "&crop_image=https://www.magicmurals.com<?php echo $custom_upload_dir . 'thumbnail/' . $custom_file;?>" +
+            "&image_orientation=" + orientation +
+            "&material=" + material +
+            "&color=" + color +
+            "&height=" + hfhi +
+            "&width=" + wfwi,
+            success: function (data) {
+                jQuery("#submitreview").html(data);
+            }
+        });
+    }
+    return false;
+}
+var orientation = '';
+var material = '';
+var color = '';
+var hfhi = '';
+var wfwi = '';
+function loadSubmitReview() {
+    if ( $j(".square-ft input").val() > 0 ) {
+        if(productAddToCartForm.validator.validate()) {
+            $j('#review-img').attr('src', '/lib/phpThumb/phpThumb.php?src=<?php echo $custom_upload_dir; ?>' + $j('.image-option input').val() + '&w=215');
+            $j('#img-orientation').html($j('.image-orientation input:checked').next('span.label').text());
+            orientation = $j('.image-orientation input:checked').next('span.label').text();
+            
+            $j('#material').html($j('.option-material select option:selected').text());
+            material = $j('.option-material select option:selected').text();
+            
+            $j('#color').html($j('.color.bottom-options-box input:checked').next('span.label').text());
+            color = $j('.color.bottom-options-box input:checked').next('span.label').text();
+            
+            var hi='';
+            if($j("#options_<?php echo $hiId; ?>_text").val()) hi = $j("#options_<?php echo $hiId; ?>_text").val() + '"';
+            var wi='';
+            if($j("#options_<?php echo $wiId; ?>_text").val()) wi = $j("#options_<?php echo $wiId; ?>_text").val() + '"';
+            
+            $j('#mural-height').html($j("#options_<?php echo $hfId; ?>_text").val() + "' " + hi);
+            hfhi = $j("#options_<?php echo $hfId; ?>_text").val() + "' " + hi;
+            
+            $j('#mural-width').html($j("#options_<?php echo $wfId; ?>_text").val() + "' " + wi);
+            wfwi = $j("#options_<?php echo $wfId; ?>_text").val() + "' " + wi;
+            
+            subModal.open();
+        }
+    } else {
+        alert("The size you have entered is not valid.\nPlease enter a valid height and width.");
+    }
+}
+function analyzePopup() {
+    $j.ajax({
+        url: '/imageanalyzer/index/',
+        data: {
+            image: '<?php echo $custom_upload_dir . $custom_file;?>',
+            hFt: $j("#options_<?php echo $hfId; ?>_text").val(),
+            hIn: $j("#options_<?php echo $hiId; ?>_text").val(),
+            wFt: $j("#options_<?php echo $wfId; ?>_text").val(),
+            wIn: $j("#options_<?php echo $wiId; ?>_text").val()
+        },
+        dataType: 'html',
+        success: function (data) {
+            $j('#analyze-modal-box.remodal .verify-crop-info').html(data);
+        }
+    });
+}
+</script>
+
+<?php } 
+
+if ( $productType == "patternprod" ) {
+	?>
+	<style>
+		.product-image-thumbs li { display: none; }
+	</style>
+	<?php
+}
+
+?>
 		

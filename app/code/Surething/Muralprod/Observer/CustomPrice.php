@@ -88,7 +88,6 @@ class CustomPrice implements ObserverInterface {
 				$item->setOriginalCustomPrice( $specialPrice );
 				$item->getProduct()->setIsSuperMode( true );
 				$customWeight = $item->getWeight() * $sqft;
-				//Mage::log('custom weight: '.$customWeight);
 				$item->setWeight($customWeight);
 			}
 			

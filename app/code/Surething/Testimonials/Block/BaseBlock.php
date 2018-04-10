@@ -4,6 +4,8 @@
  */
 namespace Surething\Testimonials\Block;
 use Magento\Framework\UrlFactory;
+use Infortis\Brands\Helper\Data;
+
 class BaseBlock extends \Magento\Framework\View\Element\Template
 {
 	/**
@@ -20,17 +22,25 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * @var \Surething\Testimonials\Model\Config
      */
     protected $_config;
+	
+	protected $testimonialsFactory;
+	protected $brandHelper;
 
     /**
      * @param \Surething\Testimonials\Block\Context $context
 	 * @param \Magento\Framework\UrlFactory $urlFactory
      */
-    public function __construct( \Surething\Testimonials\Block\Context $context
+    public function __construct( 
+		\Surething\Testimonials\Block\Context $context,
+		\Surething\Testimonials\Model\TestimonialsFactory $testimonialsFactory,
+		\Infortis\Brands\Helper\Data $brandHelper
 	)
     {
         $this->_devToolHelper = $context->getTestimonialsHelper();
 		$this->_config = $context->getConfig();
         $this->_urlApp=$context->getUrlFactory()->create();
+		$this->testimonialsFactory = $testimonialsFactory;
+		$this->brandHelper = $brandHelper;
 		parent::__construct($context);
 	
     }
@@ -91,6 +101,22 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
 			}
 		}
 		return false;
+	}
+	
+	public function getBrandHelper() {
+		return $this->brandHelper;
+	}
+	
+	public function getMediaDirectory() {
+		$testModel = $this->testimonialsFactory->create();
+		$dir = $testModel->getMediaDirectory();
+		return $dir;
+	}
+	
+	public function getTestimonialsDESC() {
+		$testModel = $this->testimonialsFactory->create();
+		$testimonials = $testModel->getTestimonialsDESC();
+		return $testimonials;
 	}
 	
 }
